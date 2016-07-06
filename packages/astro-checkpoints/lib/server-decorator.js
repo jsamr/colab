@@ -11,7 +11,8 @@ import Meteor from 'meteor/meteor';
  */
 export default function server(){
     return function( target, methodName ){
-        ActionsStore.registerOrUpdate( target[methodName], ActionsStore.getDescriptorFromContext( methodName ) );
+        ActionsStore.register( target[methodName], ActionsStore.getDescriptorFromContext( methodName ) );
+        console.info( ActionsStore.getDescriptorFromContext( methodName ) );
         ActionsStore.setProp( target[methodName], 'onServer', true );
         return target[methodName];
     }

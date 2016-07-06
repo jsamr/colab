@@ -26,34 +26,28 @@ const alwaysFailing = {
         arg1: String
     }
 };
-
 const alwaysPassing = {
     doesAssertionFails: () => {
         return null;
     },
     reason: 'I always pass.'
 };
-
 const alwaysFailingDefaultAssertor = new DefaultAssertor( _.extend({
         name: 'alwaysFailingDefaultAssertor'
     }, alwaysFailing )
 );
-
 const alwaysPassingDefaultAssertor = new DefaultAssertor( _.extend({
         name: 'alwaysPassingDefaultAssertor'
     }, alwaysPassing )
 );
-
 const alwaysFailingMethodParamsAssertor = new MethodParamsAssertor( _.extend({
         name: 'alwaysFailingMethodParamsAssertor'
     }, alwaysFailing )
 );
-
 const alwaysPassingMethodParamsAssertor = new MethodParamsAssertor( _.extend({
         name: 'alwaysPassingMethodParamsAssertor'
     }, alwaysPassing )
 );
-
 const methodArgMustBeAStringAssertor = new MethodParamsAssertor({
     name: 'methodArgMustBeAStringAssertor',
     doesAssertionFails: (methodArg) => {
@@ -62,7 +56,6 @@ const methodArgMustBeAStringAssertor = new MethodParamsAssertor({
     reason:'Target method argument should be a string'
 
 });
-
 
 describe('astro-checkpoints`', function() {
     describe('in a `DefaultAssertor` instance', function () {
@@ -97,11 +90,11 @@ describe('astro-checkpoints`', function() {
     });
     describe('in a `DefaultAssertion` instance', function () {
         describe('the method `perform`', function () {
-            let alwaysFailing = alwaysFailingDefaultAssertor.toAssertion([verboseReason], getMethodName);
-            let alwaysPassing = alwaysPassingDefaultAssertor.toAssertion([verboseReason], getMethodName);
-            it('should return an security report of type object with fields `errorId` and `reason` when the `doesAssertionFails` method returns a non null value', function () {
-                expect(alwaysFailing.perform(null, [])).to.be.a('object').to.have.property('reason');
-                expect(alwaysFailing.perform(null, [])).to.be.a('object').to.have.property('errorId');
+            let alwaysFailing = alwaysFailingDefaultAssertor.toAssertion( [verboseReason], getMethodName );
+            let alwaysPassing = alwaysPassingDefaultAssertor.toAssertion( [verboseReason], getMethodName );
+            it('should return an security report of type object with fields `errorId` and `reason` when  the `doesAssertionFails` method returns a non null value', function () {
+                expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'reason' );
+                expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'errorId' );
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
                 let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;
@@ -110,11 +103,11 @@ describe('astro-checkpoints`', function() {
     });
     describe('in a `MethodParamsAssertion` instance', function () {
         describe('the method `perform`', function () {
-            let alwaysFailing = alwaysFailingMethodParamsAssertor.toAssertion([verboseReason], getMethodName);
-            let alwaysPassing = alwaysPassingMethodParamsAssertor.toAssertion([verboseReason], getMethodName);
+            let alwaysFailing = alwaysFailingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
+            let alwaysPassing = alwaysPassingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
             it('should return an security report of type object with fields `errorId` and `reason` when the `doesAssertionFails` method returns a non null value', function () {
-                expect(alwaysFailing.perform(null, [])).to.be.a('object').to.have.property('reason');
-                expect(alwaysFailing.perform(null, [])).to.be.a('object').to.have.property('errorId');
+                expect( alwaysFailing.perform(null, []) ).to.be.a( 'object' ).to.have.property( 'reason' );
+                expect( alwaysFailing.perform(null, []) ).to.be.a( 'object' ).to.have.property( 'errorId' );
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
                 let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;
@@ -170,10 +163,10 @@ describe('astro-checkpoints`', function() {
             decorateMock( targetCandidate2, 'someMethod', assert( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
             expect( function () {
                 targetCandidate1.someMethod();
-            }).to.throw(SecurityException);
+            }).to.throw( SecurityException );
             expect( function () {
                 targetCandidate2.someMethod();
-            }).to.throw(SecurityException);
+            }).to.throw( SecurityException );
         });
     });
 });
