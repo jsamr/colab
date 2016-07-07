@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
-import { Checkpoints, assert, server } from 'meteor/svein:astro-checkpoints';
-import { ensures } from 'meteor/svein:astro-decorators-core';
+import { Serrurier, cadenas, server } from 'meteor/svein:serrurier';
+import { ensures, IsNonEmptyString } from 'meteor/svein:serrurier-decorators-core/lib/ensures';
 import { Roles } from 'meteor/alanning:roles';
 import { roles,
     assertLoggedUserInRole_s,
@@ -28,7 +28,7 @@ const DEFAULT_VIDEO_SERVER_URL = 'http://localhost:5000/',
  * @class VideoServerConfig
  * @extends {SecuredClass}
  */
-export const VideoServerConfig = Checkpoints.createClass({
+export const VideoServerConfig = Serrurier.createClass({
     name: 'VideoServerConfig',
     /** @lends VideoServerConfig.prototype */
     fields: {
@@ -57,7 +57,7 @@ export const VideoServerConfig = Checkpoints.createClass({
  * @class
  * @extends {SecuredClass}
  */
-export const WhitelistEntry = Checkpoints.createClass({
+export const WhitelistEntry = Serrurier.createClass({
     name: 'WhitelistEntry',
     /** @lends WhitelistEntry.prototype */
     fields: {
@@ -76,7 +76,7 @@ export const WhitelistEntry = Checkpoints.createClass({
  * @class
  * @extends {SecuredClass}
  */
-export const WhitelistConfig = Checkpoints.createClass({
+export const WhitelistConfig = Serrurier.createClass({
     /** @ignore */
     name: 'WhitelistConfig',
     /** @lends WhitelistConfig*/
@@ -111,7 +111,7 @@ export const WhitelistConfig = Checkpoints.createClass({
  * @class Config
  * @extends { SecuredClass }
  */
-const Config = Checkpoints.createClass({
+const Config = Serrurier.createClass({
     name: 'Config',
     collection: config,
     secured: {
@@ -125,8 +125,8 @@ const Config = Checkpoints.createClass({
          * @param {string} userId - The user id to give Admin privileges
          * @param {?Function_meteor_callback=} asyncCallback
          */
-        @assert( 'matchParams', { userId: ensures.IsNonEmptyString } )
-        @assert( 'loggedUserIsAdmin' )
+        @cadenas( 'matchParams', { userId: IsNonEmptyString } )
+        @cadenas( 'loggedUserIsAdmin' )
         @server()
         setUserAdmin( userId, asyncCallback = null ) {
             assertUserExists( userId );
@@ -140,7 +140,7 @@ const Config = Checkpoints.createClass({
          //@server()
          //@assert( 'loggedUserIsAdmin' )
          //@assert( 'matchParams', { userId: Match.Where((userId) => Meteor.userId() !== userId) } )
-        @assert( 'loggedUserInRole', 'bitch' )
+        @cadenas( 'loggedUserInRole', 'bitch' )
         unsetUserAdmin( userId, asyncCallback=null ){
             //assertUserExists(userId);
             Roles.removeUsersFromRoles( userId, roles.ADMIN );
@@ -194,7 +194,7 @@ const Config = Checkpoints.createClass({
         beforeRemove(/* e */){
             propagateSecurityException( { reason: 'Removing configuration is prohibited.', errorId:'client-config-remove-forbidden' } );
         },
-        @assert( 'loggedUserIsAdmin' )
+        @cadenas( 'loggedUserIsAdmin' )
         beforeUpdate( e ) {},
         beforeInsert( e ) {
             // force Config to singleton

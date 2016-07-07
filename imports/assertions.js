@@ -1,5 +1,5 @@
-import { parts } from 'meteor/svein:astro-checkpoints-assert-roles';
-import { DefaultAssertor } from 'meteor/svein:astro-checkpoints';
+import { parts } from 'meteor/svein:serrurier-cadenas-roles';
+import { DefaultAssertor } from 'meteor/svein:serrurier';
 import { roles } from './security';
 //noinspection JSCheckFunctionSignatures
 console.info( 'LOAAAAAAAAAAAAAAD loggedUserIsAdmin' );
@@ -16,7 +16,7 @@ export function checkAgainstVerifiedEmailPolicy(){
  * Assert the logged user is admin
  */
 const loggedUserIsAdmin = DefaultAssertor.partialFrom( 'loggedUserInRole' , {
-    name:'loggedUserIsAdmin',
-    reason:'Must be admin.'
+    name: 'loggedUserIsAdmin',
+    reason: 'Must be admin.'
 }, roles.ADMIN );
 

@@ -1,10 +1,10 @@
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import { Serrurier } from 'meteor/svein:serrurier';
 import { MetaInfoType } from './MetaInfoType';
 import _ from 'lodash';
-import { ensures } from 'meteor/svein:astro-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-decorators-core';
 
-function hasParent (tsk){
-    return _.isInteger(tsk.parentId);
+function hasParent ( tsk ){
+    return _.isInteger( tsk.parentId );
 }
 //noinspection JSClosureCompilerSyntax
 /**
@@ -12,9 +12,9 @@ function hasParent (tsk){
  * @classdesc A set of {@link MetaInfoType}
  * @implements SecuredClass
  */
-export const MetaInfoTypes=Checkpoints.createClass({
-    name:'MetaInfoTypes',
-    methods:{
+export const MetaInfoTypes = Serrurier.createClass({
+    name: 'MetaInfoTypes',
+    methods: {
         /**
          * @desc push a new type
          * @param {!MetaInfoType} type
@@ -149,7 +149,7 @@ export const MetaInfoTypes=Checkpoints.createClass({
             return _(this._types).filter(hasParent).sortBy('_id').value();
         }
     },
-    fields:{
+    fields: {
         /**
          * @type {MetaInfoType[]}
          * @instance
@@ -157,9 +157,9 @@ export const MetaInfoTypes=Checkpoints.createClass({
          * @default []
          * @private
          */
-        _types:{
-            type:[MetaInfoType],
-            default:[]
+        _types: {
+            type: [MetaInfoType],
+            default: []
         }
     }
 });

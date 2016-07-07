@@ -1,12 +1,12 @@
 import { MetaInfoType } from './MetaInfoType';
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import { Serrurier } from 'meteor/svein:serrurier';
 
 /**
  * @class
  * @extends MetaInfoType
  * @classdesc A type of annotation used to document events during experimentations
  */
-export const AnnotationType = Checkpoints.inheritClass( MetaInfoType, {
+export const AnnotationType = Serrurier.inheritClass( MetaInfoType, {
     name: 'AnnotationType',
     fields: {
         /**

@@ -10,5 +10,9 @@
     "meteor-node-stubs": "~0.2.0",
     "stringify-object": "^2.4.0",
     "validator": "^5.4.0"
+  },
+  "scripts": {
+    "test": " meteor test --driver-package practicalmeteor:mocha -p 3001",
+    "run": "scripts/colabdev.sh"
   }
 }

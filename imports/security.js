@@ -7,14 +7,8 @@ import assign from 'lodash/assign';
 import isFunction from 'lodash/isFunction';
 import { Roles } from 'meteor/alanning:roles';
 import { Class, Event } from 'meteor/jagi:astronomy';
-import { ensures } from 'meteor/svein:astro-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-decorators-core';
 import Logger from './Logger';
-
-const logger=new Logger('security~');
-
-
-
-//noinspection JSValidateJSDoc
 
 /**
  * @desc serialize any Astro.Class instance

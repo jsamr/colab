@@ -1,30 +1,30 @@
 import { Mongo } from 'meteor/mongo';
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import Serrurier from 'meteor/svein:serrurier';
 
 const tasks = new Mongo.Collection('plugins.tasks');
 
-const Task = Checkpoints.createClass({
-    name:'Task',
-    collection:tasks,
-    secured:{
-        insert:true,
-        update:true,
-        remove:true
+const Task = Serrurier.createClass({
+    name: 'Task',
+    collection: tasks,
+    secured: {
+        insert: true,
+        update: true,
+        remove: true
     },
-    fields:{},
-    behaviors:{
-        softremove:{
-            removedFieldName:'_removed'
+    fields: {},
+    behaviors: {
+        softremove: {
+            removedFieldName: '_removed'
         }
     },
-    indexes:{
-        uniqTaskType:{
-            fields:{
-                taskTypeId:1,
-                expId:1
+    indexes: {
+        uniqTaskType: {
+            fields: {
+                taskTypeId: 1,
+                expId: 1
             },
-            options:{
-                unique:true
+            options: {
+                unique: true
             }
         }
     }

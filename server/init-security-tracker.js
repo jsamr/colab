@@ -1,6 +1,6 @@
 import getp from 'lodash/get';
 import Logger from '../imports/Logger';
-import { ensures } from 'meteor/svein:astro-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-decorators-core';
 const logger=new Logger('security-tracker:emails');
 import { Roles } from 'meteor/alanning:roles';
 

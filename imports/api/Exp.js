@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import Serrurier from 'meteor/svein:serrurier';
 
 const experiments=new Mongo.Collection('exps');
 
@@ -7,7 +7,7 @@ const experiments=new Mongo.Collection('exps');
  * An experiment
  * @constructor
  */
-const Exp = Checkpoints.createClass({
+const Exp = Serrurier.createClass({
     name:'Exp',
     collection:experiments,
     secured:{

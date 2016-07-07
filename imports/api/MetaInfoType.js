@@ -1,36 +1,36 @@
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import { Serrurier } from 'meteor/svein:serrurier';
 import valid from '../validation';
 
 /**
  * @class
  * @classdesc An abstract class representing a type of contextual information relative to an experimentation
  */
-export const MetaInfoType=Checkpoints.createClass({
-    name:'MetaInfoType',
-    fields:{
+export const MetaInfoType = Serrurier.createClass({
+    name: 'MetaInfoType',
+    fields: {
         /**
          * @type {string}
          * @instance
          * @memberof MetaInfoType#
          */
-        name:String,
+        name: String,
         /**
          * @type {string}
          * @instance
          * @memberof MetaInfoType#
          * @desc Css color
          */
-        color:String,
+        color: String,
         /**
          * @type {number}
          * @instance
          * @memberof MetaInfoType#
          * @desc Unique identifier, must be an integer.
          */
-        _id:{
-            type:Number,
-            validators:[{
-                type:'integer'
+        _id: {
+            type: Number,
+            validators: [{
+                type: 'integer'
             }]
         },
         /**
@@ -41,11 +41,11 @@ export const MetaInfoType=Checkpoints.createClass({
          * A type with a parentId to null is an abstract type.
          * A type with a non-null parentId is a concrete type.
          */
-        parentId:{
-            type:Number,
-            validators:[valid.nullOrInteger()],
-            optional:true,
-            default:null
+        parentId: {
+            type: Number,
+            validators: [ valid.nullOrInteger() ],
+            optional: true,
+            default: null
         }
     }
 });

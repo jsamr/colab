@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import { Serrurier } from 'meteor/svein:serrurier';
 import { AnnotationType } from './AnnotationType';
 import { MetaInfoTypes } from './MetaInfoTypes';
 import valid from '../validation';
@@ -18,10 +18,10 @@ import _ from 'lodash';
 import Exp from './Exp';
 import { getConfig } from './Config';
 
-import { ensures } from 'meteor/svein:astro-decorators-core';
-import { assert, server } from 'meteor/svein:astro-checkpoints';
+import { ensures } from 'meteor/svein:serrurier-decorators-core';
+import { cadenas, server } from 'meteor/svein:serrurier';
 
-import { parts } from 'meteor/svein:astro-checkpoints-assert-roles';
+import { parts } from 'meteor/svein:serrurier-cadenas-roles';
 
 const projects = new Mongo.Collection('projects');
 //noinspection JSUnusedLocalSymbols,JSClosureCompilerSyntax
@@ -31,7 +31,7 @@ const projects = new Mongo.Collection('projects');
  * @extends SecuredClass
  * @implements {PartitionClass}
  */
-const Project = Checkpoints.createClass({
+const Project = Serrurier.createClass({
     name:'Project',
     collection:projects,
     secured:{
@@ -73,7 +73,7 @@ const Project = Checkpoints.createClass({
          * @param {!string|!string[]} role_s - The role(s) to set
          * @throws { Error } When the caller has no prerogatives to perform this operation.
          */
-        @assert( 'persisted' )
+        @cadenas( 'persisted' )
         setUserRole_s(userId, role_s){
             this.assertLoggedUserInRole_s(roles.project$MANAGER);
             this.assertHasBeenSerialized();
@@ -85,7 +85,7 @@ const Project = Checkpoints.createClass({
          * @param {?mongodb_string_id=} userToCheck - Optionally, check that this user id is not equal to logged user id before proceeding assertion.
          * @throws { Error } When the caller has no prerogatives to perform this operation.
          */
-        @assert( 'persisted' ) 
+        @cadenas( 'persisted' )
         assertLoggedUserInRole_s(role_s, userToCheck=null){
             if(userToCheck === null || userToCheck !== Meteor.userId()){
                 assertLoggedUserInRole_s(role_s, this.getPartition());
@@ -97,7 +97,7 @@ const Project = Checkpoints.createClass({
          * @param {string | string[]} role_s - the role(s) to check user against
          * @return {boolean} - true if user has role in this project scope, false otherwise
          */
-        @assert( 'persisted' )
+        @cadenas( 'persisted' )
         isUserInRole_s(userId, role_s){
             return isUserInRole_s(userId, role_s, this.getPartition());
         },
@@ -113,7 +113,7 @@ const Project = Checkpoints.createClass({
          * @param {Function_meteor_callback=null} asyncCallback
          * @return {boolean} - Whether or not logged user is willing to join this project.
          */
-        @assert( 'userIsLoggedIn' )
+        @cadenas( 'userIsLoggedIn' )
         isPending(asyncCallback=null){
             return  _.includes(this.pending, Meteor.userId());
         },
@@ -122,7 +122,7 @@ const Project = Checkpoints.createClass({
          * @instance
          * @memberof Project#
          */
-        @assert( 'loggedUserInRole', roles.project$acceptMember, 'test' )
+        @cadenas( 'loggedUserInRole', roles.project$acceptMember, 'test' )
         getPendingUsers(){
             return Meteor.users.find({ _id:{$in: this.pending }}).fetch();
         },
@@ -170,8 +170,8 @@ const Project = Checkpoints.createClass({
          * @param {Function=} asyncCallback - function (error, result) {...}
          */
         @server()
-        @assert( 'persisted')
-        @assert( 'userLoggedIn')
+        @cadenas( 'persisted')
+        @cadenas( 'userLoggedIn')
         unregisterFromProject(asyncCallback=null){
             revokeLoggedUserRole_s(this.getPartition());
         },
@@ -182,8 +182,8 @@ const Project = Checkpoints.createClass({
          * @instance
          */
         @server()
-        @assert( 'persisted')
-        @assert( 'userLoggedIn' )
+        @cadenas( 'persisted')
+        @cadenas( 'userLoggedIn' )
         registerToPendingInProject(asyncCallback){
             //noinspection JSUnusedAssignment
             Project.update(this._id, { $push:{pending:Meteor.userId()} });
@@ -194,9 +194,9 @@ const Project = Checkpoints.createClass({
          * @param {Function=} asyncCallback - function (error, result) {...}
          */
         @server()
-        @assert( 'persisted' )
-        @assert( 'userLoggedIn' )
-        @assert( 'loggedUserInRole', roles.project$acceptMember, parts.AUTO )
+        @cadenas( 'persisted' )
+        @cadenas( 'userLoggedIn' )
+        @cadenas( 'loggedUserInRole', roles.project$acceptMember, parts.AUTO )
         cancelPendingInProject( userId, asyncCallback=null ){
             //noinspection JSUnusedAssignment
             Project.update( this._id, {$pull: {pending: Meteor.userId()}} );
@@ -347,7 +347,7 @@ const Project = Checkpoints.createClass({
                 e.target.assertLoggedUserInRole_s(roles.project$MANAGER);
             }
         },
-        @assert( 'userIsLoggedIn' )
+        @cadenas( 'userIsLoggedIn' )
         beforeRemove(e){
             if(Meteor.isServer) {
                 // TODO softremove Exp

@@ -1,30 +1,30 @@
 import { Mongo } from 'meteor/mongo';
-import { Checkpoints } from 'meteor/svein:astro-checkpoints';
+import { Serrurier } from 'meteor/svein:serrurier';
 
-const captions=new Mongo.Collection('plugins.captions');
+const captions =new Mongo.Collection('plugins.captions');
 
-const Caption=Checkpoints.createClass({
-    name:'Caption',
-    collection:captions,
-    secured:{
-        insert:true,
-        update:true,
-        remove:true
+const Caption = Serrurier.createClass({
+    name: 'Caption',
+    collection: captions,
+    secured: {
+        insert: true,
+        update: true,
+        remove: true
     },
-    fields:{},
-    behaviors:{
-        softremove:{
-            removedFieldName:'_removed'
+    fields: {},
+    behaviors: {
+        softremove: {
+            removedFieldName: '_removed'
         }
     },
-    indexes:{
-        uniqPlaces:{
-            fields:{
-                place:1,
-                expId:1
+    indexes: {
+        uniqPlaces: {
+            fields: {
+                place: 1,
+                expId: 1
             },
-            options:{
-                unique:true
+            options: {
+                unique: true
             }
         }
     }

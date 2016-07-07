@@ -127,7 +127,7 @@ class SecurityReport {
      */
     _build() {
         if( !this._buildObj ) {
-            this._buildObj = '\n _______________________________ SECURITY REPORT _______________________________ \n' +
+            this._buildObj = '\n _______________________________ SERRURIER SECURITY REPORT _______________________________ \n' +
                              stringifyObject( this._toRawReport() ) +
                              '\n _______________________________________________________________________________ \n';
         }
