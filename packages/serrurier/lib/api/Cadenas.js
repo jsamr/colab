@@ -7,6 +7,11 @@ import { Match } from 'meteor/check';
 import { Assertion }  from './Assertion';
 const cadenasMap = new Map();
 
+let isApiLocked = false;
+
+export function lockApi() {
+    isApiLocked = true;
+}
 
 /**
  * @param {!Function} methodNameGetter
@@ -19,6 +24,7 @@ export function buildAssertion( methodNameGetter, name, params ) {
     ensuresArg( 'In function `buildAssertion` param `name`', name, String );
     ensuresArg( 'In function `buildAssertion` param `params`', params, Match.Optional(Array) );
     let cadenas = cadenasMap.get( name );
+    //noinspection JSCheckFunctionSignatures
     let args = Match.test( params, Array )? params : [];
     if (!cadenas) throw Error( `No cadenas found with name '${name}'.
     Currently registered cadenas are : '${Array.from(cadenasMap.keys()).join(', ')}'.
@@ -41,27 +47,33 @@ export function validateArguments( args, matchPatterns, nameFunc ) {
 export class Cadenas {
 
     /**
-     * @param {!Cadenas | string } cadenas - The cadenas to get a partial from, or its name
+     * @lockable
+     * @param {!string } cadenasName - The cadenas name to get a partial from
      * @param {!object} config
      * @param {!string} config.name
      * @param {!string} config.reason
      * @param {...*} partials - The partials to be applied to the {@link Cadenas#doesAssertionFails} method.
      * @see _.partial
      */
-    static partialFrom( cadenas, config, ...partials ){
-        const  { name, reason } = config;
-        ensuresArg( 'In static method `Cadenas.partialFrom` : param `config.name`', name, String );
-        ensuresArg( 'In static method `Cadenas.partialFrom` : param `config.reason`', reason, String );
-        ensures( 'In static method `Cadenas.partialFrom` : param `cadenas` must be a `string` or instance of `Cadenas`"', cadenas, Match.OneOf( String, Cadenas ) );
-        if(Match.test( cadenas, String )) cadenas = cadenasMap.get( cadenas );
-        if(!cadenas) throw new Error( `Cadenas ${cadenas} does not exist` );
-        const partial = create( cadenas, Object.assign( config, {
-            toAssertion: function( args, methodNameGetter ) {
-                partials.push( ...args );
-                cadenas.toAssertion.call(this, partials, methodNameGetter);
-            }}));
-        cadenasMap.set( name, partial );
-        return partial;
+    static partialFrom( cadenasName, config, ...partials ){
+        if(!isApiLocked){
+            const  { name, reason } = config;
+            /** @type Cadenas */
+            let cadenas = null;
+            ensuresArg( 'In static method `Cadenas.partialFrom` : param `config.name`', name, String );
+            ensuresArg( 'In static method `Cadenas.partialFrom` : param `config.reason`', reason, String );
+            ensuresArg( 'In static method `Cadenas.partialFrom` : param `cadenas`', cadenasName, String );
+            //noinspection JSCheckFunctionSignatures
+            if(Match.test( cadenasName, String )) cadenas = cadenasMap.get( cadenasName );
+            if(!cadenasName) throw new Error( `Cadenas ${cadenasName} does not exist` );
+            const partial = create( cadenas, Object.assign( config, {
+                toAssertion: function( args, methodNameGetter ) {
+                    partials.push( ...args );
+                    cadenas.toAssertion.call(this, partials, methodNameGetter);
+                }}));
+            cadenasMap.set( name, partial );
+            return partial;
+        }
     }
 
     /**
@@ -92,7 +104,7 @@ export class Cadenas {
      * @param {!Function_predicate} config.doesAssertionFails - A function that returns truthy if the assertion fails, false otherwise. If the return value is a string,
      * it will be appended to the 'reason' {@link security_context}.
      * @param {!string} config.reason
-     * @param {!string} config.errorId
+     * @param {!string} config.exceptionId
      * @param {Array.<meteor_match_pattern=} config.matchPatterns - An array of match patterns to validate the doesAssertionFails method
      * @param {Object<string, Array.<*>>=} config.dependingCadenas - Cadenas this cadenas depends on : a dictionary which keys are cadenas names, and values are a list of arguments
      * to pass to the cadenas {@link Function_predicate}
@@ -111,7 +123,7 @@ export class Cadenas {
         this.doesAssertionFails = doesAssertionFails;
         this.name = name;
         this.reason = reason;
-        this.errorId = `cadenas:${name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
+        this.exceptionId = `cadenas:${name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
         this.matchPatterns = matchPatterns;
         this.dependingCadenas = dependingCadenas;
         if(cadenasMap.get( name )) throw new Error( `Cadenas ${name} already exists` );

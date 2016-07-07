@@ -87,9 +87,9 @@ describe('svein:serrurier', function() {
         describe('the method `perform`', function () {
             let alwaysFailing = alwaysFailingDefaultCadenas.toAssertion( [verboseReason], getMethodName );
             let alwaysPassing = alwaysPassingDefaultCadenas.toAssertion( [verboseReason], getMethodName );
-            it('should return an security report of type object with fields `errorId` and `reason` when  the `doesAssertionFails` method returns a non null value', function () {
+            it('should return an security report of type object with fields `exceptionId` and `reason` when  the `doesAssertionFails` method returns a non null value', function () {
                 expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'reason' );
-                expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'errorId' );
+                expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'exceptionId' );
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
                 let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;
@@ -100,9 +100,9 @@ describe('svein:serrurier', function() {
         describe('the method `perform`', function () {
             let alwaysFailing = alwaysFailingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
             let alwaysPassing = alwaysPassingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
-            it('should return an security report of type object with fields `errorId` and `reason` when the `doesAssertionFails` method returns a non null value', function () {
+            it('should return an security report of type object with fields `exceptionId` and `reason` when the `doesAssertionFails` method returns a non null value', function () {
                 expect( alwaysFailing.perform(null, []) ).to.be.a( 'object' ).to.have.property( 'reason' );
-                expect( alwaysFailing.perform(null, []) ).to.be.a( 'object' ).to.have.property( 'errorId' );
+                expect( alwaysFailing.perform(null, []) ).to.be.a( 'object' ).to.have.property( 'exceptionId' );
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
                 let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;

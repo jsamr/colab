@@ -22,9 +22,10 @@ export default function cadenas(name, ...params ){
         ensures( 'The annotation `cadenas` must target a function, but found a '+typeof oldAction, oldAction, Function );
         thatMethodName = methodName;
         target[methodName] = function() {
-            /** @type error_descriptor|null */
+            /** @type error_descriptor */
             let errorDescriptor = assertion.perform( this, arguments );
             // if at least one assertion returns an error descriptor, store it and stop proceeding assertions.
+            //noinspection JSCheckFunctionSignatures
             if( Match.test( errorDescriptor, Object ) ) {
                 const possibleCallback = last( arguments );
                 propagateSecurityException.call( this, errorDescriptor, possibleCallback );

@@ -50,7 +50,7 @@ Then, if logged user is not in role 'administrator' and calls
 ``` javascript
 (new Project()).updateSensitiveData();
 ```
-This will output in the console ( if `Serrurier.silence()` has not been called ) :
+This will output in the console ( if `Serrurier.lockApi()` has not been called ) :
 ![](img/log1.png)
 
 Notice that the cadenas `'userIsLoggedIn'` has passed, because `'loggedUserInRole'` cadenas depends on it.
@@ -64,6 +64,7 @@ If you want, and you should, write your own cadenas, [go to this section](#write
 > **asserts** that the user is logged in, with `Meteor.userId`.  
 > **targets** `methods`, `events`  
 > **throws** `SecurityException`  
+> **params** none
 
 #### `@cadenas( 'loggedUserInRole', role_s, partition )`
 
@@ -85,11 +86,18 @@ meteor add svein:serrurier-cadenas-roles
 
 #### `@cadenas( 'matchParams', paramsDescription )`
 
-> **asserts** that all methods arguments match the given paramsDescription, and throws an error if at least one match fails.  
+> **asserts** that all method arguments match the given paramsDescription, and throws an error if at least one match fails.  
 > **targets** `methods`  
-> **throws** `ValidationError`  
+> **throws** `ValidationException`  
 > **params**  
 > > *paramsDescription* An array of [Meteor Match Patterns](https://docs.meteor.com/api/check.html#matchpatterns)
+
+
+#### `@cadenas( 'userExists' )`
+> **asserts** that the first argument of the class instance method is a string corresponding to an existing user.
+> **targets** `methods`  
+> **throws** `StateException`  
+> **params** none
 
 
 #### `@cadenas( 'persisted' )`
@@ -97,6 +105,7 @@ meteor add svein:serrurier-cadenas-roles
 > **asserts** that the instance it is being called upon has been persisted (with `_isNew` property to false)  
 > **targets** `methods`, `events`  
 > **throws** `StateException`  
+> **params** none
 
 ## *`@server`* decorator
 
@@ -113,7 +122,7 @@ import { Serrurier, server } from 'meteor/svein:serrurier';
 //...
     @server()
     aMethodThatMustExecuteOnServer() {
-      console.info("Look, I'm running on server only.");
+      console.info( "Look, I'm running on server only." );
     }
 
 ```
@@ -135,23 +144,41 @@ Then add at the root of your project a `.babelrc` file with the following conten
 }
 ```
 That's all you have to do!
-## In production
+## Security in production
 
-You can prevent `Serrurier` from outputting anything in the console with one single `Serrurier.silence()` at the beginning of your application.
+You can prevent `Serrurier` from outputting anything in the console, and lock the API with one single `Serrurier.lockApi()` at the beginning of your application.
+This cannot be reversed. Any consequitive call to any `Serrurier` static method will be ignored.
 
 ``` javascript
 import Serrurier from 'meteor/svein:serrurier';
 import 'meteor/jboulhous:dev'; // adds `Meteor.isDevelopment` flag
 
-if(!Meteor.isDevelopment) Serrurier.silence();
+if(!Meteor.isDevelopment) Serrurier.lockApi();
 
 ```
 <a name="reporters">
 ## reporters
 
 A reporter is exactly like an event listener for errors.   
-For each type of error, i.e. `SecurityException`, `StateError` and `ValidationError`, you can register a reporter.
+For each type of error, i.e. `SecurityException`, `StateException` and `ValidationException`, you can register a reporter.
 By default, there is no reporting : the errors are just thrown up to the method call.
+A reporter takes one `security_context` argument that holds several informations :
+
+```
+* @typedef {object} security_context
+* An object that holds information about the context of the execution of security routines.
+* Used to log user activity.
+* @prop {string=} action            - The 'Class#method' Astronomy signature who built the context
+* @prop {Array=}  args              - The arguments that action received
+* @prop {string=} reason            - Why the access was forbidden?
+* @prop {string=} errorId           - Unique identifier of the exception
+* @prop {string=} stackTrace        - The stacktrace that generated this exception
+* @prop {string=} userId            - The user who attempted this action
+* @prop {object=} target            - The target of the action
+* @prop {object=} currentTarget     - The currentTarget of the action, i.e. a nested field of the target
+*/
+```
+
 To add a reporter :
 
 ``` javascript
@@ -164,6 +191,7 @@ Serrurier.registerReporter( SecurityException, function( error ) {
 ```
 
 If you need a reporter that is executed on server, but listens to both client and server side errors, you can call the `Serrurier.registerServerReporter` helper.
+Suits nicely for Error logging and suspect activity logging.  
 
 ### Paranoid reporter
 This reporter fit bests for `SecurityException`.
@@ -173,14 +201,14 @@ meteor add svein:serrurier-reporter-paranoid
 
 
 ```
-_______________________________ SERRURIER SECURITY REPORT _______________________________
+_______________________________ SERRURIER PARANOID REPORT _______________________________
 {
         createdAt: new Date('2016-07-07T05:46:25.005Z'),
         ip: '127.0.0.1',
         userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/50.0.2661.102 Chrome/50.0.2661.102 Safari/537.36',
         securityContext: {
                 reason: 'User must be in  role : administrator, partition: GLOBAL',
-                errorId: 'cadenas:logged-user-in-role',
+                exceptionId: 'cadenas:logged-user-in-role',
                 descriptor: 'Project#updateSensitiveData',
                 target: {
                         Project: {
@@ -227,7 +255,7 @@ const myCustomCadenas = new DefaultCadenas({
     name: 'myCustomCadenas',
     reason: '',
     // [optional] This will fall back to SecurityException if none provided
-    errorCtor: StateError
+    errorCtor: StateException
     doesAssertionFails: function( myArg ) {
         // Does it need to throw an error ?
 

@@ -10,6 +10,9 @@ import './main.html';
 import { getConfig }  from '../imports/api/Config';
 import Project from '../imports/api/Project';
 import { TaskType } from '../imports/api/TaskType';
+import { SecurityException, Serrurier } from 'meteor/svein:serrurier';
+
+Serrurier.subscribeServerReporter( SecurityException );
 
 let once=true;
 

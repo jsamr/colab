@@ -1,4 +1,4 @@
-import ActionsStore from '../ActionsStore';
+import { ActionsStore } from '../core';
 import Logger from '../Logger';
 
 const logger = new Logger('maker:onServer');
@@ -9,10 +9,10 @@ const logger = new Logger('maker:onServer');
  * @param {!string} methodName
  * @return {Function}
  */
-function remoteCaller(actionDescriptor, methodName){
-    logger.debug('Defining', actionDescriptor);
+function remoteCaller( actionDescriptor, methodName ){
+    logger.debug( 'Defining', actionDescriptor );
     return function(){
-        const self=Array.prototype.shift.call(arguments);
+        const self = Array.prototype.shift.call( arguments );
         return self[methodName](...arguments);
     }
 }
@@ -30,10 +30,8 @@ export function makeOnServer( old, actionDescriptor, methodName ) {
         if(!ActionsStore.getProp( old, 'wrappedOnServer' )){
             logger.debug( 'Wrapping method with `onServer` decorator', actionDescriptor );
             if(Meteor.isServer) {
-                // define method
-                const method = {};
-                method[actionDescriptor] = remoteCaller( actionDescriptor, methodName );
-                Meteor.methods( method );
+                const namespacedName = '/serrurier/methods/' + methodName;
+                Meteor.methods({ [namespacedName] : remoteCaller( actionDescriptor, namespacedName ) });
             }
             wrappedMethod = function() {
                 if ( Meteor.isServer ) {

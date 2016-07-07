@@ -8,7 +8,7 @@ export function SecurityException( context={} ) {
     var temp = Error.call( this );
     this.name = 'SecurityException';
     this._context = context;
-    this.message = `[${this._context.errorId}] ${this._context.reason}`;
+    this.message = `[${this._context.exceptionId}] ${this._context.reason}`;
     this.stack = normalizeStack( temp.stack, this.name, this.message );
 }
 
@@ -18,7 +18,12 @@ SecurityException.prototype = Object.create( Error.prototype, {
         value: SecurityException,
         writable: true,
         configurable: true
+    },
+    name : {
+        value: 'SecurityException'
     }
 } );
+
+console.info( SecurityException.prototype.name )
 
 export default SecurityException;

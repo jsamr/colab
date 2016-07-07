@@ -125,7 +125,7 @@ const Config = Serrurier.createClass({
          * @param {string} userId - The user id to give Admin privileges
          * @param {?Function_meteor_callback=} asyncCallback
          */
-        @cadenas( 'matchParams', { userId: IsNonEmptyString } )
+        @cadenas( 'matchParams',  [ IsNonEmptyString ] )
         @cadenas( 'loggedUserIsAdmin' )
         @server()
         setUserAdmin( userId, asyncCallback = null ) {
@@ -139,7 +139,7 @@ const Config = Serrurier.createClass({
          */
          //@server()
          //@assert( 'loggedUserIsAdmin' )
-         //@assert( 'matchParams', { userId: Match.Where((userId) => Meteor.userId() !== userId) } )
+         //@assert( 'matchParams', [ Match.Where((userId) => Meteor.userId() !== userId) ] )
         @cadenas( 'loggedUserInRole', 'administrator' )
         unsetUserAdmin( userId, asyncCallback=null ){
             //assertUserExists(userId);
@@ -192,7 +192,7 @@ const Config = Serrurier.createClass({
     events:{
         //TODO create 'forbidden' annotation
         beforeRemove(/* e */){
-            propagateSecurityException( { reason: 'Removing configuration is prohibited.', errorId:'client-config-remove-forbidden' } );
+            propagateSecurityException( { reason: 'Removing configuration is prohibited.', exceptionId:'client-config-remove-forbidden' } );
         },
         @cadenas( 'loggedUserIsAdmin' )
         beforeUpdate( e ) {},
@@ -200,7 +200,7 @@ const Config = Serrurier.createClass({
             // force Config to singleton
             if( Meteor.isServer ) e.target._id = SINGLETON_CONFIG_ID;
             // prevent client side insertion
-            if( !e.trusted ) propagateSecurityException( { reason: 'Cannot insert config.', errorId: 'client-config-insert-forbidden' } );
+            if( !e.trusted ) propagateSecurityException( { reason: 'Cannot insert config.', exceptionId: 'client-config-insert-forbidden' } );
         }
     }
 });

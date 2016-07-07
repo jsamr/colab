@@ -4,10 +4,9 @@ import {
     decorateDescription
 } from './lib/core';
 import _ from 'lodash';
-import ActionsStore from './lib/ActionsStore';
+import { ActionsStore } from './lib/core';
 import { chai } from 'meteor/practicalmeteor:chai';
 const expect = chai.expect;
-const assert = chai.assert ;
 
 let func = function(){};
 const wrapper = function( fun ){ return () => fun(); };

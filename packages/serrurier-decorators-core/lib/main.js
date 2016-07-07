@@ -1,11 +1,15 @@
-import { decorateDescription,  registerMaker } from './core';
-import ActionsStore from './ActionsStore';
+import { decorateDescription,  registerMaker, ActionsStore, lockApi as lockCoreApi } from './core';
 import SecurityException from './SecurityException';
 import Logger from './Logger';
 import ValidationError from './ValidationError';
-
-const silence = Logger.silence;
+import { lockApi as lockMakeSecureApi, registerReporter, publishServerReporter, subscribeServerReporter } from './makers/make-secure';
 const setLogLevel = Logger.setLevel;
+
+function lockApi() {
+    lockCoreApi();
+    lockMakeSecureApi();
+    Logger.silence();
+}
 
 export {
     ActionsStore,
@@ -14,6 +18,9 @@ export {
     registerMaker,
     Logger,
     ValidationError,
-    silence,
-    setLogLevel
+    lockApi,
+    setLogLevel,
+    registerReporter,
+    publishServerReporter,
+    subscribeServerReporter
 };

@@ -28,11 +28,11 @@ function verbose( verdict, reason ) {
 /**
  *
  * @param reason
- * @param errorId
+ * @param exceptionId
  * @return {error_descriptor}
  */
-function buildErrorDescriptor( reason, errorId ) {
-    return { reason, errorId };
+function buildErrorDescriptor( reason, exceptionId ) {
+    return { reason, exceptionId };
 }
 
 
@@ -53,7 +53,7 @@ export class Assertion {
         let verdict = false;
         some( dependingAssertions, ( assertion ) => {
             verdict = assertion.perform( astroClassInstanceContext, astroMethodParams ) || false;
-            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.errorId ) : false;
+            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.exceptionId ) : false;
         });
         return verdict;
     }
@@ -89,7 +89,7 @@ export class Assertion {
             if( verdict ) {
                 const reason = verbose( this.cadenas.reason, verdict );
                 logger.warn( `${failChar}  ${className}#${this._methodNameGetter()} : failed assertion '${this.cadenas.name}' ( ${reason} )` );
-                return buildErrorDescriptor( reason, this.cadenas.errorId );
+                return buildErrorDescriptor( reason, this.cadenas.exceptionId );
             }
             else {
                 logger.info( `${okChar} ${className}#${this._methodNameGetter()} : passed assertion '${this.cadenas.name}' ( ${this.cadenas.reason} )` );
@@ -116,6 +116,7 @@ export class Assertion {
         this.assertionFunc = assertionFunc;
         this._methodNameGetter = methodNameGetter;
         this.cadenas = cadenas;
+        //noinspection JSUnusedGlobalSymbols
         this.assertionArgs = assertionArgs;
     }
 

@@ -127,7 +127,7 @@ class SecurityReport {
      */
     _build() {
         if( !this._buildObj ) {
-            this._buildObj = '\n _______________________________ SERRURIER SECURITY REPORT _______________________________ \n' +
+            this._buildObj = '\n _______________________________ SERRURIER PARANOID REPORT _______________________________ \n' +
                              stringifyObject( this._toRawReport() ) +
                              '\n _________________________________________________________________________________________ \n';
         }
@@ -153,7 +153,7 @@ class SecurityReport {
      * @param {!object} connection
      */
     constructor( securityContext, connection ) {
-        const loggerName = securityContext.action || securityContext.errorId || 'default';
+        const loggerName = securityContext.action || securityContext.exceptionId || 'default';
         const ip = getp( connection, 'clientAddress' );
         this.logger = new Logger( `suspect-activity:${loggerName}` );
         this.securityContext = securityContext;

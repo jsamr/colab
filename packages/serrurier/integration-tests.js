@@ -12,7 +12,7 @@ const expect = chai.expect;
 Logger.silence();
 
 describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
-    let securityContext = { reason:'', errorId:'any-kind-of-error' };
+    let securityContext = { reason:'', exceptionId:'any-kind-of-error' };
     describe( 'when the `decorateDescription` function is applied to an Astro description `object`', function() {
 
         let description1,

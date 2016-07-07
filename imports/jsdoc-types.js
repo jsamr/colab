@@ -5,7 +5,7 @@
  * @prop {string=} action            - The 'Class#method' Astronomy signature who built the context
  * @prop {Array=} args               - The arguments that action received
  * @prop {string=} reason            - Why the access was forbidden?
- * @prop {string=} errorId           - Unique identifier of the error
+ * @prop {string=} exceptionId           - Unique identifier of the error
  * @prop {string=} stackTrace        - The stacktrace that generated this security event
  * @prop {string=} userId            - The user who attempted this action
  * @prop {object=} target            - The target of the action
@@ -41,7 +41,7 @@
 /**
  * @typedef {object} error_descriptor
  * @prop {!string} reason
- * @prop {!string} errorId
+ * @prop {!string} exceptionId
  */
 
 /**

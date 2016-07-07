@@ -1,12 +1,13 @@
-/** @module assertions */
-
 import { Class } from 'meteor/jagi:astronomy';
 import DefaultCadenas from './DefaultCadenas';
 import MethodParamsCadenas from './MethodParamsCadenas';
 import { validateArguments } from './Cadenas';
 import ValidationError from '../ValidationError';
 
-const userIsLoggedIn= new DefaultCadenas({
+// cadenas shall never be exposed
+
+//noinspection JSUnusedGlobalSymbols
+const userIsLoggedIn = new DefaultCadenas({
     name: 'userIsLoggedIn',
     doesAssertionFails: () => {
         return !Meteor.userId()
@@ -18,6 +19,7 @@ const userIsLoggedIn= new DefaultCadenas({
 /**
  * Assert running on server
  */
+//noinspection JSUnusedGlobalSymbols
 const onServer = new DefaultCadenas({
     name: 'onServer',
     doesAssertionFails: () => !Meteor.isServer,
@@ -26,27 +28,14 @@ const onServer = new DefaultCadenas({
 
 
 /**
- * Assert user [userId] exists
- */
-const userExists = new DefaultCadenas({
-    name: 'userExists',
-    doesAssertionFails: (userId) => !Meteor.users.findOne(userId, {_id:1}),
-    reason: 'User does not exists.',
-    matchPatterns: [
-        // userId
-        String
-    ],
-    dependingCadenas: { 'onServer': [] }
-});
-
-/**
  *Assert method arguments are matching {meteor_match_pattern}s
  */
+//noinspection JSUnusedGlobalSymbols
 const matchParams = new MethodParamsCadenas({
-    name:'matchParams',
+    name: 'matchParams',
     doesAssertionFails: function( methodMatchPatterns ) {
         try{
-            validateArguments(this.astroMethodParams, methodMatchPatterns, () => `Method ${this.getMethodName()} arguments are invalid. `);
+            validateArguments( this.astroMethodParams, methodMatchPatterns, () => `Method ${this.getMethodName()} arguments are invalid. ` );
         } catch(e) {
             if(e instanceof ValidationError){
                 return e.message;
@@ -62,10 +51,22 @@ const matchParams = new MethodParamsCadenas({
 });
 
 /**
+ * Assert user [userId] exists
+ * Assumes that the method it is applied on has a userId as first argument.
+ */
+//noinspection JSUnusedGlobalSymbols
+const userExists = new MethodParamsCadenas({
+    name: 'userExists',
+    doesAssertionFails: (userId) => !Meteor.users.findOne( userId, {_id:1} ),
+    reason: 'User does not exists.',
+    dependingCadenas: { 'matchParams': [ String ] }
+});
+
+/**
  * Assert this document (Astro.Class instance) has been persisted in db
  */
 const persisted = new DefaultCadenas({
-    name:'persisted',
+    name: 'persisted',
     doesAssertionFails: function() {
         return this._isNew === true;
     },
@@ -76,22 +77,7 @@ const persisted = new DefaultCadenas({
  * Assert the user is logged
  */
 const userLoggedIn = new DefaultCadenas({
-    name:'userLoggedIn',
+    name: 'userLoggedIn',
     doesAssertionFails: () => !Meteor.userId(),
-    reason:'Must be logged in.'
+    reason: 'Must be logged in.'
 });
-
-
-
-
-/**
- * All the available assertions. You can compose them with {@link Assertion.partialFrom}
- * @type {Object.<string, Assertion>}
- */
-export default assertions = {
-    onServer,
-    userExists,
-    matchParams,
-    persisted,
-    userLoggedIn
-};

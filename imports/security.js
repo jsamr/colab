@@ -45,7 +45,7 @@ export function eventToContext(e){
  * Must be bound to 'this' for callback to keep 'this' context
  * @paral {!object} errorDescriptor
  * @param {!string} errorDescriptor.reason - An information about the forbidden access.
- * @param {!string} errorDescriptor.errorId - A unique identifier for this error
+ * @param {!string} errorDescriptor.exceptionId - A unique identifier for this error
  * @param {?Function_meteor_callback=} callbackCandidate - ignored if not a function
  * @throws {SecurityException} Always.
  */
@@ -121,7 +121,7 @@ export function isLoggedUserInRole_s(role_s, partition){
 export function assertLoggedUserInRole_s(role_s, partition=Roles.GLOBAL_PARTITION){
     //TODO manage role_s and partition at secureMethod level
     if(!isLoggedUserInRole_s(role_s, partition)) {
-        propagateSecurityException( { reason: 'Missing required prerogatives.', errorId:'assert-logged-user-in-role' } );
+        propagateSecurityException( { reason: 'Missing required prerogatives.', exceptionId:'assert-logged-user-in-role' } );
     }
 }
 
@@ -135,7 +135,7 @@ export function assertLoggedUserInRole_s(role_s, partition=Roles.GLOBAL_PARTITIO
 export function assertUserExists(userId){
     assertOnServer();
     const found=Meteor.users.findOne( userId, {_id:1} );
-    if(!found) propagateSecurityException( { reason: 'User does not exists.', errorId: 'assert:user-does-not-exists' } );
+    if(!found) propagateSecurityException( { reason: 'User does not exists.', exceptionId: 'assert:user-does-not-exists' } );
 }
 
 /**

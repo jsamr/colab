@@ -343,7 +343,7 @@ const Project = Serrurier.createClass({
         beforeSave(/* e */){
             const conf = getConfig();
             if(!conf.usersCanCreateProject && !isLoggedUserInRole_s(roles.ADMIN)){
-                propagateSecurityException( { reason:'Not allowed to create project.', errorId: 'create-project-forbidden' } );
+                propagateSecurityException( { reason:'Not allowed to create project.', exceptionId: 'create-project-forbidden' } );
             }
 
         },
