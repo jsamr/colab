@@ -28,9 +28,9 @@ export function buildAssertion( methodNameGetter, name, params ) {
 
 export function validateArguments( args, matchPatterns, nameFunc ) {
     let i = 0;
-    each( matchPatterns, ( pattern, argName ) => {
-        if(i > args.length) throw new ValidationError( `${nameFunc()} Missing argument ${argName})}` );
-        ensuresArg( `In function \`${nameFunc()}\` the param \`${argName}\``, args[i], pattern );
+    each( matchPatterns, ( pattern, index ) => {
+        if(i > args.length) throw new ValidationError( `${nameFunc()} Missing argument n°${index})}` );
+        ensuresArg( `In \`${nameFunc()}()\` the param at index \`${index}\``, args[i], pattern );
         i++;
     });
 }
@@ -93,24 +93,24 @@ export class Assertor {
      * it will be appended to the 'reason' {@link security_context}.
      * @param {!string} config.reason
      * @param {!string} config.errorId
-     * @param {Object.<string, meteor_match_pattern>=} config.matchPatterns - A dictionary of match patterns which keys are argument names
+     * @param {Array.<meteor_match_pattern=} config.matchPatterns - An array of match patterns to validate the doesAssertionFails method
      * @param {Object<string, Array.<*>>=} config.includedAssertorDescriptors - Assertors this assertor depends on : a dictionary which keys are assertor names, and values are a list of arguments
      * to pass to the assertor {@link Function_predicate}
      */
     constructor(config){
         ensuresArg('In `Assertor` constructor : param `config`', config, Object);
-        const { AssertionClass, name, doesAssertionFails, reason, matchPatterns={}, includedAssertorDescriptors={}} = config;
+        const { AssertionClass, name, doesAssertionFails, reason='', matchPatterns=[], includedAssertorDescriptors={}} = config;
         ensuresArg( 'In `Assertor` constructor : param `config.AssertionClass` must be a class inheriting from `AbstractAssertion`"', AssertionClass.prototype, Assertion );
         ensuresArg( 'In `Assertor` constructor : param `config.doesAssertionFails`', doesAssertionFails, Function );
         ensuresArg( 'In `Assertor` constructor : param `config.name`', name, String );
         ensuresArg( 'In `Assertor` constructor : param `config.reason`', reason, String );
-        ensuresArg( 'In `Assertor` constructor : param `config.matchPatterns`', matchPatterns, Object );
+        ensuresArg( 'In `Assertor` constructor : param `config.matchPatterns`', matchPatterns, Array );
         ensuresArg( 'In `Assertor` constructor : param `config.includedAssertorDescriptors`', includedAssertorDescriptors, Object );
         this.AssertionClass = AssertionClass;
         this.doesAssertionFails = doesAssertionFails;
         this.name = name;
         this.reason = reason;
-        this.errorId = `assert:${name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
+        this.errorId = `cadenas:${name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
         this.matchPatterns = matchPatterns;
         this.includedAssertorDescriptors = includedAssertorDescriptors;
         if(assertors.get( name )) throw new Error( `Assertor ${name} already exists` );

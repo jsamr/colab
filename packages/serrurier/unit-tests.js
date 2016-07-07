@@ -19,9 +19,7 @@ const alwaysFailing = {
         return arg1;
     },
     reason: 'I always fail.',
-    matchPatterns: {
-        arg1: String
-    }
+    matchPatterns: [ String ]
 };
 const alwaysPassing = {
     doesAssertionFails: () => {

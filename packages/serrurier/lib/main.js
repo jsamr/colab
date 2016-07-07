@@ -49,7 +49,24 @@ const Serrurier = {
         ensuresArg( 'In method `Serrurier.extendClass` : argument `description`', description, Object );
         ensuresArg( 'In method `Serrurier.extendClass` : argument `Clazz`', Clazz, Function );
         Clazz.extend( decorateDescription( description ) );
+    },
+    /**
+     *
+     * @param {!Function} Error - The constructor of the error to listen to
+     * @param {function({object} error)} handler - The hook that will be called when it's associated error type is thrown.
+     */
+    registerReporter( Error, handler ) {
+
+    },
+    /**
+     *
+     * @param {!Function} Error - The constructor of the error to listen to
+     * @param {function({object} error)} handler - The hook that will be called when it's associated error type is thrown.
+     */
+    registerServerReporter( Error, handler ) {
+
     }
+
 };
 
 export {

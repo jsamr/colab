@@ -19,7 +19,8 @@ meteor add svein-serrurier
 > **ℹ** This (or those) assertions are run both **client** side and **server** side.  
 > **ℹ** Those Exceptions are handled [by reporters](#reporters).  
 > **ℹ**  The general syntax for *`@cadenas`* is `@cadenas( cadenasName, ...params )`  
-> **ℹ** *`@cadenas`*  can target any function inside a `methods` description block. `events` are supported as well as long as you don't provide an array of handlers.  
+> **ℹ** *`@cadenas`*  can target any function inside a `methods` description block.
+> **ℹ** *`@cadenas`* can target any `events` handlers but **not in an array of handlers**. On any `Error` thrown by a cadenas, `e.preventDefault()` will be called.  
 > **ℹ** It supports callbacks for `methods`.
 > **ℹ** *Serrurier* is a very modular library and you can easely write your own *`@cadenas`* [within few lines of codes](#write-cadenas).   
 > **⚠** To use decorators in your meteor project `@`), [follow those 2 straightforward steps](#decorators).  
@@ -49,46 +50,53 @@ Then, if logged user is not in role 'administrator' and calls
 ``` javascript
 (new Project()).updateSensitiveData();
 ```
-This will output in the console :
+This will output in the console ( if `Serrurier.silence()` has not been called ) :
 ![](img/log1.png)
 
 Notice that the cadenas `'userIsLoggedIn'` has passed, because `'loggedUserInRole'` cadenas depends on it.
 
 ### List of available *`@cadenas`*
 
+If you want, and you should, write your own cadenas, [go to this section](#write-cadenas).
+
 #### `@cadenas( 'userLoggedIn' )`
 
-> **desc** Assert that the user is logged in, with `Meteor.userId`  
+> **asserts** that the user is logged in, with `Meteor.userId`.  
+> **targets** `methods`, `events`  
 > **throws** `SecurityException`  
 
 #### `@cadenas( 'loggedUserInRole', role_s, partition )`
 
-**⚠** You need to use [alanning-roles](https://github.com/alanning/meteor-roles) in your project to use this one, and add the following plugin :
+**⚠** You need to use [alanning:meteor-roles](https://github.com/alanning/meteor-roles) in your project to use this one, and add the following plugin :
 
 ```
 meteor add svein:serrurier-cadenas-roles
 ```
 
-> **desc**  
+> **asserts** that the logged user has role(s) in a specific scope (partition). Throws an error if it fails.  
+> **targets** `methods`, `events`  
 > **throws** `SecurityException`  
-> **params**
-> > role_s dsfsd  
-> > partition sdfsfd
+> **depends** on `'userLoggedIn'` (will always check that user is logged in first)
+> **params**  
+> > *role_s* One single or an array of role(s), i.e. string(s).   
+> > *partition* The scopes in which the partition will apply.   
+> >
 
 
 #### `@cadenas( 'matchParams', paramsDescription )`
 
-> **desc**  
+> **asserts** that all methods arguments match the given paramsDescription, and throws an error if at least one match fails.  
+> **targets** `methods`  
 > **throws** `ValidationError`  
 > **params**  
-> > paramsDescription  
+> > *paramsDescription* An array of [Meteor Match Patterns](https://docs.meteor.com/api/check.html#matchpatterns)
 
 
 #### `@cadenas( 'persisted' )`
 
+> **asserts** that the instance it is being called upon has been persisted (with `_isNew` property to false)  
+> **targets** `methods`, `events`  
 > **throws** `StateException`  
-> **desc** Assert that the instance it is being called upon has been persisted (with `_isNew` property)
-
 
 ## *`@server`* decorator
 
@@ -96,8 +104,21 @@ meteor add svein:serrurier-cadenas-roles
 > meteor add svein:serrurier-decorator-server
 > ```  
 > **ℹ** Applies to `methods` only.  
-> **ℹ** Performs server-side only, you must provide a callback as last argument.
+> **ℹ** Performs server-side only, you must provide a callback as last argument if you need the return value.  
+> This callback has the following signature : `callback( [ Error ] error, { * } result )`
 
+```javascript
+import { Serrurier, server } from 'meteor/svein:serrurier';
+
+//...
+    @server()
+    aMethodThatMustExecuteOnServer() {
+      console.info("Look, I'm running on server only.");
+    }
+
+```
+
+Calling `aMethodThatMustExecuteOnServer` from client will call it on server. In the background, a Meteor method will be registered with the name `/serrurier/ClassName#methodName` through `Meteor.methods`.
 
 <a name='decorators'>
 ## Adding legacy decorations (Meteor >= 1.3.4)
@@ -128,7 +149,28 @@ if(!Meteor.isDevelopment) Serrurier.silence();
 <a name="reporters">
 ## reporters
 
+A reporter is exactly like an event listener for errors.   
+For each type of error, i.e. `SecurityException`, `StateError` and `ValidationError`, you can register a reporter.
+By default, there is no reporting : the errors are just thrown up to the method call.
+To add a reporter :
+
+``` javascript
+import { Serrurier, SecurityException } from 'meteor/svein:serrurier';
+
+Serrurier.registerReporter( SecurityException, function( error ) {
+    console.info( error._context );
+    // do stuff, like calling a Meteor method
+});
+```
+
+If you need a reporter that is executed on server, but listens to both client and server side errors, you can call the `Serrurier.registerServerReporter` helper.
+
 ### Paranoid reporter
+This reporter fit bests for `SecurityException`.
+```
+meteor add svein:serrurier-reporter-paranoid
+```
+
 
 ```
 {
@@ -138,7 +180,7 @@ if(!Meteor.isDevelopment) Serrurier.silence();
         securityContext: {
                 reason: 'User must be in  role : administrator, partition: GLOBAL',
                 errorId: 'assert:logged-user-in-role',
-                descriptor: 'updateSensitiveData',
+                descriptor: 'Project#updateSensitiveData',
                 target: {
                         Project: {
                                 _removed: false,
@@ -147,7 +189,7 @@ if(!Meteor.isDevelopment) Serrurier.silence();
                 userId: 'JCwWgQZLExz5KrcDH'
         }
 }
- _______________________________________________________________________________ 
+ _______________________________________________________________________________
 ```
 //TODO write doc
 
@@ -156,8 +198,33 @@ if(!Meteor.isDevelopment) Serrurier.silence();
 //TODO write doc
 ### From scratch
 
+```javascript
+const myCustomAssertor = new DefaultAssertor({
+    name: 'myCustomAssertor',
+    reason: '',
+    // [optional] This will fall back to SecurityException if none provided
+    errorCtor: StateError
+    doesAssertionFails: function( myArg ) {
+        // Does it need to throw an error ?
+
+    },
+    // [optional] What is the cadenas signature (i.e. `doesAssertionFails` signature)?
+    matchPatterns: { myArg: String },
+    // [optional] A set of depending assertions in the form of a dictionary which keys are assertor names, and values an array with their `doesAssertionFails` params.
+    includedAssertorDescriptors: { userIsLoggedIn: [] }
+});
+```
+
 ### Composition with `Assertor.partialFrom`
 
 ``` javascript
+import Serrurier from 'meteor/svein:serrurier';
+/**
+ * Assert the logged user is admin
+ */
+const loggedUserIsAdmin = DefaultAssertor.partialFrom( 'loggedUserInRole' , {
+    name: 'loggedUserIsAdmin',
+    reason: 'Must be admin.'
+}, 'administrator' );
 
 ```

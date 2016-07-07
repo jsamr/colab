@@ -32,7 +32,10 @@ const userExists = new DefaultAssertor({
     name: 'userExists',
     doesAssertionFails: (userId) => !Meteor.users.findOne(userId, {_id:1}),
     reason: 'User does not exists.',
-    matchPatterns: { userId: String },
+    matchPatterns: [
+        // userId
+        String
+    ],
     includedAssertorDescriptors: { 'onServer': [] }
 });
 
@@ -52,7 +55,10 @@ const matchParams = new MethodParamsAssertor({
         return false;
     },
     reason: 'Invalid method arguments.',
-    matchPatterns: { methodMatchPatterns: Object }
+    matchPatterns: [
+        // methodMatchPatterns
+        Array
+    ]
 });
 
 /**

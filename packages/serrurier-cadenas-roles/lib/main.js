@@ -33,10 +33,12 @@ const loggedUserInRole = new DefaultAssertor({
         return !isLoggedUserInRole_s( role_s, partition ) ? `role : ${role_s}, partition: ${partition === GLOBAL ? 'GLOBAL' : partition}` : false;
     },
     reason: 'User must be in ',
-    matchPatterns: {
-        role_s: Match.OneOf( String, [String] ),
-        partition: Match.OneOf( String, Match.Where((val) => val === GLOBAL || val === AUTO ) )
-    },
+    matchPatterns: [
+        // role_s
+        Match.OneOf( String, [String] ),
+        // partition
+        Match.OneOf( String, Match.Where((val) => val === GLOBAL || val === AUTO ) )
+    ],
     includedAssertorDescriptors: { userIsLoggedIn: [] }
 
 });
