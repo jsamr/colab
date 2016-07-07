@@ -13,7 +13,7 @@ Package.describe({
     name: 'svein:serrurier-cadenas-roles',
     version: '1.0.0',
     // Brief, one-line summary of the package.
-    summary: 'Provides Assertors using the alanning:roles package',
+    summary: 'Provides Cadenas using the alanning:roles package',
     // URL to the Git repository containing the source code for this package.
     git: '',
     // By default, Meteor will default to using README.md for documentation.

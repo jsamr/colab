@@ -1,4 +1,4 @@
-import { DefaultAssertor } from 'meteor/svein:serrurier';
+import { DefaultCadenas } from 'meteor/svein:serrurier';
 import { Roles } from 'meteor/alanning:roles';
 import { Match } from 'meteor/check';
 import {
@@ -24,7 +24,7 @@ const GLOBAL = Roles.GLOBAL_PARTITION;
 /**
  * Assert logged user is in [roles]|role, parition
  */
-const loggedUserInRole = new DefaultAssertor({
+const loggedUserInRole = new DefaultCadenas({
     name: 'loggedUserInRole',
     doesAssertionFails: function ( role_s, partition = GLOBAL ) {
         if( partition === AUTO ){
@@ -39,7 +39,7 @@ const loggedUserInRole = new DefaultAssertor({
         // partition
         Match.OneOf( String, Match.Where((val) => val === GLOBAL || val === AUTO ) )
     ],
-    includedAssertorDescriptors: { userIsLoggedIn: [] }
+    dependingCadenas: { userIsLoggedIn: [] }
 
 });
 

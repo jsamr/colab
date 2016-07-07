@@ -1,12 +1,12 @@
 import { Class } from 'meteor/jagi:astronomy';
 import server from './server-decorator';
 import cadenas from './cadenas-decorator';
-import './api/default-assertions';
+import './api/default-cadenas';
 import { decorateDescription } from 'meteor/svein:serrurier-decorators-core'
 
-import { Assertor } from './api/Assertor';
-import DefaultAssertor from './api/DefaultAssertor';
-import MethodParamsAssertor from './api/MethodParamsAssertor';
+import { Cadenas } from './api/Cadenas';
+import DefaultCadenas from './api/DefaultCadenas';
+import MethodParamsCadenas from './api/MethodParamsCadenas';
 import { ensuresArg } from './ensures';
 
 /**
@@ -73,8 +73,8 @@ export {
     server,
     cadenas,
     Serrurier,
-    DefaultAssertor,
-    MethodParamsAssertor
+    DefaultCadenas,
+    MethodParamsCadenas
 };
 
 export default Serrurier;

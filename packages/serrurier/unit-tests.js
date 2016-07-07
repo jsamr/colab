@@ -3,8 +3,8 @@ import SecurityException from './lib/SecurityException';
 import ValidationError from './lib/ValidationError';
 import MethodParamsAssertion from './lib/api/MethodParamsAssertion';
 import DefaultAssertion from './lib/api/DefaultAssertion';
-import MethodParamsAssertor from './lib/api/MethodParamsAssertor';
-import DefaultAssertor from './lib/api/DefaultAssertor';
+import MethodParamsCadenas from './lib/api/MethodParamsCadenas';
+import DefaultCadenas from './lib/api/DefaultCadenas';
 import cadenas from './lib/cadenas-decorator';
 import { decoratorMock } from 'meteor/svein:serrurier-decorators-core/lib/utils';
 import _ from 'lodash';
@@ -27,23 +27,23 @@ const alwaysPassing = {
     },
     reason: 'I always pass.'
 };
-const alwaysFailingDefaultAssertor = new DefaultAssertor( _.extend({
-        name: 'alwaysFailingDefaultAssertor'
+const alwaysFailingDefaultCadenas = new DefaultCadenas( _.extend({
+        name: 'alwaysFailingDefaultCadenas'
     }, alwaysFailing )
 );
-const alwaysPassingDefaultAssertor = new DefaultAssertor( _.extend({
-        name: 'alwaysPassingDefaultAssertor'
+const alwaysPassingDefaultCadenas = new DefaultCadenas( _.extend({
+        name: 'alwaysPassingDefaultCadenas'
     }, alwaysPassing )
 );
-const alwaysFailingMethodParamsAssertor = new MethodParamsAssertor( _.extend({
+const alwaysFailingMethodParamsAssertor = new MethodParamsCadenas( _.extend({
         name: 'alwaysFailingMethodParamsAssertor'
     }, alwaysFailing )
 );
-const alwaysPassingMethodParamsAssertor = new MethodParamsAssertor( _.extend({
+const alwaysPassingMethodParamsAssertor = new MethodParamsCadenas( _.extend({
         name: 'alwaysPassingMethodParamsAssertor'
     }, alwaysPassing )
 );
-const methodArgMustBeAStringAssertor = new MethodParamsAssertor({
+const methodArgMustBeAStringAssertor = new MethodParamsCadenas({
     name: 'methodArgMustBeAStringAssertor',
     doesAssertionFails: (methodArg) => {
         return typeof methodArg !== 'string';
@@ -53,15 +53,15 @@ const methodArgMustBeAStringAssertor = new MethodParamsAssertor({
 });
 
 describe('svein:serrurier', function() {
-    describe('in a `DefaultAssertor` instance', function () {
+    describe('in a `DefaultCadenas` instance', function () {
         describe('the method `toAssertion`', function () {
-            let assertion = alwaysFailingDefaultAssertor.toAssertion( [verboseReason], getMethodName );
+            let assertion = alwaysFailingDefaultCadenas.toAssertion( [verboseReason], getMethodName );
             it( 'should return a `DefaultAssertion` instance', function () {
                 expect(assertion).to.be.an.instanceof(DefaultAssertion);
             });
             it( 'should throw a `ValidationError` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
                 expect(function () {
-                    alwaysFailingDefaultAssertor.toAssertion([], getMethodName)
+                    alwaysFailingDefaultCadenas.toAssertion([], getMethodName)
                 }).to.throw(ValidationError);
             });
         });
@@ -85,8 +85,8 @@ describe('svein:serrurier', function() {
     });
     describe('in a `DefaultAssertion` instance', function () {
         describe('the method `perform`', function () {
-            let alwaysFailing = alwaysFailingDefaultAssertor.toAssertion( [verboseReason], getMethodName );
-            let alwaysPassing = alwaysPassingDefaultAssertor.toAssertion( [verboseReason], getMethodName );
+            let alwaysFailing = alwaysFailingDefaultCadenas.toAssertion( [verboseReason], getMethodName );
+            let alwaysPassing = alwaysPassingDefaultCadenas.toAssertion( [verboseReason], getMethodName );
             it('should return an security report of type object with fields `errorId` and `reason` when  the `doesAssertionFails` method returns a non null value', function () {
                 expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'reason' );
                 expect(alwaysFailing.perform( null, []) ).to.be.a( 'object' ).to.have.property( 'errorId' );
@@ -110,12 +110,12 @@ describe('svein:serrurier', function() {
         });
     });
     describe('a method decorated with `assert`', function () {
-        describe('describing a `DefaultAssertor` instance', function () {
+        describe('describing a `DefaultCadenas` instance', function () {
             it('should throw an error of type `SecurityException` when the bound assertion fails ', function () {
                 let targetCandidate = {
                     someMethod: function () { }
                 };
-                decoratorMock( targetCandidate, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
+                decoratorMock( targetCandidate, 'someMethod', cadenas( 'alwaysFailingDefaultCadenas', 'assertion argument 1' ));
                 expect(function () {
                     targetCandidate.someMethod();
                 }).to.throw(SecurityException);
@@ -148,14 +148,14 @@ describe('svein:serrurier', function() {
                 someMethod: function () {}
             };
             // mock the @decorator
-            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
-            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysFailingDefaultCadenas', 'assertion argument 1' ));
+            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysPassingDefaultCadenas', 'assertion argument 1' ));
             let targetCandidate2 = {
                 someMethod: function () {}
             };
             // mock the @decorator
-            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
-            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysPassingDefaultCadenas', 'assertion argument 1' ));
+            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysFailingDefaultCadenas', 'assertion argument 1' ));
             expect( function () {
                 targetCandidate1.someMethod();
             }).to.throw( SecurityException );

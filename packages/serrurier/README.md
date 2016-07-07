@@ -173,13 +173,14 @@ meteor add svein:serrurier-reporter-paranoid
 
 
 ```
+_______________________________ SERRURIER SECURITY REPORT _______________________________
 {
         createdAt: new Date('2016-07-07T05:46:25.005Z'),
         ip: '127.0.0.1',
         userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/50.0.2661.102 Chrome/50.0.2661.102 Safari/537.36',
         securityContext: {
                 reason: 'User must be in  role : administrator, partition: GLOBAL',
-                errorId: 'assert:logged-user-in-role',
+                errorId: 'cadenas:logged-user-in-role',
                 descriptor: 'Project#updateSensitiveData',
                 target: {
                         Project: {
@@ -189,18 +190,41 @@ meteor add svein:serrurier-reporter-paranoid
                 userId: 'JCwWgQZLExz5KrcDH'
         }
 }
- _______________________________________________________________________________
+_________________________________________________________________________________________
 ```
 //TODO write doc
 
 <a name="write-cadenas">
 ## Write your own *`@cadenas`*
-//TODO write doc
+
+### Composition with `Cadenas.partialFrom`
+
+``` javascript
+import { Cadenas } from 'meteor/svein:serrurier';
+import { Match } from 'meteor/check';
+/**
+ * Assert the logged user is administrator
+ */
+const loggedUserIsAdmin = Cadenas.partialFrom( 'loggedUserInRole' , {
+    name: 'loggedUserIsAdmin',
+    reason: 'Must be admin.'
+}, 'administrator' );
+
+```
+Later in your project
+
+``` javascript
+    @cadenas( 'loggedUserIsAdmin' )
+    methodThatMustBeRunByAdmin() {
+      // Will be run by 'administrator'
+    }
+```
+
 ### From scratch
 
 ```javascript
-const myCustomAssertor = new DefaultAssertor({
-    name: 'myCustomAssertor',
+const myCustomCadenas = new DefaultCadenas({
+    name: 'myCustomCadenas',
     reason: '',
     // [optional] This will fall back to SecurityException if none provided
     errorCtor: StateError
@@ -209,22 +233,8 @@ const myCustomAssertor = new DefaultAssertor({
 
     },
     // [optional] What is the cadenas signature (i.e. `doesAssertionFails` signature)?
-    matchPatterns: { myArg: String },
-    // [optional] A set of depending assertions in the form of a dictionary which keys are assertor names, and values an array with their `doesAssertionFails` params.
-    includedAssertorDescriptors: { userIsLoggedIn: [] }
+    matchPatterns: [ Match.Optional( String ) ],
+    // [optional] A set of depending assertions in the form of a dictionary which keys are cadenas names, and values an array with their `doesAssertionFails` params.
+    dependingCadenas: { userIsLoggedIn: [] }
 });
-```
-
-### Composition with `Assertor.partialFrom`
-
-``` javascript
-import Serrurier from 'meteor/svein:serrurier';
-/**
- * Assert the logged user is admin
- */
-const loggedUserIsAdmin = DefaultAssertor.partialFrom( 'loggedUserInRole' , {
-    name: 'loggedUserIsAdmin',
-    reason: 'Must be admin.'
-}, 'administrator' );
-
 ```

@@ -1,12 +1,12 @@
 import { ensures } from './ensures';
 import { propagateSecurityException } from './api/security';
-import { buildAssertion } from './api/Assertor';
+import { buildAssertion } from './api/Cadenas';
 import { Match } from 'meteor/check';
 import { ActionsStore } from 'meteor/svein:serrurier-decorators-core';
 import last from 'lodash/last'
 /**
  * @param name
- * @param {...*} params - params to give to the named assertor
+ * @param {...*} params - params to give to the named cadenas
  * @example
  * ​@asserting( 'loggedUserInRole', roles.ADMIN )
  * methodThatMustBeRunByAdmin(){

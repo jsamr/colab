@@ -1,9 +1,9 @@
 import MethodParamsAssertion from './MethodParamsAssertion';
-import { Assertor } from './Assertor';
+import { Cadenas } from './Cadenas';
 /**
- * @extends {Assertor}
+ * @extends {Cadenas}
  */
-class MethodParamsAssertor extends Assertor {
+class MethodParamsCadenas extends Cadenas {
     /**
      * @param {!object} config - An object holding the instantiation params
      * @param {!string} config.name
@@ -12,8 +12,8 @@ class MethodParamsAssertor extends Assertor {
      * @param {!string} config.reason
      * @param {!string} config.errorId
      * @param {Array.<meteor_match_pattern>=} config.matchPatterns - An array of match patterns to validate the doesAssertionFails method
-     * @param {Object<string, Array.<*>>=} config.includedAssertorDescriptors - Assertors this assertor depends on : a dictionary which keys are assertor names, and values are an array of arguments
-     * to pass to the assertor {@link Function_predicate}
+     * @param {Object<string, Array.<*>>=} config.dependingCadenas - Cadenas this cadenas depends on : a dictionary which keys are cadenas names, and values are an array of arguments
+     * to pass to the cadenas {@link Function_predicate}
      */
     constructor(config){
         config.AssertionClass = MethodParamsAssertion;
@@ -21,4 +21,4 @@ class MethodParamsAssertor extends Assertor {
     }
 }
 
-export default MethodParamsAssertor;
+export default MethodParamsCadenas;

@@ -2,7 +2,7 @@ import { Match } from 'meteor/check'
 import map from 'lodash/map';
 import some from 'lodash/some';
 import { Class } from 'meteor/jagi:astronomy'
-import { buildAssertion } from './Assertor';
+import { buildAssertion } from './Cadenas';
 import { ensuresArg } from '../ensures';
 import Logger from '../Logger';
 okChar = '✔';
@@ -11,7 +11,7 @@ if(Meteor.isServer)  symb = '';
 const logger = new Logger( 'cadenas' );
 /**
  *
- * @param {!Object.<string, Array.<*>|*>} assertorDescriptions - Dictionary which keys are assertor names, and values are assertor param(s).
+ * @param {!Object.<string, Array.<*>|*>} assertorDescriptions - Dictionary which keys are cadenas names, and values are cadenas param(s).
  * @param {!Function} methodNameGetter
  * @return {Assertion[]}
  */
@@ -49,11 +49,11 @@ export class Assertion {
      * @private
      */
     _performDependingAssertions( methodNameGetter, astroClassInstanceContext, astroMethodParams ) {
-        const dependingAssertions = buildAssertions( this.assertor.includedAssertorDescriptors, methodNameGetter);
+        const dependingAssertions = buildAssertions( this.cadenas.dependingCadenas, methodNameGetter);
         let verdict = false;
         some( dependingAssertions, ( assertion ) => {
             verdict = assertion.perform( astroClassInstanceContext, astroMethodParams ) || false;
-            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.assertor.reason ), assertion.assertor.errorId ) : false;
+            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.errorId ) : false;
         });
         return verdict;
     }
@@ -87,12 +87,12 @@ export class Assertion {
         else {
             const verdict = this._applyAssertionFunc( astroClassInstanceContext, astroMethodParams );
             if( verdict ) {
-                const reason = verbose( this.assertor.reason, verdict );
-                logger.warn( `${failChar}  ${className}#${this._methodNameGetter()} : failed assertion '${this.assertor.name}' ( ${reason} )` );
-                return buildErrorDescriptor( reason, this.assertor.errorId );
+                const reason = verbose( this.cadenas.reason, verdict );
+                logger.warn( `${failChar}  ${className}#${this._methodNameGetter()} : failed assertion '${this.cadenas.name}' ( ${reason} )` );
+                return buildErrorDescriptor( reason, this.cadenas.errorId );
             }
             else {
-                logger.info( `${okChar} ${className}#${this._methodNameGetter()} : passed assertion '${this.assertor.name}' ( ${this.assertor.reason} )` );
+                logger.info( `${okChar} ${className}#${this._methodNameGetter()} : passed assertion '${this.cadenas.name}' ( ${this.cadenas.reason} )` );
                 return false;
             }
         }
@@ -107,15 +107,15 @@ export class Assertion {
 
     /**
      *
-     * @param {Assertor} assertor
+     * @param {Cadenas} cadenas
      * @param {Function} assertionFunc
      * @param {Function} methodNameGetter
      * @param {Array}  assertionArgs - The args passed to assertion
      */
-    constructor( assertor, assertionFunc, methodNameGetter, assertionArgs ) {
+    constructor( cadenas, assertionFunc, methodNameGetter, assertionArgs ) {
         this.assertionFunc = assertionFunc;
         this._methodNameGetter = methodNameGetter;
-        this.assertor = assertor;
+        this.cadenas = cadenas;
         this.assertionArgs = assertionArgs;
     }
 

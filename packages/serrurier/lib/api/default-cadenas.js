@@ -1,12 +1,12 @@
 /** @module assertions */
 
 import { Class } from 'meteor/jagi:astronomy';
-import DefaultAssertor from './DefaultAssertor';
-import MethodParamsAssertor from './MethodParamsAssertor';
-import { validateArguments } from './Assertor';
+import DefaultCadenas from './DefaultCadenas';
+import MethodParamsCadenas from './MethodParamsCadenas';
+import { validateArguments } from './Cadenas';
 import ValidationError from '../ValidationError';
 
-const userIsLoggedIn= new DefaultAssertor({
+const userIsLoggedIn= new DefaultCadenas({
     name: 'userIsLoggedIn',
     doesAssertionFails: () => {
         return !Meteor.userId()
@@ -18,7 +18,7 @@ const userIsLoggedIn= new DefaultAssertor({
 /**
  * Assert running on server
  */
-const onServer = new DefaultAssertor({
+const onServer = new DefaultCadenas({
     name: 'onServer',
     doesAssertionFails: () => !Meteor.isServer,
     reason: 'Cannot be run client side.'
@@ -28,7 +28,7 @@ const onServer = new DefaultAssertor({
 /**
  * Assert user [userId] exists
  */
-const userExists = new DefaultAssertor({
+const userExists = new DefaultCadenas({
     name: 'userExists',
     doesAssertionFails: (userId) => !Meteor.users.findOne(userId, {_id:1}),
     reason: 'User does not exists.',
@@ -36,13 +36,13 @@ const userExists = new DefaultAssertor({
         // userId
         String
     ],
-    includedAssertorDescriptors: { 'onServer': [] }
+    dependingCadenas: { 'onServer': [] }
 });
 
 /**
  *Assert method arguments are matching {meteor_match_pattern}s
  */
-const matchParams = new MethodParamsAssertor({
+const matchParams = new MethodParamsCadenas({
     name:'matchParams',
     doesAssertionFails: function( methodMatchPatterns ) {
         try{
@@ -64,7 +64,7 @@ const matchParams = new MethodParamsAssertor({
 /**
  * Assert this document (Astro.Class instance) has been persisted in db
  */
-const persisted = new DefaultAssertor({
+const persisted = new DefaultCadenas({
     name:'persisted',
     doesAssertionFails: function() {
         return this._isNew === true;
@@ -75,7 +75,7 @@ const persisted = new DefaultAssertor({
 /**
  * Assert the user is logged
  */
-const userLoggedIn = new DefaultAssertor({
+const userLoggedIn = new DefaultCadenas({
     name:'userLoggedIn',
     doesAssertionFails: () => !Meteor.userId(),
     reason:'Must be logged in.'
