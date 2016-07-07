@@ -1,6 +1,6 @@
 import { Class } from 'meteor/jagi:astronomy';
 import server from './server-decorator';
-import cadenas from './assert-decorator';
+import cadenas from './cadenas-decorator';
 import './api/default-assertions';
 import { decorateDescription } from 'meteor/svein:serrurier-decorators-core'
 

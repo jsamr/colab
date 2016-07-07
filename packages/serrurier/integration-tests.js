@@ -1,4 +1,4 @@
-import assert from './lib/assert-decorator';
+import cadenas from './lib/cadenas-decorator';
 import SecurityException from './lib/SecurityException';
 import {
     decorateDescription,
@@ -9,8 +9,8 @@ import { decoratorMock } from 'meteor/svein:serrurier-decorators-core/lib/utils'
 import { chai } from 'meteor/practicalmeteor:chai';
 import _ from 'lodash';
 const expect = chai.expect;
-Logger.setLevel( 'error' );
-Logger.setLevel( 'cop', 'error' );
+Logger.silence();
+
 describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
     let securityContext = { reason:'', errorId:'any-kind-of-error' };
     describe( 'when the `decorateDescription` function is applied to an Astro description `object`', function() {

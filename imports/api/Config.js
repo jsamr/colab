@@ -140,7 +140,7 @@ const Config = Serrurier.createClass({
          //@server()
          //@assert( 'loggedUserIsAdmin' )
          //@assert( 'matchParams', { userId: Match.Where((userId) => Meteor.userId() !== userId) } )
-        @cadenas( 'loggedUserInRole', 'bitch' )
+        @cadenas( 'loggedUserInRole', 'administrator' )
         unsetUserAdmin( userId, asyncCallback=null ){
             //assertUserExists(userId);
             Roles.removeUsersFromRoles( userId, roles.ADMIN );

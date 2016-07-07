@@ -19,10 +19,11 @@ Tracker.autorun(()=>{
   if(sub1.ready() && sub2.ready() && once){
     //try {
       once=false;
-      const conf=getConfig();
-      conf.unsetUserAdmin(Meteor.userId());
+      //const conf=getConfig();
+      //conf.unsetUserAdmin(Meteor.userId());
       //conf.remove();
-      //let prj = new Project();
+      let prj = new Project();
+      prj.updateSensitiveData()
       //let taskType1 = new TaskType();
       //taskType1.name='Yolo';
       //taskType1.color='yahoo';

@@ -10,7 +10,7 @@ import ensures from '../ensures';
 import SecurityException from '../SecurityException';
 
 /**
- * @desc Throws an error. If a callback has been provided, send it the error.
+ * Throws a SecurityException. If a callback has been provided, send it the error.
  * Must be bound to 'this' for callback to keep 'this' context
  * @paral {!object} errorDescriptor
  * @param {!string} errorDescriptor.reason - An information about the forbidden access.
@@ -26,7 +26,7 @@ export function propagateSecurityException( errorDescriptor, callbackCandidate=n
         throw error;
     } finally {
         if ( Match.test( callbackCandidate, Function ) ) {
-            callbackCandidate.call(this, error, null);
+            callbackCandidate.call( this, error, null );
         }
     }
 }

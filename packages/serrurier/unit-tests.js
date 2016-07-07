@@ -5,7 +5,7 @@ import MethodParamsAssertion from './lib/api/MethodParamsAssertion';
 import DefaultAssertion from './lib/api/DefaultAssertion';
 import MethodParamsAssertor from './lib/api/MethodParamsAssertor';
 import DefaultAssertor from './lib/api/DefaultAssertor';
-import assert from './lib/assert-decorator';
+import cadenas from './lib/cadenas-decorator';
 import { decoratorMock } from 'meteor/svein:serrurier-decorators-core/lib/utils';
 import _ from 'lodash';
 import { chai } from 'meteor/practicalmeteor:chai';
@@ -117,7 +117,7 @@ describe('svein:serrurier', function() {
                 let targetCandidate = {
                     someMethod: function () { }
                 };
-                decoratorMock( targetCandidate, 'someMethod', assert( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
+                decoratorMock( targetCandidate, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
                 expect(function () {
                     targetCandidate.someMethod();
                 }).to.throw(SecurityException);
@@ -127,7 +127,7 @@ describe('svein:serrurier', function() {
             let targetCandidate = {
                 someMethod: function () { }
             };
-            decoratorMock( targetCandidate, 'someMethod', assert( 'methodArgMustBeAStringAssertor' ));
+            decoratorMock( targetCandidate, 'someMethod', cadenas( 'methodArgMustBeAStringAssertor' ));
             it('should throw an error of type `SecurityException` when the bound assertion fails ', function () {
                 expect(function () {
                     // must fail because the first argument is not a string
@@ -150,14 +150,14 @@ describe('svein:serrurier', function() {
                 someMethod: function () {}
             };
             // mock the @decorator
-            decoratorMock( targetCandidate1, 'someMethod', assert( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
-            decoratorMock( targetCandidate1, 'someMethod', assert( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate1, 'someMethod', cadenas( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
             let targetCandidate2 = {
                 someMethod: function () {}
             };
             // mock the @decorator
-            decoratorMock( targetCandidate2, 'someMethod', assert( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
-            decoratorMock( targetCandidate2, 'someMethod', assert( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysPassingDefaultAssertor', 'assertion argument 1' ));
+            decoratorMock( targetCandidate2, 'someMethod', cadenas( 'alwaysFailingDefaultAssertor', 'assertion argument 1' ));
             expect( function () {
                 targetCandidate1.someMethod();
             }).to.throw( SecurityException );

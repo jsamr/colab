@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="426.08942"
-     inkscape:cy="132.61936"
+     inkscape:zoom="1.979899"
+     inkscape:cx="331.20813"
+     inkscape:cy="41.724332"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -65,32 +65,35 @@
        preserveAspectRatio="none"
        height="158.14285"
        width="143.20564" />
-    <flowRoot
+    <text
        xml:space="preserve"
-       id="flowRoot4136"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#2c2c2c;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="matrix(2.1552427,0,0,2.615142,-145.4471,-87.58389)"><flowRegion
-         id="flowRegion4138"><rect
-           id="rect4140"
-           width="225.22621"
-           height="52.631107"
-           x="127.27922"
-           y="382.63107"
-           style="fill:#2c2c2c;fill-opacity:1" /></flowRegion><flowPara
-         id="flowPara4142"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:hack;-inkscape-font-specification:hack;fill:#2c2c2c;fill-opacity:1">serrurier</flowPara></flowRoot>    <text
+       style="font-size:94.96327972px;line-height:125%"
+       x="141.95596"
+       y="925.35687"
+       id="text4260"
+       sodipodi:linespacing="125%"
+       transform="scale(0.90782145,1.1015382)"><tspan
+         sodipodi:role="line"
+         x="141.95596"
+         y="925.35687"
+         id="tspan4262"><tspan
+           x="141.95596"
+           y="925.35687"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace, hack, sans-serif;-inkscape-font-specification:hack;fill:#2c2c2c;fill-opacity:1"
+           id="tspan4264">Serrurier</tspan></tspan></text>
+    <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:14.60093021px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="11.908865"
-       y="1044.145"
+       style="font-style:normal;font-weight:normal;font-size:14.07798004px;line-height:125%;font-family:sans-serif, verdana;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="11.885618"
+       y="1046.7552"
        id="text4197"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4199"
-         x="11.908865"
-         y="1044.145">for <tspan
+         x="11.885618"
+         y="1046.7552">for <tspan
    style="font-weight:bold"
-   id="tspan4201">astronomy</tspan></tspan></text>
+   id="tspan4156">Astronomy</tspan></tspan></text>
     <g
        id="g3354"
        transform="matrix(0.20000694,0,0,0.20000694,38.917513,961.37548)"
@@ -127,17 +130,5 @@
            inkscape:connector-curvature="0" />
       </g>
     </g>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:18.64041328px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:0.67094016;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
-       x="59.086555"
-       y="943.96863"
-       id="text3364"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3366"
-         x="59.086555"
-         y="943.96863"
-         style="fill:#000000;fill-opacity:0.67094016;">@</tspan></text>
   </g>
 </svg>

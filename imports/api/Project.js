@@ -231,6 +231,11 @@ const Project = Serrurier.createClass({
         updateAnnotationType(annotationType){
             this.plugins.task.updateType(annotationType);
         },
+        @cadenas( 'loggedUserInRole', 'administrator' )
+        updateSensitiveData() {
+            // ...
+            console.info( 'The assertion passed, user is administrator.' );
+        },
         /**
          * @desc Add a new TaskType. Does not persist.
          * @param {!TaskType} taskType
