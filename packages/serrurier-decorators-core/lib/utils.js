@@ -3,15 +3,10 @@ export function decoratorMock( target, propName, decoration ) {
 }
 import pince from 'meteor/jag:pince';
 
-export function normalizeStack(stack, type, message) {
-    let lines = stack.split('\n');
-    lines.splice( 0, 3 );
-    return `${type}: ${message}\n${lines.join('\n')}`;
-}
-
-let disableLogging = false;
 
 export const createNamespacedLoggerClass = function( namespace ) {
+    let disableLogging = false;
+
     class Logger extends pince.Logger {
 
         /**

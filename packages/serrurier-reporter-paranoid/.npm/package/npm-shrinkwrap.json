@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "is-plain-obj": {
+      "version": "1.1.0",
+      "resolved": "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-1.1.0.tgz",
+      "from": "is-plain-obj@>=1.0.0 <2.0.0"
+    },
+    "is-regexp": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/is-regexp/-/is-regexp-1.0.0.tgz",
+      "from": "is-regexp@>=1.0.0 <2.0.0"
+    },
+    "lodash": {
+      "version": "4.11.1",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.11.1.tgz",
+      "from": "lodash@4.11.1"
+    },
+    "stringify-object": {
+      "version": "2.4.0",
+      "resolved": "https://registry.npmjs.org/stringify-object/-/stringify-object-2.4.0.tgz",
+      "from": "stringify-object@2.4.0"
+    }
+  }
+}

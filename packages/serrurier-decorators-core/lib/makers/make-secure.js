@@ -2,7 +2,6 @@ import { Event, Class } from 'meteor/jagi:astronomy';
 import { Match } from 'meteor/check';
 import { ActionsStore } from '../core'
 import { ensures, ensuresArg } from '../ensures';
-import SecurityException from '../SecurityException';
 import first from 'lodash/head';
 import partial from 'lodash/partial';
 import Logger from '../Logger';
@@ -62,19 +61,24 @@ function runSecurely( func, ...args ){
         const possibleEvent =  first(args);
         const Error = Object.getPrototypeOf( e ).constructor;
         const handlers = reportersMap.get( Error );
-        console.info( Error === SecurityException  );
-        const descriptor = ActionsStore.getProp( func, 'descriptor' );
+        const action = ActionsStore.getProp( func, 'descriptor' );
         const isEventHandler = possibleEvent instanceof Event;
-        let context = Object.assign( e._context || {}, { descriptor }, (() => {
+        let context = Object.assign( e._context || {}, { action }, (() => {
             if( isEventHandler ) return eventToContext( possibleEvent );
-            else {
-                //noinspection JSCheckFunctionSignatures
-                return { target: makeTargetSerializable(this) }
-            }
+            //noinspection JSCheckFunctionSignatures
+            else return { target: makeTargetSerializable( this ) }
         })());
         if(isEventHandler && Meteor.isServer) possibleEvent.preventDefault();
-        if(Match.test( handlers, Array )) handlers.forEach( ( handler ) => handler.call( this, context ) );
-        else throw e;
+        if(Match.test( handlers, Array ) && handlers.length) {
+            handlers.forEach( ( handler ) => handler.call( this, context ) );
+            // if ca callback is present, call it.
+            if(e._callback) e._callback.call( this, e, null );
+        }
+        else {
+            // if ca callback is present, call it.
+            if(e._callback) e._callback.call( this, e, null );
+            else throw e;
+        }
     }
 }
 

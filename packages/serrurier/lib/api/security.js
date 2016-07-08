@@ -7,20 +7,17 @@ import SecurityException from '../SecurityException';
  * @paral {!object} errorDescriptor
  * @param {!string} errorDescriptor.reason - An information about the forbidden access.
  * @param {!string} errorDescriptor.exceptionId - A unique identifier for this error
+ * @param {?string=} errorDescriptor.ErrorClass - The error to throw
  * @param {?Function_meteor_callback=} callbackCandidate - ignored if not a function
  * @throws {SecurityException} Always.
  */
 export function propagateSecurityException( errorDescriptor, callbackCandidate=null ) {
     let context = {};
-    const error = new SecurityException( context );
+    let ErrorClass = errorDescriptor.ErrorClass || SecurityException;
+    const error = new ErrorClass( context );
     Object.assign( context, errorDescriptor );
-    try {
-        throw error;
-    } finally {
-        if ( Match.test( callbackCandidate, Function ) ) {
-            callbackCandidate.call( this, error, null );
-        }
-    }
+    if ( Match.test( callbackCandidate, Function ) ) error._callback = callbackCandidate;
+    throw error;
 }
 
 

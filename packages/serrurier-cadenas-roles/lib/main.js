@@ -49,6 +49,5 @@ const parts = {
 };
 
 export {
-    loggedUserInRole,
     parts
 }

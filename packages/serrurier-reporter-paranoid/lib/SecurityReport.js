@@ -1,23 +1,19 @@
-import Logger from '../imports/Logger';
+import Logger from './Logger';
 import getp from 'lodash/get';
 import pick from 'lodash/pick';
 import isString from 'lodash/isString';
 import stringifyObject from 'stringify-object';
 import { HTTP } from 'meteor/http';
 
-let saLogger = new Logger("suspect-activity:core");
-let geoLogger = new Logger('suspect-activity:geoinfo');
+let geoLogger = new Logger( 'geoinfo' );
 const UNKNOWN = "unknown";
-const ONE_DAY_S = 86400;
-const ONE_MONTH_S = ONE_DAY_S*30;
-const EMAILS_EVERY_M = 15;
-const LIMIT_FETCHED_SECURITY_REPORTS = 100;
-const UnsecureTrackedIP = new Meteor.Collection("sec_UTIP");
-// Conserver pour 1 jour
-UnsecureTrackedIP._ensureIndex( { createdAt: 1 }, { expireAfterSeconds: ONE_DAY_S } );
-let SuspectActivitySecurityReports =  new Meteor.Collection("sec_SASR");
-// Conserver pour 2 mois
-SuspectActivitySecurityReports._ensureIndex( { createdAt: 1 }, { expireAfterSeconds: ONE_MONTH_S*2 } );
+const ONE_DAY = 86400;
+const ONE_MONTH = ONE_DAY*30;
+
+const ParanoidTrackedIPs = new Meteor.Collection( "paranoid_UTIP" );
+
+let ParanoidReports =  new Meteor.Collection( "paranoid_SASR" );
+let isGeoTrackingEnabled = false;
 
 const geoProviderAPI = "https://freegeoip.net/json/";
 const geoProviderTimeout = 3000;
@@ -31,6 +27,7 @@ const geoProviderFields = [
 ];
 
 class GeoTracker {
+
     /**
      *
      * @return {Promise}
@@ -49,7 +46,7 @@ class GeoTracker {
      * @return {Promise} Resolves to geoInfo or null
      */
     fromDB() {
-        const geoInfo=UnsecureTrackedIP.findOne( { _id: this.ip } ) || null;
+        const geoInfo=ParanoidTrackedIPs.findOne( { _id: this.ip } ) || null;
         return Promise.resolve( geoInfo );
     }
 
@@ -112,14 +109,26 @@ class SecurityReport {
     _toRawReport() {
         return pick( this, ['createdAt', 'ip', 'userAgent', 'geoInfo', 'securityContext'] );
     }
-    deliver() {
+
+    /**
+     * @private
+     */
+    _deliverWithGeoInfo(){
         this._geoTracker.findGeoInfo().then( (geoInfo) => {
-                this.geoInfo=geoInfo;
-                this._build();
-                this.log();
-                this._saveLocally();
-                this.logger.debug('Report saved.');
-            }).catch( (error) => this.logger.error('Unexpected error', error) );
+            this.geoInfo=geoInfo;
+            this._build();
+            this.log();
+            this._saveLocally();
+        }).catch( (error) => this.logger.error('Unexpected error', error) );
+    }
+    deliver() {
+        if(isGeoTrackingEnabled) this._deliverWithGeoInfo();
+        else {
+            this._build();
+            this.log();
+            this._saveLocally();
+        }
+
     }
     /**
      * @return {string|*|null}
@@ -141,8 +150,9 @@ class SecurityReport {
     _saveLocally() {
         const report = this._toRawReport();
         report.handledByCron = false;
-        SuspectActivitySecurityReports.insert( report );
+        ParanoidReports.insert( report );
     }
+
     log() {
         this.logger.warn( this._build() );
     }
@@ -161,9 +171,31 @@ class SecurityReport {
         this.userAgent = getp( connection, 'httpHeaders.user-agent' ) || UNKNOWN;
         this.createdAt = new Date();
         this._buildObj = null;
-        this.geoInfo = null;
+        this.geoInfo = UNKNOWN;
         this._geoTracker = new GeoTracker(ip);
     }
 }
 
-export default SecurityReport;
+/**
+ *
+ * @param {!object} options
+ * @param {boolean} options.geotracking
+ * @param {Number} options.ip_cache_ttl
+ * @param {Number} options.record_ttl
+ */
+function config( options ) {
+    const { geotracking, ip_cache_ttl, record_ttl } = options;
+    // Keep for one day
+    ParanoidTrackedIPs._ensureIndex( { createdAt: 1 }, { expireAfterSeconds: ip_cache_ttl || ONE_DAY } );
+    // Keep the reports for two months
+    ParanoidReports._ensureIndex( { createdAt: 1 }, { expireAfterSeconds: record_ttl || ONE_MONTH } );
+    isGeoTrackingEnabled = !!geotracking;
+}
+
+export {
+    SecurityReport,
+    ParanoidReports,
+    ONE_DAY,
+    ONE_MONTH,
+    config
+};

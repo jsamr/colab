@@ -7,7 +7,11 @@ import './init-collections';
 import './init-security-tracker';
 import './init-roles';
 import './init-publications';
-import './init-methods';
+import { config } from 'meteor/svein:serrurier-reporter-paranoid';
+
+config({
+    geotracking: true
+});
 
 Meteor.startup(() => {
   // code to run on server at startup

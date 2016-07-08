@@ -1,10 +1,11 @@
 import { ensures, ensuresArg } from '../ensures';
-import ValidationError from '../ValidationError';
+import ValidationException from '../ValidationException';
 import each from 'lodash/each';
 import create from 'lodash/create';
 import partial from 'lodash/partial';
 import { Match } from 'meteor/check';
 import { Assertion }  from './Assertion';
+import SecurityException from '../SecurityException';
 const cadenasMap = new Map();
 
 let isApiLocked = false;
@@ -35,7 +36,7 @@ export function buildAssertion( methodNameGetter, name, params ) {
 export function validateArguments( args, matchPatterns, nameFunc ) {
     let i = 0;
     each( matchPatterns, ( pattern, index ) => {
-        if(i > args.length) throw new ValidationError( `${nameFunc()} Missing argument n°${index})}` );
+        if(i > args.length) throw new ValidationException( `${nameFunc()} Missing argument n°${index})}` );
         ensuresArg( `In \`${nameFunc()}()\` the param at index \`${index}\``, args[i], pattern );
         i++;
     });
@@ -93,9 +94,11 @@ export class Cadenas {
         this._validateArgument( assertorArgs );
         this._methodNameGetter = methodNameGetter;
         const AssertionClass = this.AssertionClass;
+        const numOfOptArgs = this.matchPatterns.length - assertorArgs.length;
+        if(numOfOptArgs)  for(let i=0; i<numOfOptArgs; i++) assertorArgs.push( undefined );
         const fullAssertionFails = partial( this.doesAssertionFails, ...assertorArgs );
         const cadenas = this;
-        return new AssertionClass( cadenas, fullAssertionFails, methodNameGetter, assertorArgs );
+        return new AssertionClass( cadenas, fullAssertionFails, methodNameGetter, assertorArgs, this.ErrorClass );
     }
     /**
      * @param {!object} config - An object holding the instantiation params
@@ -105,13 +108,14 @@ export class Cadenas {
      * it will be appended to the 'reason' {@link security_context}.
      * @param {!string} config.reason
      * @param {!string} config.exceptionId
+     * @param {?Function} config.ErrorClass
      * @param {Array.<meteor_match_pattern=} config.matchPatterns - An array of match patterns to validate the doesAssertionFails method
      * @param {Object<string, Array.<*>>=} config.dependingCadenas - Cadenas this cadenas depends on : a dictionary which keys are cadenas names, and values are a list of arguments
      * to pass to the cadenas {@link Function_predicate}
      */
     constructor(config){
         ensuresArg('In `Cadenas` constructor : param `config`', config, Object);
-        const { AssertionClass, name, doesAssertionFails, reason='', matchPatterns=[], dependingCadenas={}} = config;
+        const { AssertionClass, name, doesAssertionFails, reason='', matchPatterns=[], dependingCadenas={}, ErrorClass=SecurityException } = config;
         ensures( 'In `Cadenas` constructor : param `config.AssertionClass` must be a class inheriting from `AbstractAssertion`. ' +
             'Are you sure you didn\'t mean to call a concrete constructor like `new DefaultCadenas()`?`"', AssertionClass.prototype, Assertion );
         ensuresArg( 'In `Cadenas` constructor : param `config.doesAssertionFails`', doesAssertionFails, Function );
@@ -119,6 +123,7 @@ export class Cadenas {
         ensuresArg( 'In `Cadenas` constructor : param `config.reason`', reason, String );
         ensuresArg( 'In `Cadenas` constructor : param `config.matchPatterns`', matchPatterns, Array );
         ensuresArg( 'In `Cadenas` constructor : param `config.dependingCadenas`', dependingCadenas, Object );
+        ensuresArg( 'In `Cadenas` constructor : param `config.ErrorClass`', ErrorClass, Function );
         this.AssertionClass = AssertionClass;
         this.doesAssertionFails = doesAssertionFails;
         this.name = name;
@@ -126,6 +131,7 @@ export class Cadenas {
         this.exceptionId = `cadenas:${name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
         this.matchPatterns = matchPatterns;
         this.dependingCadenas = dependingCadenas;
+        this.ErrorClass = ErrorClass;
         if(cadenasMap.get( name )) throw new Error( `Cadenas ${name} already exists` );
         cadenasMap.set( name, this );
     }

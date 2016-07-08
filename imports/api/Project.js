@@ -122,7 +122,7 @@ const Project = Serrurier.createClass({
          * @instance
          * @memberof Project#
          */
-        @cadenas( 'loggedUserInRole', roles.project$acceptMember, 'test' )
+        @cadenas( 'loggedUserInRole', roles.project$acceptMember, parts.AUTO )
         getPendingUsers(){
             return Meteor.users.find({ _id:{$in: this.pending }}).fetch();
         },

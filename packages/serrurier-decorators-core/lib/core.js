@@ -237,11 +237,11 @@ export function decorateMethods( methods, className ) {
  */
 export function decorateDescription( description ){
     if(!isApiLocked) {
-        ensures( 'In function `decorateDescription`, param `description` must be a valid descriptor.', description, Match.ObjectIncluding({
+        ensures( 'In function `decorateDescription`, param `description` must be a valid Astro description.', description, Match.ObjectIncluding({
             name: String,
             events: Match.Optional( Object ),
             methods: Match.Optional( Object )
-        }) );
+        }));
         const { name, events, methods } = description;
         const className = name;
         description.methods = decorateMethods( methods, className );

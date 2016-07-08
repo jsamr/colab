@@ -1,2 +1,4 @@
-import { SecurityException } from 'meteor/svein:serrurier-decorators-core';
+import { createSerrurierException } from './utils';
+
+const SecurityException = createSerrurierException('SecurityException');
 export default SecurityException;

@@ -1,12 +1,11 @@
 import { check, Match } from 'meteor/check';
-import ValidationError from './ValidationError';
-
 
 /**
  *
  * @param {!string} message - A message helping with error tracking.
  * @param {*} arg - object to validate
  * @param pattern - a {@link http://docs.meteor.com/api/check.html#matchpatterns Meteor MatchPattern}
+ * @throws TypeError, if one match fails
  */
 export function ensuresArg( message, arg, pattern ){
     if( !Match.test( arg, pattern ) ){
@@ -36,7 +35,7 @@ export function ensuresArg( message, arg, pattern ){
                     details += e.message.replace( 'Match error:', '' );
                 }
         }
-        throw new ValidationError(`${message} of type \`${ofType}\` ${details}.`);
+        throw new TypeError(`${message} of type \`${ofType}\` ${details}.`);
     }
 }
 
@@ -45,10 +44,11 @@ export function ensuresArg( message, arg, pattern ){
  * @param {!string} message
  * @param {*} toCheck - object to validate
  * @param  pattern - a {@link http://docs.meteor.com/api/check.html#matchpatterns Meteor MatchPattern}
+ * @throws TypeError, if one match fails
  */
 export function ensures ( message, toCheck, pattern ) {
     if (!Match.test( toCheck, pattern )) {
-        throw new ValidationError(message);
+        throw new TypeError( message );
     }
 }
 

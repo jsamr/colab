@@ -1,3 +1,4 @@
+import 'meteor/svein:serrurier-reporter-paranoid';
 import '../imports/assertions';
 import '../imports/init-behaviors';
 import { Template } from 'meteor/templating';
@@ -10,9 +11,7 @@ import './main.html';
 import { getConfig }  from '../imports/api/Config';
 import Project from '../imports/api/Project';
 import { TaskType } from '../imports/api/TaskType';
-import { SecurityException, Serrurier } from 'meteor/svein:serrurier';
 
-Serrurier.subscribeServerReporter( SecurityException );
 
 let once=true;
 
@@ -26,7 +25,9 @@ Tracker.autorun(()=>{
       //conf.unsetUserAdmin(Meteor.userId());
       //conf.remove();
       let prj = new Project();
-      prj.updateSensitiveData()
+      prj.updateSensitiveData(function( err, result ){
+          console.info(err)
+      });
       //let taskType1 = new TaskType();
       //taskType1.name='Yolo';
       //taskType1.color='yahoo';

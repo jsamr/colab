@@ -1,6 +1,6 @@
 import { Assertion } from './lib/api/Assertion'
 import SecurityException from './lib/SecurityException';
-import ValidationError from './lib/ValidationError';
+import ValidationException from './lib/ValidationException';
 import MethodParamsAssertion from './lib/api/MethodParamsAssertion';
 import DefaultAssertion from './lib/api/DefaultAssertion';
 import MethodParamsCadenas from './lib/api/MethodParamsCadenas';
@@ -59,10 +59,10 @@ describe('svein:serrurier', function() {
             it( 'should return a `DefaultAssertion` instance', function () {
                 expect(assertion).to.be.an.instanceof(DefaultAssertion);
             });
-            it( 'should throw a `ValidationError` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
+            it( 'should throw a `ValidationException` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
                 expect(function () {
                     alwaysFailingDefaultCadenas.toAssertion([], getMethodName)
-                }).to.throw(ValidationError);
+                }).to.throw(ValidationException);
             });
         });
     });
@@ -73,10 +73,10 @@ describe('svein:serrurier', function() {
             it('should return a `MethodParamsAssertion` instance', function () {
                 expect(alwaysFailing).to.be.an.instanceof(MethodParamsAssertion);
             });
-            it('should throw a `ValidationError` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
+            it('should throw a `ValidationException` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
                 expect(function () {
                     alwaysFailingMethodParamsAssertor.toAssertion([], getMethodName )
-                }).to.throw(ValidationError);
+                }).to.throw(ValidationException);
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
                 let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;

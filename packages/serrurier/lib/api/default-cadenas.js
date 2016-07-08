@@ -2,7 +2,7 @@ import { Class } from 'meteor/jagi:astronomy';
 import DefaultCadenas from './DefaultCadenas';
 import MethodParamsCadenas from './MethodParamsCadenas';
 import { validateArguments } from './Cadenas';
-import ValidationError from '../ValidationError';
+import StateException from '../StateException';
 
 // cadenas shall never be exposed
 
@@ -37,7 +37,7 @@ const matchParams = new MethodParamsCadenas({
         try{
             validateArguments( this.astroMethodParams, methodMatchPatterns, () => `Method ${this.getMethodName()} arguments are invalid. ` );
         } catch(e) {
-            if(e instanceof ValidationError){
+            if(e instanceof TypeError){
                 return e.message;
             } else throw e;
         }
@@ -70,7 +70,8 @@ const persisted = new DefaultCadenas({
     doesAssertionFails: function() {
         return this._isNew === true;
     },
-    reason: 'Cannot call this method before its target has been persisted.'
+    reason: 'Cannot call this method before its target has been persisted.',
+    ErrorClass: StateException
 });
 
 /**
