@@ -59,10 +59,10 @@ describe('svein:serrurier', function() {
             it( 'should return a `DefaultAssertion` instance', function () {
                 expect(assertion).to.be.an.instanceof(DefaultAssertion);
             });
-            it( 'should throw a `ValidationException` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
+            it( 'should throw a `TypeError` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
                 expect(function () {
                     alwaysFailingDefaultCadenas.toAssertion([], getMethodName)
-                }).to.throw(ValidationException);
+                }).to.throw( TypeError );
             });
         });
     });
@@ -71,15 +71,15 @@ describe('svein:serrurier', function() {
             let alwaysFailing = alwaysFailingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
             let alwaysPassing = alwaysPassingMethodParamsAssertor.toAssertion( [verboseReason], getMethodName );
             it('should return a `MethodParamsAssertion` instance', function () {
-                expect(alwaysFailing).to.be.an.instanceof(MethodParamsAssertion);
+                expect(alwaysFailing).to.be.an.instanceof( MethodParamsAssertion );
             });
-            it('should throw a `ValidationException` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
+            it('should throw a `TypeError` when it is called with a wrong number of elements in `assertorArgs` array argument', function () {
                 expect(function () {
-                    alwaysFailingMethodParamsAssertor.toAssertion([], getMethodName )
-                }).to.throw(ValidationException);
+                    alwaysFailingMethodParamsAssertor.toAssertion( [], getMethodName )
+                }).to.throw(TypeError);
             });
             it('should return a falsy value when the `doesAssertionFails` method returns a null value', function () {
-                let t = expect(alwaysPassing.perform(null, [])).not.to.be.ok;
+                let t = expect(alwaysPassing.perform( null, [] )).not.to.be.ok;
             });
         });
     });
@@ -109,7 +109,7 @@ describe('svein:serrurier', function() {
             });
         });
     });
-    describe('a method decorated with `assert`', function () {
+    describe('a method decorated with `cadenas`', function () {
         describe('describing a `DefaultCadenas` instance', function () {
             it('should throw an error of type `SecurityException` when the bound assertion fails ', function () {
                 let targetCandidate = {
@@ -118,7 +118,7 @@ describe('svein:serrurier', function() {
                 decoratorMock( targetCandidate, 'someMethod', cadenas( 'alwaysFailingDefaultCadenas', 'assertion argument 1' ));
                 expect(function () {
                     targetCandidate.someMethod();
-                }).to.throw(SecurityException);
+                }).to.throw( SecurityException );
             });
         });
         describe('describing a `MethodParamsAssertor` instance', function () {
@@ -126,11 +126,11 @@ describe('svein:serrurier', function() {
                 someMethod: function () { }
             };
             decoratorMock( targetCandidate, 'someMethod', cadenas( 'methodArgMustBeAStringAssertor' ));
-            it('should throw an error of type `SecurityException` when the bound assertion fails ', function () {
+            it('should throw an error of type `ValidationException` when the bound assertion fails ', function () {
                 expect(function () {
                     // must fail because the first argument is not a string
                     targetCandidate.someMethod( {} );
-                }).to.throw( SecurityException );
+                }).to.throw( ValidationException );
             });
 
             it('should not throw an error of type `SecurityException` when the bound assertion passes ', function () {
@@ -142,7 +142,7 @@ describe('svein:serrurier', function() {
         });
 
     });
-    describe('a method decorated with multiple `assert`s', function () {
+    describe('a method decorated with multiple `cadenas`s', function () {
         it('should apply all those assertions', function () {
             let targetCandidate1 = {
                 someMethod: function () {}

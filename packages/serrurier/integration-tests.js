@@ -3,7 +3,8 @@ import SecurityException from './lib/SecurityException';
 import {
     decorateDescription,
     ActionsStore,
-    Logger
+    Logger,
+    registerReporter
 } from 'meteor/svein:serrurier-decorators-core';
 import { decoratorMock } from 'meteor/svein:serrurier-decorators-core/lib/utils';
 import { chai } from 'meteor/practicalmeteor:chai';
@@ -19,6 +20,9 @@ describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
             description2;
 
         before( function(){
+            registerReporter( SecurityException, function(){
+               //
+            });
             description1 = decorateDescription({
                 name: 'MyAstroClass1',
                 events: {
@@ -50,7 +54,7 @@ describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
         after( function(){
             ActionsStore.clear();
         });
-        describe( 'any wrapped method called `methodName`', function() {
+        describe( 'any wrapped method called `methodName` when a reporter listen to `SecurityException`', function() {
             it( 'should have the "isSecured" property set in the store', function() {
                 expect( ActionsStore.getProp( description1.methods.methodA, 'isSecured' ) ).to.be.true;
             });
@@ -77,7 +81,7 @@ describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
             });
         });
         describe( 'a `description.events` wrapped field member that threw a `SecurityException`', function() {
-            it( 'should not anymore throw an instance of `SecurityException`', function() {
+            it( 'should not anymore throw an instance of `SecurityException` ', function() {
                 expect( function() { description1.events.eventA[0](); }).not.to.throw( SecurityException );
             });
         });
