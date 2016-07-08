@@ -13,14 +13,14 @@ class MethodParamsCadenas extends Cadenas {
      * 'this' is bound to the {@link Assertion} it is being run in. To get the astro class instance, you need to use 'this.astroInstance' property.
      * @param {!string} config.reason
      * @param {!string} config.exceptionId
-     * @param {!Function=ValidationException} config.ErrorClass - Default to {@link ValidationException}
+     * @param {!Function=ValidationException} config.ExceptionClass - Default to {@link ValidationException}
      * @param {Array.<meteor_match_pattern>=} config.matchPatterns - An array of match patterns to validate the doesAssertionFails method
      * @param {Object<string, Array.<*>>=} config.dependingCadenas - Cadenas this cadenas depends on : a dictionary which keys are cadenas names, and values are an array of arguments
      * to pass to the cadenas {@link Function_predicate}
      */
     constructor(config){
         config.AssertionClass = MethodParamsAssertion;
-        config.ErrorClass = config.ErrorClass || ValidationException;
+        config.ExceptionClass = config.ExceptionClass || ValidationException;
         super(config);
     }
 }

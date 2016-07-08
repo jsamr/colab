@@ -71,7 +71,7 @@ const persisted = new DefaultCadenas({
         return this._isNew === true;
     },
     reason: 'Cannot call this method before its target has been persisted.',
-    ErrorClass: StateException
+    ExceptionClass: StateException
 });
 
 /**

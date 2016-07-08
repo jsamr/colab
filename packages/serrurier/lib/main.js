@@ -14,6 +14,7 @@ import DefaultCadenas from './api/DefaultCadenas';
 import MethodParamsCadenas from './api/MethodParamsCadenas';
 import SecurityException from './SecurityException';
 import { ensuresArg } from './ensures';
+import { createSerrurierException } from './utils';
 import Logger from './Logger';
 
 let isSerrurierLocked = false;
@@ -71,10 +72,10 @@ const Serrurier = {
     },
     /**
      * Register a reporter that will be run on both client and server when the corresponding error type is thrown.
-     * @param {!Function} ErrorClass - The constructor of the error to listen to
+     * @param {!Function} ExceptionClass - The constructor of the error to listen to
      * @param {function({object} context)} reporter - The hook that will be called when it's associated error type is thrown.
      */
-    registerReporter( ErrorClass, reporter ) {
+    registerReporter( ExceptionClass, reporter ) {
         runIfApiIsOpen( () => registerReporter.apply( null, arguments ) );
     },
     /**
@@ -84,25 +85,25 @@ const Serrurier = {
      * Publish a reporter (function) that will be run server side through Meteor methods when the corresponding error type is thrown, either from client or from server.
      * This reporter will have access to all the available Meteor api inside Meteor methods, see {@link https://docs.meteor.com/api/methods.html#Meteor-methods}.
      *
-     * @param {!Function} ErrorClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
+     * @param {!Function} ExceptionClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
      * @param {function({object} context)} serverReporter - The hook that will be called when it's associated error type is thrown.
      * @param {String} [name] - The name of the Meteor method that will be used in the background. Default is namespaced with '/serrurier/'.
      * @see Serrurier.subscribeServerReporter
      */
-    publishServerReporter( ErrorClass, serverReporter, name ) {
+    publishServerReporter( ExceptionClass, serverReporter, name ) {
         runIfApiIsOpen( () => publishServerReporter.apply( null, arguments ) );
     },
 
     /**
      * @locus client
      *
-     * Must be called on client. Acknowledge Serrurier that a server reporter is available for client and must be called when a ErrorClass is thrown.
+     * Must be called on client. Acknowledge Serrurier that a server reporter is available for client and must be called when a ExceptionClass is thrown.
      *
-     * @param {!Function} ErrorClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
+     * @param {!Function} ExceptionClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
      * @param {String} [name] - The name of the Meteor method that will be used in the background. Default is namespaced with '/serrurier/'.
      * @see Serrurier.publishServerReporter
      */
-    subscribeServerReporter( ErrorClass, name ) {
+    subscribeServerReporter( ExceptionClass, name ) {
         runIfApiIsOpen( () => subscribeServerReporter.apply( null, arguments ) );
     },
 
@@ -114,6 +115,13 @@ const Serrurier = {
         lockDecoratorsApi();
         isSerrurierLocked = true;
         Logger.silence();
+    },
+    /**
+     * Creates an exception that can be used to register reporters. 
+     * @param {String} name
+     */
+    createException( name ) {
+        return createSerrurierException( name );
     }
 
 };

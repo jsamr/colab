@@ -164,14 +164,17 @@ import 'meteor/jboulhous:dev'; // adds `Meteor.isDevelopment` flag
 if(!Meteor.isDevelopment) Serrurier.lock();
 
 ```
+
+
 <a name="reporters">
 ## reporters
 
-A reporter is exactly like an event listener for errors.   
-For each type of error, i.e. `SecurityException`, `StateException` and `ValidationException`, you can register a reporter.
-By default, there is no reporting : the errors are just thrown up to the method call.
-A reporter takes one `security_context` argument that holds several informations :
-
+> **ℹ** A reporter is exactly like an event listener for errors.   
+> **ℹ** For each type of error, i.e. `SecurityException`, `StateException` and `ValidationException`, you can register a reporter.
+> **ℹ** You can create your own errors with `import { createSerrurierException } from 'meteor/svein:'`
+> **ℹ** By default, there is no reporting : the errors are just thrown up to the method call.
+> **ℹ** A reporter takes one `security_context` argument that holds several informations :
+>
 ``` javascript
 * @typedef {object} security_context
 * An object that holds information about the context of the execution.
@@ -185,7 +188,8 @@ A reporter takes one `security_context` argument that holds several informations
 */
 ```
 
-To add a reporter :
+
+### to add one
 
 ``` javascript
 // @locus client, server
@@ -267,7 +271,7 @@ On the server, you must call `config` once :
 import {
   config,
   ONE_DAY,
-  ONE_MONTH
+  ONE_MONTH,
   ParanoidReports // This is the mongo collection
 } from 'meteor/svein:serrurier-reporter-paranoid';
 
@@ -290,7 +294,7 @@ import { Cadenas } from 'meteor/svein:serrurier';
 import { Match } from 'meteor/check';
 /**
  * Assert the logged user is administrator
- * Note that you can override the ErrorClass property when making partials.
+ * Note that you can override the ExceptionClass property when making partials.
  */
 const loggedUserIsAdmin = Cadenas.partialFrom( 'loggedUserInRole' , {
     name: 'loggedUserIsAdmin',
@@ -310,24 +314,26 @@ methodThatMustBeRunByAdmin() {
 ### From scratch
 
 ```javascript
-import { Cadenas, createSerrurierException } from 'meteor/svein:serrurier';
+import { DefaultCadenas, Serrurier } from 'meteor/svein:serrurier';
 
 // You can also use builtin exception like ValidationException, SecurityException and StateException
-const MyException = createSerrurierException( 'MyException' );
+const MyException = Serrurier.createException( 'MyException' );
 
 const myCustomCadenas = new DefaultCadenas({
     name: 'myCustomCadenas',
     reason: '',
-    // [optional] The exception that will be thrown. Only reporters listening for this exception will be called.
-    // Default to SecurityException for 'DefaultCadenas' and ValidationException for 'MethodParamsCadenas'
-    ErrorClass: MyException
+    // [optional] The exception that will be thrown. Only reporters listening for this exception will be called upon assertion failures.
+    // Default to SecurityException for 'DefaultCadenas' and ValidationException for 'MethodParamsCadenas'.
+    // You shall use the utility function `Serrurier.createException` if you need to create your own.
+    ExceptionClass: MyException
     doesAssertionFails: function( myArg ) {
         // Does it need to throw an exception ?
         // Must NOT throw an error. Returns a non-empty string that will be appended to the `reason` context property when an error should be thrown
         // else return false
-
     },
-    // [optional] What is the cadenas signature (i.e. `doesAssertionFails` signature)?
+    // The cadenas signature (i.e. `doesAssertionFails` signature)?
+    // You must describe any parameter here to keep the API consistent.
+    // Use Match.Any if you don't want to test an input, however this is not recommanded.
     matchPatterns: [ Match.Optional( String ) ],
     // [optional] A set of depending assertions in the form of a dictionary which keys are cadenas names, and values an array with their `doesAssertionFails` params.
     dependingCadenas: { userIsLoggedIn: [] }

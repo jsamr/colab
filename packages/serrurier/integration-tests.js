@@ -20,7 +20,7 @@ describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
             description2;
 
         before( function(){
-            registerReporter( SecurityException, function(){
+            registerReporter( SecurityException, function() {
                //
             });
             description1 = decorateDescription({

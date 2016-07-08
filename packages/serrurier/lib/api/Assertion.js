@@ -29,11 +29,11 @@ function verbose( verdict, reason ) {
  *
  * @param reason
  * @param exceptionId
- * @param ErrorClass
+ * @param ExceptionClass
  * @return {error_descriptor}
  */
-function buildErrorDescriptor( reason, exceptionId, ErrorClass ) {
-    return { reason, exceptionId, ErrorClass };
+function buildErrorDescriptor( reason, exceptionId, ExceptionClass ) {
+    return { reason, exceptionId, ExceptionClass };
 }
 
 
@@ -54,7 +54,7 @@ export class Assertion {
         let verdict = false;
         some( dependingAssertions, ( assertion ) => {
             verdict = assertion.perform( astroClassInstanceContext, astroMethodParams ) || false;
-            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.exceptionId, assertion.ErrorClass ) : false;
+            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.exceptionId, assertion.ExceptionClass ) : false;
         });
         return verdict;
     }
@@ -90,7 +90,7 @@ export class Assertion {
             if( verdict ) {
                 const reason = verbose( this.cadenas.reason, verdict );
                 logger.warn( `${failChar}  ${className}#${this._methodNameGetter()} : failed assertion '${this.cadenas.name}' ( ${reason} )` );
-                return buildErrorDescriptor( reason, this.cadenas.exceptionId, this.ErrorClass );
+                return buildErrorDescriptor( reason, this.cadenas.exceptionId, this.ExceptionClass );
             }
             else {
                 logger.info( `${okChar} ${className}#${this._methodNameGetter()} : passed assertion '${this.cadenas.name}' ( ${this.cadenas.reason} )` );
@@ -112,13 +112,13 @@ export class Assertion {
      * @param {!Function} assertionFunc
      * @param {!Function} methodNameGetter
      * @param {!Array}  assertionArgs - The args passed to assertion
-     * @param {!Function} ErrorClass - An error constructor
+     * @param {!Function} ExceptionClass - An error constructor
      */
-    constructor( cadenas, assertionFunc, methodNameGetter, assertionArgs, ErrorClass ) {
+    constructor( cadenas, assertionFunc, methodNameGetter, assertionArgs, ExceptionClass ) {
         this.assertionFunc = assertionFunc;
         this._methodNameGetter = methodNameGetter;
         this.cadenas = cadenas;
-        this.ErrorClass = ErrorClass;
+        this.ExceptionClass = ExceptionClass;
         //noinspection JSUnusedGlobalSymbols
         this.assertionArgs = assertionArgs;
     }

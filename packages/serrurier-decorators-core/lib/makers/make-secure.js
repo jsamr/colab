@@ -99,30 +99,30 @@ export function makeSecure( func ){
 }
 
 
-function _registerReporter( ErrorClass, reporter ) {
-    if(!reportersMap.has( ErrorClass )) reportersMap.set( ErrorClass, [] );
-    reportersMap.get( ErrorClass ).push( reporter );
+function _registerReporter( ExceptionClass, reporter ) {
+    if(!reportersMap.has( ExceptionClass )) reportersMap.set( ExceptionClass, [] );
+    reportersMap.get( ExceptionClass ).push( reporter );
 }
 /**
  *
- * @param {!Function} ErrorClass - The error constructor.
+ * @param {!Function} ExceptionClass - The error constructor.
  * @param {function( {object} context )} reporter
  */
-export function registerReporter( ErrorClass, reporter ) {
+export function registerReporter( ExceptionClass, reporter ) {
     if(!isApiLocked) {
-        ensuresArg( 'In function `registerReporter`, arg `ErrorClass`', ErrorClass, Function );
+        ensuresArg( 'In function `registerReporter`, arg `ExceptionClass`', ExceptionClass, Function );
         ensuresArg( 'In function `registerReporter`, arg `reporter`', reporter, Function );
-        _registerReporter( ErrorClass, reporter );
+        _registerReporter( ExceptionClass, reporter );
     }
 }
 
-function createReportName( ErrorClass, name ) {
-    ensuresArg( 'In function `registerReporter`, arg `ErrorClass`', ErrorClass, Function );
+function createReportName( ExceptionClass, name ) {
+    ensuresArg( 'In function `registerReporter`, arg `ExceptionClass`', ExceptionClass, Function );
     ensuresArg( 'In function `registerReporter`, arg `name`', name, Match.Optional( String ) );
     let methodName = name ;
     if(!name) {
-        const errorName = getp( ErrorClass, 'prototype.name' );
-        ensures( 'The ErrorClass must have a `ErrorClass.prototype.name`', errorName, String );
+        const errorName = getp( ExceptionClass, 'prototype.name' );
+        ensures( 'The ExceptionClass must have a `ExceptionClass.prototype.name`', errorName, String );
         methodName = '/serrurier/decorators/security/'+errorName;
         ensures( 'In `registerServerHandler` : a server handler is already registered to this error. You can provide a name as third argument to work around this limitation.',
             serverReportersNames.has( methodName ), false );
@@ -134,15 +134,15 @@ function createReportName( ErrorClass, name ) {
 
 /**
  * @locus server
- * @param {!Function} ErrorClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
+ * @param {!Function} ExceptionClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
  * @param {function( {object} context )} serverReporter
  * @param {String} [name] - The name of the Meteor method that will be used in the background. Default is namespaced by '/serrurier/'.
  */
-export function publishServerReporter(ErrorClass, serverReporter, name ) {
+export function publishServerReporter( ExceptionClass, serverReporter, name ) {
     if(!isApiLocked) {
         if(Meteor.isServer) {
             ensuresArg( 'In function `registerReporter`, arg `serverReporter`', serverReporter, Function );
-            const methodName = createReportName( ErrorClass, name );
+            const methodName = createReportName( ExceptionClass, name );
             // register the method
             Meteor.methods({ [methodName]: serverReporter });
         } else {
@@ -154,14 +154,14 @@ export function publishServerReporter(ErrorClass, serverReporter, name ) {
 /**
  *
  * @locus client
- * @param {!Function} ErrorClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
+ * @param {!Function} ExceptionClass - The error constructor. The field `Error.prototype.name` must exist if you don't want to provide the third argument (name).
  * @param {String} [name] - The name of the Meteor method that will be used in the background. Default is namespaced by '/serrurier/'.
  */
-export function subscribeServerReporter( ErrorClass, name ) {
+export function subscribeServerReporter( ExceptionClass, name ) {
     if(!isApiLocked) {
         if(Meteor.isClient) {
-            const methodName = createReportName(ErrorClass, name);
-            _registerReporter(ErrorClass, partial(Meteor.call, methodName));
+            const methodName = createReportName(ExceptionClass, name);
+            _registerReporter(ExceptionClass, partial(Meteor.call, methodName));
         } else {
             throw new Error('The function `subscribeServerReporter` must be called on client. When subscribed on client, publish to it with `publishServerReporter`.')
         }

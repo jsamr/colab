@@ -109,9 +109,9 @@ describe('svein:serrurier', function() {
             });
         });
     });
-    describe('a method decorated with `cadenas`', function () {
-        describe('describing a `DefaultCadenas` instance', function () {
-            it('should throw an error of type `SecurityException` when the bound assertion fails ', function () {
+    describe( 'a method decorated with `cadenas`', function () {
+        describe( 'describing a `DefaultCadenas` instance', function () {
+            it( 'should throw an error of type `SecurityException` when the bound assertion fails ', function () {
                 let targetCandidate = {
                     someMethod: function () { }
                 };
