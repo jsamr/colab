@@ -2,7 +2,7 @@ import { parts } from 'meteor/svein:serrurier-cadenas-roles';
 import { DefaultCadenas } from 'meteor/svein:serrurier';
 import { roles } from './security';
 //noinspection JSCheckFunctionSignatures
-console.info( 'LOAAAAAAAAAAAAAAD loggedUserIsAdmin' );
+
 /**
  *
  * @return {boolean} true if logged user is verified, or verify email policy is disabled

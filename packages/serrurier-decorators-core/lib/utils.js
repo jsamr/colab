@@ -24,7 +24,7 @@ export const createNamespacedLoggerClass = function( namespace ) {
             pince.Logger.setLevel( namespace, level );
         }
         static setModuleLevel( module, level ){
-            pince.Logger.setLevel( `${namespace}${module}`, level );
+            pince.Logger.setLevel( `${namespace}:${module}`, level );
         }
         debug(){
             if(!disableLogging) super.debug( ...arguments );
@@ -46,7 +46,7 @@ export const createNamespacedLoggerClass = function( namespace ) {
             if(!disableLogging) super.error( ...arguments );
         }
         constructor( module ){
-            super( `${namespace}${module}` )
+            super( `${namespace}:${module}` )
         }
     }
     Logger.setLevel( 'info' );

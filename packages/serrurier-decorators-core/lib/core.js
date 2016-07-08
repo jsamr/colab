@@ -29,11 +29,13 @@ let isApiLocked = false;
  * @param {!string} actionName
  */
 function bindActionToClass( action, actionDescriptor ) {
-    let actionName = actionsProperties.get( action ).descriptor;
+    let properties = actionsProperties.get( action );
+    let actionName = properties.descriptor;
     ensuresArg( 'In method `bindActionToClass` : argument `action`', action, Function );
     ensuresArg( 'In method `bindActionToClass` : argument `className` '+actionDescriptor, actionDescriptor, String );
     descriptorMapper.delete( actionName );
     descriptorMapper.set( actionDescriptor, action );
+    properties.descriptor = actionDescriptor;
 }
 
 

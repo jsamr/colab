@@ -7,6 +7,7 @@
 > **✔** This library aims to write more secure, maintainable and readable code, by defining function access through decorators.  
 > **✔** It integrates smoothly with [alanning:meteor-roles](https://github.com/alanning/meteor-roles).  
 > **✔** Allows to easely report suspect activity and model errors through [builtin or custom reporters](#reporters).
+> **✔** Works with synchronous and asynchronous (through Meteor methods api) methods.
 
 ``` bash
 meteor add svein-serrurier
@@ -325,6 +326,7 @@ const myCustomCadenas = new DefaultCadenas({
     // [optional] The exception that will be thrown. Only reporters listening for this exception will be called upon assertion failures.
     // Default to SecurityException for 'DefaultCadenas' and ValidationException for 'MethodParamsCadenas'.
     // You shall use the utility function `Serrurier.createException` if you need to create your own.
+    // They inherit Meteor.Error and can be thrown from server to client via callabcks. 
     ExceptionClass: MyException
     doesAssertionFails: function( myArg ) {
         // Does it need to throw an exception ?

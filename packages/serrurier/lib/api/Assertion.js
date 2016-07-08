@@ -7,7 +7,6 @@ import { ensuresArg } from '../ensures';
 import Logger from '../Logger';
 okChar = '✔';
 failChar = '✘';
-if(Meteor.isServer)  symb = '';
 const logger = new Logger( 'cadenas' );
 /**
  *

@@ -69,14 +69,24 @@ function runSecurely( func, ...args ){
             else return { target: makeTargetSerializable( this ) }
         })());
         if(isEventHandler && Meteor.isServer) possibleEvent.preventDefault();
+        // remove context
+        delete e._context;
         if(Match.test( handlers, Array ) && handlers.length) {
             handlers.forEach( ( handler ) => handler.call( this, context ) );
             // if ca callback is present, call it.
-            if(e._callback) e._callback.call( this, e, null );
+            if(e._callback) {
+                const callback = e._callback;
+                delete e._callback;
+                callback.call( this, e, null );
+            }
         }
         else {
             // if ca callback is present, call it.
-            if(e._callback) e._callback.call( this, e, null );
+            if(e._callback) {
+                const callback = e._callback;
+                delete e._callback;
+                callback.call( this, e, null );
+            }
             else throw e;
         }
     }
