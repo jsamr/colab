@@ -1,12 +1,11 @@
 import { Match } from 'meteor/check'
-import map from 'lodash/map';
-import some from 'lodash/some';
+import { map, some } from 'meteor/svein:serrurier-core/lib/lodash';
 import { Class } from 'meteor/jagi:astronomy'
 import { buildAssertion } from './Cadenas';
 import { ensuresArg } from '../ensures';
 import Logger from '../Logger';
-okChar = '✔';
-failChar = '✘';
+const okChar = '✔';
+const failChar = '✘';
 const logger = new Logger( 'cadenas' );
 /**
  *
@@ -17,11 +16,6 @@ const logger = new Logger( 'cadenas' );
 function buildAssertions( assertorDescriptions, methodNameGetter ) {
     ensuresArg('`buildAssertions`', assertorDescriptions, Object);
     return map( assertorDescriptions, ( params, name ) => buildAssertion( methodNameGetter, name, params ) );
-}
-
-function verbose( verdict, reason ) {
-    if( Match.test( verdict, Boolean )) return reason;
-    else return `${verdict} ${reason}`;
 }
 
 /**
@@ -53,7 +47,7 @@ export class Assertion {
         let verdict = false;
         some( dependingAssertions, ( assertion ) => {
             verdict = assertion.perform( astroClassInstanceContext, astroMethodParams ) || false;
-            return verdict ? buildErrorDescriptor( verbose( verdict, assertion.cadenas.reason ), assertion.cadenas.exceptionId, assertion.ExceptionClass ) : false;
+            return verdict ? buildErrorDescriptor( verdict, assertion.cadenas.exceptionId, assertion.ExceptionClass ) : false;
         });
         return verdict;
     }
@@ -87,7 +81,7 @@ export class Assertion {
         else {
             const verdict = this._applyAssertionFunc( astroClassInstanceContext, astroMethodParams );
             if( verdict ) {
-                const reason = verbose( this.cadenas.reason, verdict );
+                const reason = verdict;
                 logger.warn( `${failChar}  ${className}#${this._methodNameGetter()} : failed assertion '${this.cadenas.name}' ( ${reason} )` );
                 return buildErrorDescriptor( reason, this.cadenas.exceptionId, this.ExceptionClass );
             }

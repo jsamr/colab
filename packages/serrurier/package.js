@@ -1,13 +1,9 @@
 var coreDependencies = [
     'ecmascript',
     'check',
-    'svein:serrurier-decorators-core@1.0.0',
+    'svein:serrurier-core@1.0.0',
     'jagi:astronomy@2.0.0'
 ];
-
-Npm.depends({
-    lodash: '4.11.1'
-});
 
 Package.describe({
     name: 'svein:serrurier',
@@ -25,9 +21,10 @@ Package.onTest(  function(api) {
     api.use( coreDependencies );
     api.use( [
         'practicalmeteor:mocha',
-        'practicalmeteor:chai'
+        'practicalmeteor:chai',
+        'lmieulet:meteor-coverage@0.8.0'
     ] );
-    api.mainModule( 'unit-tests.js' );
+    api.mainModule( 'all.tests.js' );
 });
 
 Package.onUse( function( api ) {

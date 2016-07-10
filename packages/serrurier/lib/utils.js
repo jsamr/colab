@@ -12,22 +12,27 @@ export function normalizeStack( stack, type ) {
  */
 export const createSerrurierException = function( name ) {
 
-    function SerrurierException( context={} ) {
+    function SerrurierException( context={ exceptionId:'UNKNOWN', reason: 'UNKNOWN' } ) {
         this.stack = normalizeStack( Error.call( this ).stack, this.name );
         this._context = context;
         Object.defineProperty( this,'message', {
             'get': function() {
-                return `[${this._context.exceptionId}] ${this._context.reason}`;
+                return `[${context.exceptionId}] ${context.reason}`;
             }
         });
         Object.defineProperty( this,'error', {
             'get': function() {
-                return this._context.exceptionId;
+                return `${this.name}.${context.exceptionId}`;
             }
         });
-        Object.defineProperty( this,'reason', {
+        Object.defineProperty( this, 'details', {
             'get': function() {
-                return this._context.reason;
+                return name;
+            }
+        });
+        Object.defineProperty( this, 'reason', {
+            'get': function() {
+                return context.reason;
             }
         });
     }
@@ -38,8 +43,10 @@ export const createSerrurierException = function( name ) {
             writable: false,
             configurable: true
         },
-        name : {
-            value: name
+        name: {
+            'get': function() {
+                return name;
+            }
         }
     });
     return SerrurierException;

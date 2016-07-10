@@ -2,6 +2,7 @@ var coreDependencies = [
     'check',
     'ecmascript',
     'svein:serrurier@1.0.0',
+    'svein:serrurier-cadenas-defaults@1.0.0',
     'alanning:roles@2.0.0'
 ];
 

@@ -1,10 +1,10 @@
-export function decoratorMock( target, propName, decoration ) {
+function decoratorMock( target, propName, decoration ) {
     decoration( target, propName );
 }
 import pince from 'meteor/jag:pince';
 
 
-export const createNamespacedLoggerClass = function( namespace ) {
+const createNamespacedLoggerClass = function( namespace ) {
     let disableLogging = false;
 
     class Logger extends pince.Logger {
@@ -52,3 +52,20 @@ export const createNamespacedLoggerClass = function( namespace ) {
     Logger.setLevel( 'info' );
     return Logger;
 };
+
+function once(fn) {
+    var returnValue, called = false;
+    return function () {
+        if (!called) {
+            called = true;
+            returnValue = fn.apply(this, arguments);
+        }
+        return returnValue;
+    };
+}
+
+export {
+    decoratorMock,
+    createNamespacedLoggerClass,
+    once
+}

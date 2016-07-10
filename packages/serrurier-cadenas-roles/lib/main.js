@@ -27,12 +27,10 @@ const GLOBAL = Roles.GLOBAL_PARTITION;
 const loggedUserInRole = new DefaultCadenas({
     name: 'loggedUserInRole',
     doesAssertionFails: function ( role_s, partition = GLOBAL ) {
-        if( partition === AUTO ){
-            partition = this.getPartition();
-        }
-        return !isLoggedUserInRole_s( role_s, partition ) ? `role : ${role_s}, partition: ${partition === GLOBAL ? 'GLOBAL' : partition}` : false;
+        if( partition === AUTO ) partition = this.getPartition();
+        const userNotInRole = !isLoggedUserInRole_s( role_s, partition );
+        return userNotInRole && `user.not.in.role:${role_s}:${partition||'GLOBAL'}`
     },
-    reason: 'User must be in ',
     matchPatterns: [
         // role_s
         Match.OneOf( String, [String] ),

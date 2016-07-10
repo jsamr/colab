@@ -3,7 +3,7 @@ import extend from 'lodash/extend';
 import Config, { SINGLETON_CONFIG_ID } from '../imports/api/Config';
 import Project from '../imports/api/Project';
 import Exp from '../imports/api/Exp';
-import { ensures } from 'meteor/svein:serrurier-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-core';
 import { roles } from '../imports/security';
 import { Meteor } from 'meteor/meteor';
 // import plugins

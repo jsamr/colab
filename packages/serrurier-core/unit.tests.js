@@ -3,7 +3,7 @@ import {
     decorateMethods,
     decorateDescription
 } from './lib/core';
-import _ from 'lodash';
+import { once } from './lib/utils';
 import { ActionsStore } from './lib/core';
 import { chai } from 'meteor/practicalmeteor:chai';
 const expect = chai.expect;
@@ -13,7 +13,7 @@ const wrapper = function( fun ){ return () => fun(); };
 
 let descriptor = 'do';
 
-describe( 'svein:serrurier-decorators-core', function(){
+describe( 'svein:serrurier-core', function(){
 
     describe('in the object`ActionsStore`', function(){
         describe( 'the method `ActionsStore.register`', function() {
@@ -50,44 +50,46 @@ describe( 'svein:serrurier-decorators-core', function(){
     });
 
     describe( 'the function `decorateEvents`', function() {
-        const events1 = {
-            'beforeA': function() {}
-        };
-        const events2 = {
-            'beforeA': function() {},
-            'beforeB': [ function(){}, function(){} ]
-        };
-        after( function(){
-           ActionsStore.clear();
+        let decoratedEvents1, decoratedEvents2;
+        const beforeOnce = once( function() {
+            const events1 = {
+                'beforeA': function() {}
+            };
+            const events2 = {
+                'beforeA': function() {},
+                'beforeB': [ function(){}, function(){} ]
+            };
+            decoratedEvents1 = decorateEvents( events1, 'ClassTest1' );
+            decoratedEvents2 = decorateEvents( events2, 'ClassTest2' );
         });
+        before( beforeOnce );
         it( 'should wrap events declared as functions with array', function() {
-            const decoratedEvents1 = decorateEvents( events1, 'ClassTest1' );
             expect( decoratedEvents1 ).to.be.a('object');
             //noinspection JSUnresolvedVariable,JSUnresolvedFunction
             expect( decoratedEvents1 ).to.have.property('beforeA').to.be.an.instanceof(Array);
         });
         it( 'should decorate events declared as Array of functions', function() {
-            let decoratedEvents2 = decorateEvents( events2, 'ClassTest2' );
             let array = decoratedEvents2.beforeA;
-            _.each(array, function(value){ expect(value).to.be.an.instanceof(Function) });
+            array.forEach( function(value){ expect(value).to.be.an.instanceof(Function) } );
         });
     });
     describe( 'the function `decorateMethods`', function() {
+        let decoratedMethods1, decoratedMethods2;
         const value = {};
-        const methods = {
-            'actionA': function() { return value; },
-            'actionB': function() { return value; }
-        };
-        after( function(){
-            ActionsStore.clear();
+        const beforeOnce = once( function() {
+            const methods = {
+                'actionA': function() { return value; },
+                'actionB': function() { return value; }
+            };
+            decoratedMethods1 = decorateMethods( methods, 'ClassTest1' );
+            decoratedMethods2 = decorateMethods( methods, 'ClassTest2' );
         });
+        before( beforeOnce );
         it( 'should return a dictionary', function() {
-            const decoratedMethods1 = decorateMethods( methods, 'ClassTest1' );
             expect( decoratedMethods1 ).to.be.a('object');
         });
         it( 'should decorate all provided methods', function() {
-            const decoratedMethods2 = decorateMethods( methods, 'ClassTest2' );
-            _.each( decoratedMethods2, function( decoratedMethod ) { expect( decoratedMethod() ).to.equal( value ) } );
+            Object.keys( decoratedMethods2 ).forEach( function( decoratedMethodKey ) { expect( decoratedMethods2[decoratedMethodKey]() ).to.equal( value ) } );
         });
     });
 

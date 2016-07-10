@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { Serrurier, cadenas, server } from 'meteor/svein:serrurier';
-import { ensures, IsNonEmptyString } from 'meteor/svein:serrurier-decorators-core/lib/ensures';
+import { ensures, IsNonEmptyString } from 'meteor/svein:serrurier-core/lib/ensures';
 import { Roles } from 'meteor/alanning:roles';
 import { roles,
     assertLoggedUserInRole_s,
@@ -137,10 +137,10 @@ const Config = Serrurier.createClass({
          * @param {string} userId - The user id to retain Admin privileges
          * @param {?Function_meteor_callback=} asyncCallback
          */
-         //@server()
-         //@assert( 'loggedUserIsAdmin' )
-         //@assert( 'matchParams', [ Match.Where((userId) => Meteor.userId() !== userId) ] )
-        @cadenas( 'loggedUserInRole', 'administrator' )
+
+        @cadenas( 'argUserNotSelf' )
+        @cadenas( 'loggedUserIsAdmin' )
+        @server()
         unsetUserAdmin( userId, asyncCallback=null ){
             //assertUserExists(userId);
             Roles.removeUsersFromRoles( userId, roles.ADMIN );

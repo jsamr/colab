@@ -20,3 +20,9 @@ const loggedUserIsAdmin = DefaultCadenas.partialFrom( 'loggedUserInRole' , {
     reason: 'Must be admin.'
 }, roles.ADMIN );
 
+
+const argUserNotSelf = DefaultCadenas.partialFrom( 'matchParams', {
+    name: 'argUserNotSelf',
+    reason: 'Cannot apply to self!'
+
+}, [ Match.Where((userId) => Meteor.userId() !== userId) ]);

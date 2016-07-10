@@ -1,8 +1,7 @@
 import { Class } from 'meteor/jagi:astronomy';
-import DefaultCadenas from './DefaultCadenas';
-import MethodParamsCadenas from './MethodParamsCadenas';
-import { validateArguments } from './Cadenas';
-import StateException from '../StateException';
+
+import { DefaultCadenas, MethodParamsCadenas, StateException } from 'meteor/svein:serrurier'
+import { validateArguments } from 'meteor/svein:serrurier/lib/api/Cadenas';
 
 // cadenas shall never be exposed
 
@@ -10,9 +9,8 @@ import StateException from '../StateException';
 const userIsLoggedIn = new DefaultCadenas({
     name: 'userIsLoggedIn',
     doesAssertionFails: () => {
-        return !Meteor.userId()
-    },
-    reason: 'Must be logged in.'
+        return !Meteor.userId() && 'user.not.logged.in'
+    }
 });
 
 
@@ -22,8 +20,7 @@ const userIsLoggedIn = new DefaultCadenas({
 //noinspection JSUnusedGlobalSymbols
 const onServer = new DefaultCadenas({
     name: 'onServer',
-    doesAssertionFails: () => !Meteor.isServer,
-    reason: 'Cannot be run client side.'
+    doesAssertionFails: () => !Meteor.isServer && 'not.on.server'
 });
 
 
@@ -43,7 +40,6 @@ const matchParams = new MethodParamsCadenas({
         }
         return false;
     },
-    reason: 'Invalid method arguments.',
     matchPatterns: [
         // methodMatchPatterns
         Array
@@ -57,8 +53,7 @@ const matchParams = new MethodParamsCadenas({
 //noinspection JSUnusedGlobalSymbols
 const userExists = new MethodParamsCadenas({
     name: 'userExists',
-    doesAssertionFails: (userId) => !Meteor.users.findOne( userId, {_id:1} ),
-    reason: 'User does not exists.',
+    doesAssertionFails: (userId) => !Meteor.users.findOne( userId, {_id:1} && 'user.does.not.exists' ),
     dependingCadenas: { 'matchParams': [ String ] }
 });
 
@@ -68,17 +63,7 @@ const userExists = new MethodParamsCadenas({
 const persisted = new DefaultCadenas({
     name: 'persisted',
     doesAssertionFails: function() {
-        return this._isNew === true;
+        return this._isNew === true && 'has.not.been.persisted';
     },
-    reason: 'Cannot call this method before its target has been persisted.',
     ExceptionClass: StateException
-});
-
-/**
- * Assert the user is logged
- */
-const userLoggedIn = new DefaultCadenas({
-    name: 'userLoggedIn',
-    doesAssertionFails: () => !Meteor.userId(),
-    reason: 'Must be logged in.'
 });

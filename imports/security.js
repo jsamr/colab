@@ -7,7 +7,7 @@ import assign from 'lodash/assign';
 import isFunction from 'lodash/isFunction';
 import { Roles } from 'meteor/alanning:roles';
 import { Class, Event } from 'meteor/jagi:astronomy';
-import { ensures } from 'meteor/svein:serrurier-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-core';
 import Logger from './Logger';
 
 /**

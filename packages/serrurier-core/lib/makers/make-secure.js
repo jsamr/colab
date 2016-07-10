@@ -2,11 +2,9 @@ import { Event, Class } from 'meteor/jagi:astronomy';
 import { Match } from 'meteor/check';
 import { ActionsStore } from '../core'
 import { ensures, ensuresArg } from '../ensures';
-import first from 'lodash/head';
-import partial from 'lodash/partial';
+import { first, partial, getp, last } from '../lodash';
 import Logger from '../Logger';
 import { Meteor } from 'meteor/meteor';
-import getp from 'lodash/get';
 const logger = new Logger('maker:secure');
 
 let isApiLocked = false;
@@ -15,7 +13,7 @@ const reportersMap = new Map();
 const serverReportersNames = new Set();
 
 /**
- * @desc serialize any Astro.Class instance
+ * Sanitize any Astro.Class instance
  * @param {!Astro.Class} target
  * @return {object} A serializable target
  */
@@ -50,7 +48,7 @@ function eventToContext( e ){
 }
 
 /**
- * @desc Run a function securely, reporting any suspect activity. 'this' must be bound, if ever used.
+ * Run a function securely, calling mapped reporters on error.
  * @param {!Function} func
  * @param {...*} args
  */
@@ -63,30 +61,23 @@ function runSecurely( func, ...args ){
         const handlers = reportersMap.get( Error );
         const action = ActionsStore.getProp( func, 'descriptor' );
         const isEventHandler = possibleEvent instanceof Event;
-        let context = Object.assign( e._context || {}, { action }, (() => {
+        const possibleCallback = last( arguments );
+        let   callback = null;
+        let context = Object.assign( e._context || {}, { action, stackTrace: e.stack }, (() => {
             if( isEventHandler ) return eventToContext( possibleEvent );
             //noinspection JSCheckFunctionSignatures
             else return { target: makeTargetSerializable( this ) }
         })());
-        if(isEventHandler && Meteor.isServer) possibleEvent.preventDefault();
-        // remove context
-        delete e._context;
+        if (Match.test( possibleCallback, Function ) && func !== possibleCallback) callback = possibleCallback;
+        if(isEventHandler) possibleEvent.preventDefault();
         if(Match.test( handlers, Array ) && handlers.length) {
             handlers.forEach( ( handler ) => handler.call( this, context ) );
             // if ca callback is present, call it.
-            if(e._callback) {
-                const callback = e._callback;
-                delete e._callback;
-                callback.call( this, e, null );
-            }
+            if(callback) callback.call( this, e, null );
         }
         else {
             // if ca callback is present, call it.
-            if(e._callback) {
-                const callback = e._callback;
-                delete e._callback;
-                callback.call( this, e, null );
-            }
+            if(callback) callback.call( this, e, null );
             else throw e;
         }
     }
@@ -94,7 +85,7 @@ function runSecurely( func, ...args ){
 
 
 /**
- * @desc Make a function secured, i.e. {@link runSecurely}
+ * Make a function secured, i.e. {@link runSecurely}
  * @param {!Function} func
  * @return {Function}
  */

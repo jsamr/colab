@@ -15,12 +15,17 @@ function lockApi() {
     Logger.silence();
 }
 
+function silence() {
+    Logger.silence();
+}
+
 export {
     ActionsStore,
     decorateDescription,
     registerMaker,
     Logger,
     lockApi,
+    silence,
     setLogLevel,
     registerReporter,
     publishServerReporter,

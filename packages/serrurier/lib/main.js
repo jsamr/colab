@@ -1,18 +1,20 @@
 import { Class } from 'meteor/jagi:astronomy';
 import server from './server-decorator';
 import cadenas from './cadenas-decorator';
-import './api/default-cadenas';
 import {
     decorateDescription,
     registerReporter,
     publishServerReporter,
     subscribeServerReporter,
+    silence as silenceCoreApi,
     lockApi as lockDecoratorsApi
-}  from 'meteor/svein:serrurier-decorators-core';
+}  from 'meteor/svein:serrurier-core';
 import { Cadenas, lockApi as lockCadenasApi } from './api/Cadenas';
 import DefaultCadenas from './api/DefaultCadenas';
 import MethodParamsCadenas from './api/MethodParamsCadenas';
 import SecurityException from './SecurityException';
+import StateException from './StateException';
+import ValidationException from './ValidationException';
 import { ensuresArg } from './ensures';
 import { createSerrurierException } from './utils';
 import Logger from './Logger';
@@ -24,14 +26,18 @@ function runIfApiIsOpen( func ) {
 }
 
 /**
- * The Serrurier helpers to build secured `Astro.Class`s
- * @type {
- *   {
- *     createClass: (function(!Object): Astro.Class),
- *     inheritClass: (function(!Astro.Class, !Object): Astro.Class),
- *     extendClass: (function(!Astro.Class, !Object))
- *   }
- * }
+ * Serrurier API entry-point.
+ * @type {{
+ *  createClass: (function(!Object): Astro.Class),
+ *  inheritClass: (function(!Astro.Class, !Object): Astro.Class),
+ *  extendClass: (function(!Astro.Class, !Object)),
+ *  registerReporter: (function(!Function, function({object}, context))),
+ *  publishServerReporter: (function(!Function, function({object}, context), String=)),
+ *  subscribeServerReporter: (function(!Function, String=)),
+ *  lock: (function()),
+ *  silence: (function()),
+ *  createException: (function(String))
+ *}}
  */
 const Serrurier = {
     /**
@@ -55,6 +61,7 @@ const Serrurier = {
         return runIfApiIsOpen( () =>{
             ensuresArg( 'In method `Serrurier.inheritClass` : argument `description`', description, Object );
             ensuresArg( 'In method `Serrurier.inheritClass` : argument `Clazz`', Clazz, Function );
+            //noinspection JSUnresolvedFunction
             return Clazz.inherit( decorateDescription( description ) );
         });
     },
@@ -67,6 +74,7 @@ const Serrurier = {
         runIfApiIsOpen( () =>{
             ensuresArg( 'In method `Serrurier.extendClass` : argument `description`', description, Object );
             ensuresArg( 'In method `Serrurier.extendClass` : argument `Clazz`', Clazz, Function );
+            //noinspection JSUnresolvedFunction
             Clazz.extend( decorateDescription( description ) );
         });
     },
@@ -76,7 +84,7 @@ const Serrurier = {
      * @param {function({object} context)} reporter - The hook that will be called when it's associated error type is thrown.
      */
     registerReporter( ExceptionClass, reporter ) {
-        runIfApiIsOpen( () => registerReporter.apply( null, arguments ) );
+        runIfApiIsOpen( () => registerReporter.call( null, ExceptionClass, reporter ) );
     },
     /**
      * @locus server
@@ -91,7 +99,7 @@ const Serrurier = {
      * @see Serrurier.subscribeServerReporter
      */
     publishServerReporter( ExceptionClass, serverReporter, name ) {
-        runIfApiIsOpen( () => publishServerReporter.apply( null, arguments ) );
+        runIfApiIsOpen( () => publishServerReporter.call( null, ExceptionClass, serverReporter, name ) );
     },
 
     /**
@@ -104,20 +112,27 @@ const Serrurier = {
      * @see Serrurier.publishServerReporter
      */
     subscribeServerReporter( ExceptionClass, name ) {
-        runIfApiIsOpen( () => subscribeServerReporter.apply( null, arguments ) );
+        runIfApiIsOpen( () => subscribeServerReporter.call( null, ExceptionClass, name ) );
     },
 
     /**
-     * Lock the api and prevent Serrurier from outputing anything in the console.
+     * Lock the api : mutating functionalities (like registering reporters, creating cadenas) becomes unavailable.
      */
-    lockApi(){
+    lock(){
         lockCadenasApi();
         lockDecoratorsApi();
         isSerrurierLocked = true;
+    },
+    /**
+     * Silence the serrurier api, preventing it from logging anything.
+     * This is a irreversible action.
+     */
+    silence() {
+        silenceCoreApi();
         Logger.silence();
     },
     /**
-     * Creates an exception that can be used to register reporters. 
+     * Creates an exception that can be used to register reporters.
      * @param {String} name
      */
     createException( name ) {
@@ -132,7 +147,9 @@ export {
     Serrurier,
     DefaultCadenas,
     MethodParamsCadenas,
-    SecurityException
+    SecurityException,
+    StateException,
+    ValidationException
 };
 
 export default Serrurier;

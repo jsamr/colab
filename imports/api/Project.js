@@ -18,7 +18,7 @@ import _ from 'lodash';
 import Exp from './Exp';
 import { getConfig } from './Config';
 
-import { ensures } from 'meteor/svein:serrurier-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-core';
 import { cadenas, server } from 'meteor/svein:serrurier';
 
 import { parts } from 'meteor/svein:serrurier-cadenas-roles';

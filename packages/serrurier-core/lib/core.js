@@ -1,5 +1,4 @@
-/** @module astrodecorations */
-import mapValues from 'lodash/mapValues';
+import { mapValues } from 'meteor/svein:serrurier-core/lib/lodash';
 import { ensures, ensuresArg, IsNonEmptyString } from './ensures';
 import Logger from './Logger';
 import { makeSecure } from './makers/make-secure';
@@ -33,6 +32,7 @@ function bindActionToClass( action, actionDescriptor ) {
     let actionName = properties.descriptor;
     ensuresArg( 'In method `bindActionToClass` : argument `action`', action, Function );
     ensuresArg( 'In method `bindActionToClass` : argument `className` '+actionDescriptor, actionDescriptor, String );
+    console.info( 'calling bindActionToClass for', actionDescriptor )
     descriptorMapper.delete( actionName );
     descriptorMapper.set( actionDescriptor, action );
     properties.descriptor = actionDescriptor;
@@ -44,15 +44,6 @@ function bindActionToClass( action, actionDescriptor ) {
  */
 export const ActionsStore = {
 
-    /**
-     * Clears the store.
-     */
-    clear() {
-        if(!isApiLocked){
-            actionsProperties.clear();
-            descriptorMapper.clear();
-        }
-    },
     /**
      * Remove an action from the store.
      * @param {!Function} action
@@ -101,8 +92,7 @@ export const ActionsStore = {
      */
     registerOrUpdate( action, descriptor ) {
         runIfApiIsOpen( () => {
-            const oldAction = descriptorMapper.get( descriptor );
-            if(oldAction) ActionsStore.update( action, descriptor );
+            if(descriptorMapper.has( descriptor )) ActionsStore.update( action, descriptor );
             else ActionsStore.register( action, descriptor );
         });
     },
@@ -116,13 +106,11 @@ export const ActionsStore = {
         runIfApiIsOpen( () => {
             ensuresArg('ActionsStore.registerOrUpdateAction : argument `action`', action, Function);
             ensuresArg('ActionsStore.registerOrUpdateAction : argument `descriptor`', descriptor, IsNonEmptyString);
-            const oldAction = descriptorMapper.get(descriptor);
-            const properties = actionsProperties.get(oldAction);
-            if (!oldAction || !properties) throw new Error(`the action ${descriptor} was attempted to be updated while not yet registered.`);
-            //TODO implement
-            //actionsProperties.delete( oldAction );
-            actionsProperties.set(action, properties);
-            descriptorMapper.set(descriptor, action);
+            const oldAction = descriptorMapper.get( descriptor );
+            const properties = actionsProperties.get( oldAction );
+            if (!oldAction || !properties) throw new ReferenceError(`the action ${descriptor} was attempted to be updated while not yet registered.`);
+            actionsProperties.set( action, properties );
+            descriptorMapper.set( descriptor, action );
         });
     },
 
@@ -135,7 +123,10 @@ export const ActionsStore = {
     getProp( action, propName ) {
         let props = actionsProperties.get( action );
         if(props) return props[propName];
-        else throw new Error( 'Cannot get a prop from an unregistered action');
+        else {
+            console.info( arguments.callee.caller.toString() );
+            throw new ReferenceError( 'Cannot get a prop from an unregistered action' );
+        }
     },
 
     /**
@@ -150,7 +141,7 @@ export const ActionsStore = {
             ensuresArg('ActionsStore.setProp : argument action', action, Function);
             ensuresArg('ActionsStore.setProp : argument propName', propName, String);
             const properties = actionsProperties.get(action);
-            if (!properties) throw new Error('The provided action is not registered!');
+            if (!properties) throw new ReferenceError('The provided action is not registered!');
             let oldValue = properties[propName];
             properties[propName] = propValue;
             return oldValue;

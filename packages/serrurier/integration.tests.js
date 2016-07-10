@@ -5,55 +5,50 @@ import {
     ActionsStore,
     Logger,
     registerReporter
-} from 'meteor/svein:serrurier-decorators-core';
-import { decoratorMock } from 'meteor/svein:serrurier-decorators-core/lib/utils';
+} from 'meteor/svein:serrurier-core';
+import { decoratorMock, once } from 'meteor/svein:serrurier-core/lib/utils';
 import { chai } from 'meteor/practicalmeteor:chai';
-import _ from 'lodash';
 const expect = chai.expect;
 Logger.silence();
 
-describe( 'svein:serrurier-decorators-core with svein:serrurier', function() {
+describe( 'svein:serrurier-core with svein:serrurier', function() {
     let securityContext = { reason:'', exceptionId:'any-kind-of-error' };
     describe( 'when the `decorateDescription` function is applied to an Astro description `object`', function() {
-
         let description1,
-            description2;
-
-        before( function(){
-            registerReporter( SecurityException, function() {
-               //
-            });
-            description1 = decorateDescription({
-                name: 'MyAstroClass1',
-                events: {
-                    eventA: function() {
-                        throw new SecurityException( securityContext );
+            description2,
+            onceBefore = once( function(){
+                registerReporter( SecurityException, function() {
+                    console.info('SecurityException reporter is being called.');
+                });
+                description1 = decorateDescription({
+                    name: 'MyAstroClass1',
+                    events: {
+                        eventA: function() {
+                            throw new SecurityException( securityContext );
+                        }
+                    },
+                    methods: {
+                        methodA: function() {
+                            throw new SecurityException( securityContext );
+                        }
                     }
-                },
-                methods: {
-                    methodA: function() {
-                        throw new SecurityException( securityContext );
+                });
+                description2 = decorateDescription({
+                    name: 'MyAstroClass2',
+                    events: {
+                        eventA: [
+                            function() { throw new Error();},
+                            function() {}
+                        ]
+                    },
+                    methods: {
+                        methodA: function() {
+                            throw new Error();
+                        }
                     }
-                }
-            });
-            description2 = decorateDescription({
-                name: 'MyAstroClass2',
-                events: {
-                    eventA: [
-                        function() { throw new Error();},
-                        function() {}
-                    ]
-                },
-                methods: {
-                    methodA: function() {
-                        throw new Error();
-                    }
-                }
-            });
+                });
         });
-        after( function(){
-            ActionsStore.clear();
-        });
+        before( onceBefore );
         describe( 'any wrapped method called `methodName` when a reporter listen to `SecurityException`', function() {
             it( 'should have the "isSecured" property set in the store', function() {
                 expect( ActionsStore.getProp( description1.methods.methodA, 'isSecured' ) ).to.be.true;

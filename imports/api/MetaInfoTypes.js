@@ -1,7 +1,7 @@
 import { Serrurier } from 'meteor/svein:serrurier';
 import { MetaInfoType } from './MetaInfoType';
 import _ from 'lodash';
-import { ensures } from 'meteor/svein:serrurier-decorators-core';
+import { ensures } from 'meteor/svein:serrurier-core';
 
 function hasParent ( tsk ){
     return _.isInteger( tsk.parentId );

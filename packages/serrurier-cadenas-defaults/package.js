@@ -1,19 +1,14 @@
-var commonDependencies =  [
+var coreDependencies = [
     'ecmascript',
     'check',
-    'jag:pince@0.0.9',
-    'jagi:astronomy@2.0.0'
+    'svein:serrurier@1.0.0'
 ];
 
-Npm.depends({
-    lodash: '4.11.1'
-});
-
 Package.describe({
-    name: 'svein:serrurier-decorators-core',
+    name: 'svein:serrurier-cadenas-defaults',
     version: '1.0.0',
     // Brief, one-line summary of the package.
-    summary: '',
+    summary: 'A set of basic cadenas for svein:serrurier',
     // URL to the Git repository containing the source code for this package.
     git: '',
     // By default, Meteor will default to using README.md for documentation.
@@ -21,17 +16,8 @@ Package.describe({
     documentation: 'README.md'
 });
 
-Package.onTest(  function( api ) {
-    api.use( commonDependencies );
-    api.use( [
-        'practicalmeteor:mocha',
-        'practicalmeteor:chai'
-    ] );
-    api.mainModule( 'unit-tests.js' );
-});
-
 Package.onUse( function( api ) {
     api.versionsFrom( '1.3.4.1' );
-    api.use( commonDependencies );
-    api.mainModule( 'lib/main.js' );
+    api.use( coreDependencies );
+    api.mainModule( 'main.js' );
 });
