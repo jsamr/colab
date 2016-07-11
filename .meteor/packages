@@ -44,6 +44,9 @@ practicalmeteor:chai
 
 # hwillson:stub-collections           # Mongo mock
 # dburles:factory                     # Define factory methods
-svein:serrurier-decorators-core
 svein:serrurier
-svein:serrurier-cadenas-roles
+svein:serrurier-core
+svein:serrurier-cadenas-roles@2.0.0
+svein:serrurier-reporter-paranoid
+lmieulet:meteor-coverage
+svein:serrurier-cadenas-defaults

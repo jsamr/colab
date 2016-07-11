@@ -40,11 +40,13 @@ jagi:astronomy-softremove-behavior@2.0.3
 jboulhous:dev@1.0.1
 jquery@1.11.9
 livedata@1.0.18
+lmieulet:meteor-coverage@0.8.1
 localstorage@1.0.11
 logging@1.0.13_1
 mdg:validation-error@0.5.1
 meteor@1.1.15_1
 meteor-base@1.0.4
+meteorhacks:picker@1.0.3
 minifier-css@1.1.12_1
 minifier-js@1.1.12_1
 minimongo@1.0.17
@@ -78,8 +80,10 @@ srp@1.0.9
 standard-minifier-css@1.0.7_1
 standard-minifier-js@1.0.7_1
 svein:serrurier@1.0.0
-svein:serrurier-cadenas-roles@1.0.0
-svein:serrurier-decorators-core@1.0.0
+svein:serrurier-cadenas-defaults@1.0.0
+svein:serrurier-cadenas-roles@2.0.0
+svein:serrurier-core@1.0.0
+svein:serrurier-reporter-paranoid@1.0.0
 templating@1.1.12_1
 templating-tools@1.0.4
 tmeasday:test-reporter-helpers@0.2.1
