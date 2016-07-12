@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { Serrurier, cadenas, server } from 'meteor/svein:serrurier';
-import { ensures, IsNonEmptyString } from 'meteor/svein:serrurier-core/lib/ensures';
+import { ensures, ensuresArg, IsNonEmptyString } from 'meteor/svein:serrurier-core/lib/ensures';
 import { Roles } from 'meteor/alanning:roles';
 import { roles,
     assertLoggedUserInRole_s,
@@ -212,8 +212,7 @@ const Config = Serrurier.createClass({
 export const getConfig=function(){
     /** @type {Config} */
     const conf=Config.findOne();
-
-    ensures( 'Getting config singleton', conf, Config );
+    ensuresArg( 'Getting config singleton', conf, Config );
     return conf;
 };
 
