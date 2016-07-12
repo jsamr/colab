@@ -171,7 +171,7 @@ const Project = Serrurier.createClass({
          */
         @server()
         @cadenas( 'persisted')
-        @cadenas( 'userLoggedIn')
+        @cadenas( 'userIsLoggedIn')
         unregisterFromProject(asyncCallback=null){
             revokeLoggedUserRole_s(this.getPartition());
         },
@@ -183,7 +183,7 @@ const Project = Serrurier.createClass({
          */
         @server()
         @cadenas( 'persisted')
-        @cadenas( 'userLoggedIn' )
+        @cadenas( 'userIsLoggedIn' )
         registerToPendingInProject(asyncCallback){
             //noinspection JSUnusedAssignment
             Project.update(this._id, { $push:{pending:Meteor.userId()} });
@@ -195,7 +195,7 @@ const Project = Serrurier.createClass({
          */
         @server()
         @cadenas( 'persisted' )
-        @cadenas( 'userLoggedIn' )
+        @cadenas( 'userIsLoggedIn' )
         @cadenas( 'loggedUserInRole', roles.project$acceptMember, parts.AUTO )
         cancelPendingInProject( userId, asyncCallback=null ){
             //noinspection JSUnusedAssignment
