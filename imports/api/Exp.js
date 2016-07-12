@@ -1,8 +1,8 @@
 import { Mongo } from 'meteor/mongo';
 import Serrurier from 'meteor/svein:serrurier';
-
+import Project from './Project';
 const experiments=new Mongo.Collection('exps');
-
+import Session from '../medianode/Session';
 /**
  * An experiment
  * @constructor
@@ -17,14 +17,23 @@ const Exp = Serrurier.createClass({
     },
     /** @lends Exp.prototype */
     methods:{
-        updateTaskSegment(){
+        updateTaskSegment() {
 
         },
-        createTaskIfNotExists(){
+        createTaskIfNotExists() {
 
         },
-        insertCaptions(){
+        insertCaptions() {
 
+        },
+        createSession() {
+            return new Session( this );
+        },
+        /**
+         * @returns {Project}
+         */
+        getProject() {
+            return Project.findOne( this.projectId );
         }
     },
     behaviors:{
