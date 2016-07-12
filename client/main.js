@@ -11,7 +11,11 @@ import './main.html';
 import { getConfig }  from '../imports/api/Config';
 import Project from '../imports/api/Project';
 import { TaskType } from '../imports/api/TaskType';
+import { Accounts } from 'meteor/accounts-base';
 
+Accounts.onLogin( function() {
+    console.info(arguments)
+})
 
 let once=true;
 
@@ -21,6 +25,8 @@ Tracker.autorun(()=>{
   if(sub1.ready() && sub2.ready() && once){
     //try {
       once=false;
+      let store = require('../imports/store').default;
+      console.info(store.getState())
       //const conf=getConfig();
       //conf.unsetUserAdmin(Meteor.userId());
       //conf.remove();
