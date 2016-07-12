@@ -83,3 +83,20 @@ Meteor.publish('plugins.annotations', function(expName) {
 Meteor.publish('users', () => Meteor.users.find());
 
 Meteor.publish('roles', () => Meteor.roles.find());
+
+/**
+ * Publish general user information including basic information about the venues they have access to
+ */
+Meteor.publish( null, function() {
+    return Meteor.users.find({
+        _id: this.userId
+    }, {
+        fields: {
+            email: true,
+            username: true,
+            profile: true,
+            roles: true,
+            'services.password': true
+        }
+    })
+});
