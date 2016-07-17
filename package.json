@@ -15,6 +15,7 @@
     "validator": "^5.4.0"
   },
   "standard": {
+    "parser": "babel-eslint",
     "ignore": [
       "packages/",
       "**/*.test.js"
