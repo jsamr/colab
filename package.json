@@ -13,5 +13,10 @@
     "redux-saga": "^0.11.0",
     "stringify-object": "^2.4.0",
     "validator": "^5.4.0"
+  },
+  "standard": {
+    "ignore": [
+      "packages/"
+    ]
   }
 }
