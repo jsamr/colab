@@ -16,7 +16,15 @@
   },
   "standard": {
     "ignore": [
-      "packages/"
+      "packages/",
+      "**/*.test.js"
     ]
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "standard": "^7.1.2"
   }
 }
