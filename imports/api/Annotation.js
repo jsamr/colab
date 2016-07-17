@@ -1,33 +1,33 @@
-import { Mongo } from 'meteor/mongo';
-import Serrurier from 'meteor/svein:serrurier';
+import { Mongo } from 'meteor/mongo'
+import Serrurier from 'meteor/svein:serrurier'
 
-const annotations = new Mongo.Collection( 'plugins.annotations' );
+const annotations = new Mongo.Collection('plugins.annotations')
 
 const Annotation = Serrurier.createClass({
-    name: 'Annotation',
-    collection: annotations,
-    secured: {
-        insert: true,
-        update: true,
-        remove: true
-    },
-    fields: {},
-    behaviors: {
-        softremove: {
-            removedFieldName: '_removed'
-        }
-    },
-    indexes: {
-        uniqRawMinutes: {
-            fields: {
-                rawMinutes: 1,
-                expId: 1
-            },
-            options: {
-                unique: true
-            }
-        }
+  name: 'Annotation',
+  collection: annotations,
+  secured: {
+    insert: true,
+    update: true,
+    remove: true
+  },
+  fields: {},
+  behaviors: {
+    softremove: {
+      removedFieldName: '_removed'
     }
-});
+  },
+  indexes: {
+    uniqRawMinutes: {
+      fields: {
+        rawMinutes: 1,
+        expId: 1
+      },
+      options: {
+        unique: true
+      }
+    }
+  }
+})
 
-export default Annotation;
+export default Annotation

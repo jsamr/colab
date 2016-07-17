@@ -1,18 +1,11 @@
 import { DefaultCadenas } from 'meteor/svein:serrurier'
-import { roles } from './security'
+import { roles, isLoggedUserInRolesAndChecked } from './security'
 import { Meteor } from 'meteor/meteor'
 import { Match } from 'meteor/check'
+import { getConfig } from 'api/Config'
 import getp from 'lodash/get'
-// noinspection JSCheckFunctionSignatures
 
-/**
- *
- * @return {boolean} true if logged user is verified, or verify email policy is disabled
- */
-function checkAgainstVerifiedEmailPolicy () {
-  return !Meteor.settings.public.enableVerifyEmailSecurityPolicy ||
-    getp(Meteor.user(), 'emails[0].verified') === true
-}
+// noinspection JSCheckFunctionSignatures
 
 /**
  * Assert the logged user is admin
@@ -28,8 +21,18 @@ const argUserNotSelf = DefaultCadenas.partialFrom('matchParams', {
 
 }, [ Match.Where((userId) => Meteor.userId() !== userId) ])
 
+const configOptionEnabled = new DefaultCadenas({
+  name: 'configOptionEnabled',
+  doesAssertionFails (accessor) {
+    const config = getConfig()
+    if (!isLoggedUserInRolesAndChecked(roles.ADMIN) && !getp(config, accessor)) return 'not.allowed.by.conf.' + accessor
+    else return false
+  },
+  matchPatterns: [ String ]
+})
+
 export {
-  checkAgainstVerifiedEmailPolicy,
   loggedUserIsAdmin,
-  argUserNotSelf
+  argUserNotSelf,
+  configOptionEnabled
 }

@@ -1,4 +1,3 @@
-
 /**
  * @class AstroClass
  */
@@ -34,7 +33,6 @@
  * @function
  * @name AstroClass#validate
  */
-
 
 /**
  * @class PartitionClass
