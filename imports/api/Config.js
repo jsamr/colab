@@ -127,10 +127,9 @@ const Config = Serrurier.createClass({
      * @param {string} userId - The user id to retain Admin privileges
      * @param {?Function_meteor_callback=} asyncCallback
      */
-
-    //@server()
     @cadenas('argUserNotSelf')
     @cadenas('loggedUserIsAdmin')
+    @server()
     unsetUserAdmin (userId, asyncCallback = null) {
       assertUserExists(userId)
       Roles.removeUsersFromRoles(userId, roles.ADMIN)
@@ -180,7 +179,7 @@ const Config = Serrurier.createClass({
   events: {
     // TODO create 'forbidden' annotation
     beforeRemove (/* e */) {
-      // propagateException({ reason: 'client.config.remove.forbidden', exceptionId: 'removeForbidden' })
+      propagateException({ reason: 'client.config.remove.forbidden', exceptionId: 'removeForbidden' })
     },
     @cadenas('loggedUserIsAdmin')
     beforeUpdate (e) {},

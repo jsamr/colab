@@ -1,12 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-// import { propagateException  } from 'meteor/svein:serrurier/lib/api/security'
+import { propagateException  } from 'meteor/svein:serrurier/lib/api/security'
 import { ensuresArg } from 'meteor/svein:serrurier-core'
 import getp from 'lodash/get'
-
-function propagateException () {
-  throw new Error('yolo')
-}
 
 /**
  *
