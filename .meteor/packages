@@ -23,7 +23,7 @@ standard-minifier-css               # CSS minifier run for production mode
 standard-minifier-js                # JS minifier run for production mode
 ecmascript                          # Enable ECMAScript2015+ syntax in app code
 
-jagi:astronomy@=2.0.1                # Model Layer
+jagi:astronomy                # Model Layer
 jagi:astronomy-softremove-behavior
 
 alanning:roles@=2.0.0                # Roles management
@@ -46,7 +46,7 @@ practicalmeteor:chai
 # dburles:factory                     # Define factory methods
 svein:serrurier
 svein:serrurier-core
-svein:serrurier-cadenas-roles@2.0.0
+svein:serrurier-cadenas-roles
 svein:serrurier-reporter-paranoid
 lmieulet:meteor-coverage
 svein:serrurier-cadenas-defaults
