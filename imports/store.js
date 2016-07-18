@@ -45,7 +45,8 @@ Accounts.onLogin(userLogin)
 sagaMiddleWare.run(medianodeSaga, new ColabMediaConf({
   appName: 'colab2',
   SYM_AUTH_ACTION: METEOR_LOGIN,
-  SYM_RESET_ACTION: METEOR_LOGOUT
+  SYM_RESET_ACTION: METEOR_LOGOUT,
+  RETRY_AFTER_SECONDS: 10
 }))
 
 // user meteor defer to fasten ui lodading

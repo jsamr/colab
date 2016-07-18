@@ -1,15 +1,14 @@
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
-import { Serrurier, cadenas, server } from 'meteor/svein:serrurier'
+import { Serrurier, DefaultCadenas, cadenas, server } from 'meteor/svein:serrurier'
 import { ensuresArg, IsNonEmptyString } from 'meteor/svein:serrurier-core/lib/ensures'
 import { Roles } from 'meteor/alanning:roles'
-import { roles, propagateException, assertUserExists } from '../security'
+import { roles, propagateException, assertUserExists, isLoggedUserInRolesAndChecked } from '../security'
 import { EmailType, URLType, extendType } from '../astro-types'
 
 const config = new Mongo.Collection('globalconfig')
 
 export const SINGLETON_CONFIG_ID = '1'
-
 const DEFAULT_VIDEO_SERVER_URL = 'http://localhost:5000/'
 const DEFAULT_VIDEO_SERVER_ON = false
 const DEFAULT_WHITELIST_VALUES = []
@@ -129,9 +128,9 @@ const Config = Serrurier.createClass({
      * @param {?Function_meteor_callback=} asyncCallback
      */
 
+    //@server()
     @cadenas('argUserNotSelf')
     @cadenas('loggedUserIsAdmin')
-    @server()
     unsetUserAdmin (userId, asyncCallback = null) {
       assertUserExists(userId)
       Roles.removeUsersFromRoles(userId, roles.ADMIN)
@@ -181,7 +180,7 @@ const Config = Serrurier.createClass({
   events: {
     // TODO create 'forbidden' annotation
     beforeRemove (/* e */) {
-      propagateException({ reason: 'client.config.remove.forbidden', exceptionId: 'removeForbidden' })
+      // propagateException({ reason: 'client.config.remove.forbidden', exceptionId: 'removeForbidden' })
     },
     @cadenas('loggedUserIsAdmin')
     beforeUpdate (e) {},
@@ -206,3 +205,13 @@ export const getConfig = function () {
 }
 
 export default Config
+
+new DefaultCadenas({
+  name: 'configOptionEnabled',
+  doesAssertionFails (accessor) {
+    const config = getConfig()
+    if (!isLoggedUserInRolesAndChecked(roles.ADMIN) && !getp(config, accessor)) return 'not.allowed.by.conf.' + accessor
+    else return false
+  },
+  matchPatterns: [ String ]
+})

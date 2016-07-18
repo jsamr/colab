@@ -10,7 +10,6 @@ import { AUTH_FAIL, AUTH_OK, AUTH, RESET, REQUEST_AUTO_AUTH } from './actions'
  */
 function * autoReAuth (seconds) {
   yield delay((seconds) * 1000)
-  console.info('delayed')
   yield put({ type: REQUEST_AUTO_AUTH })
 }
 
@@ -70,13 +69,15 @@ function * authenticate (conf) {
   if (!conf instanceof MediaNodeConfig) throw new TypeError('must provide an instance of MediaNodeConfig ')
   if (conf.canAuthWithToken()) yield fork(authenticateWithToken, conf)
   else yield fork(authenticateWithCredentials, conf)
-  console.info(' authenticated with credentials')
   let action = yield take([ AUTH_OK, AUTH_FAIL ])
-  console.info(action)
-  // upon success, launch a fork that will send autoreauth actions when token is about to expire
-  if (action.type === AUTH_OK) yield fork(autoReAuth, 5) // conf.remainingSecondsBeforeTokenExpires()
-  // upon failure, launch a fork that will attempt a reauth after RETRY_AFTER_SECONDS seconds
-  else yield fork(autoReAuth, conf.RETRY_AFTER_SECONDS)
+  if (action.type === AUTH_OK) {
+    // upon success, launch a fork that will send autoreauth actions when token is about to expire
+    console.info(`reconnecting in ${conf.remainingSecondsBeforeTokenExpires()} seconds.`)
+    yield fork(autoReAuth, conf.remainingSecondsBeforeTokenExpires())
+  } else {
+    // upon failure, launch a fork that will attempt a reauth after RETRY_AFTER_SECONDS seconds
+    yield fork(autoReAuth, conf.RETRY_AFTER_SECONDS)
+  }
 }
 
 export function * authFlow (conf) {
