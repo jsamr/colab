@@ -1,3 +1,4 @@
+import '/imports/cadenas'
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
 import { Serrurier, DefaultCadenas, cadenas, server } from 'meteor/svein:serrurier'
