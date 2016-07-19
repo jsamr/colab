@@ -10,7 +10,7 @@ function getDefaultState () {
   }
 }
 
-export default function mediaNodeReducer (state, action) {
+export function media (state, action) {
   if (state === undefined) return getDefaultState()
   switch (action.type) {
     case AUTH:

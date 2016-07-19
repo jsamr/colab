@@ -29,6 +29,7 @@ export function * authenticateWithCredentials (conf) {
     conf.token = { value: data.token, epoch_s: data.epoch_s }
     yield put({ type: AUTH_OK })
   } catch (error) {
+    console.error(error)
     let standardError = errors.SERVER_OFFLINE
     if (error.response && error.response.data) {
       const possibleError = errors[error.response.data]
@@ -53,6 +54,7 @@ export function * authenticateWithToken (conf) {
     yield result
     yield put({ type: AUTH_OK })
   } catch (error) {
+    console.error(error)
     let standardError = errors.SERVER_OFFLINE
     if (error.response && error.response.data) {
       const possibleError = errors[error.response.data]
@@ -72,9 +74,10 @@ function * authenticate (conf) {
   let action = yield take([ AUTH_OK, AUTH_FAIL ])
   if (action.type === AUTH_OK) {
     // upon success, launch a fork that will send autoreauth actions when token is about to expire
-    console.info(`reconnecting in ${conf.remainingSecondsBeforeTokenExpires()} seconds.`)
+    console.info(`Reconnecting in ${conf.remainingSecondsBeforeTokenExpires()} seconds.`)
     yield fork(autoReAuth, conf.remainingSecondsBeforeTokenExpires())
   } else {
+    console.warn(`Auth failed. Reconnecting in ${conf.RETRY_AFTER_SECONDS} seconds.`)
     // upon failure, launch a fork that will attempt a reauth after RETRY_AFTER_SECONDS seconds
     yield fork(autoReAuth, conf.RETRY_AFTER_SECONDS)
   }
