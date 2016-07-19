@@ -1,7 +1,7 @@
 import 'meteor/svein:serrurier-reporter-paranoid'
 import '/imports/cadenas'
 import '/imports/init-behaviors'
-import '/imports/unsecure-login-mock'
+// import '/imports/unsecure-login-mock'
 import { createApp } from 'mantra-core'
 import initContext from './configs/context'
 import { routerReducer } from 'react-router-redux'

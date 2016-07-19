@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { createStore, applyMiddleware, compose } from 'redux'
-import { Accounts } from 'meteor/accounts-base'
+import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui';
 import Logger from '/imports/Logger'
 import createSagaMiddleware from 'redux-saga'
 import * as CONF from './params'
@@ -23,8 +23,12 @@ export default function ({ reducer }) {
     defaultState,
     applyMiddleware(sagaMiddleWare, loggerMiddleware)
   )
+  Accounts.ui.config({
+    passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+  })
   return {
     Accounts,
+    ACCOUNT_STATES,
     Meteor,
     Logger,
     Tracker,

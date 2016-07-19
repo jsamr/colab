@@ -50,3 +50,4 @@ svein:serrurier-cadenas-roles
 svein:serrurier-reporter-paranoid
 lmieulet:meteor-coverage
 svein:serrurier-cadenas-defaults
+std:accounts-ui
