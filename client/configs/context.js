@@ -1,11 +1,18 @@
+import '/imports/init-accounts'
+import '/imports/init-i18n'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { createStore, applyMiddleware, compose } from 'redux'
-import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui';
+import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui'
 import Logger from '/imports/Logger'
 import createSagaMiddleware from 'redux-saga'
 import * as CONF from './params'
 const sagaMiddleWare = createSagaMiddleware()
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import { browserHistory } from 'react-router'
+import { routerMiddleware, push } from 'react-router-redux'
+import i18n from 'meteor/universe:i18n'
+import ROUTES from './routes'
 
 const logger = new Logger('redux')
 
@@ -18,14 +25,13 @@ const loggerMiddleware = store => next => action => {
 const defaultState = {}
 
 export default function ({ reducer }) {
+  injectTapEventPlugin()
+  const rMiddleware = routerMiddleware(browserHistory)
   const store = createStore(
     reducer,
     defaultState,
-    applyMiddleware(sagaMiddleWare, loggerMiddleware)
+    applyMiddleware(sagaMiddleWare, rMiddleware, loggerMiddleware)
   )
-  Accounts.ui.config({
-    passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
-  })
   return {
     Accounts,
     ACCOUNT_STATES,
@@ -34,6 +40,9 @@ export default function ({ reducer }) {
     Tracker,
     Store: store,
     CONF: CONF,
-    sagaMiddleWare
+    sagaMiddleWare,
+    ROUTES,
+    t: i18n.__,
+    nav: push
   }
 }

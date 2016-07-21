@@ -1,0 +1,39 @@
+{
+  "restrictions" : {
+    "validemail" : "valid email",
+    "maxchars": "maximum {$param} characters",
+    "minchars" : "minimum {$param} characters"
+  },
+  "orders" : {
+    "provideyour": "provide your ",
+    "providea": "provide a ",
+    "retype" : "retype "
+  },
+  "dashboard" : {
+    "myprojects" : "my projects",
+    "noprojects": "you actually don't belong to any project"
+  },
+  "errors": {
+    "passwordnomatch": "the passwords do not match"
+  },
+  "validate": {
+    "fields" : {
+        "emails": "emails",
+        "firstname" : "firstname",
+        "lastname" : "lastname",
+        "email" : "e-mail",
+        "password" : "password",
+        "username" : "username"
+    },
+    "mustbe" : {
+      "integer": "{$name} must be an integer ",
+      "url" : "${name} must be a valid URL",
+      "composedof" : "{$name} must be composed of "
+    },
+    "isrequired" : "is required"
+  },
+  "topbar" : {
+    "exit" : "quit CoLab",
+    "notifications" : "notifications"
+  }
+}

@@ -1,5 +1,5 @@
 import * as actionTypes from '/imports/medianode/actions'
-import reducer from '/imports/medianode/reducer'
+import * as reducer from '/imports/medianode/reducer'
 import medianodeSaga from '/imports/medianode/saga'
 import ColabMediaConf from './libs/ColabMediaConf'
 import { LOGOUT } from '../auth/actions/actionTypes'

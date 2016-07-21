@@ -1,28 +1,36 @@
-import { MainLayout } from './components/MainLayout.jsx'
+import MainLayout from './containers/MainLayout'
+import App from './containers/App'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { syncHistoryWithStore } from 'react-router-redux'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-const Layout = (props) => <div>Hi dude! {props.children}</div>
-import { composeWithTracker } from 'react-komposer'
-import { notifySubReady } from './actions'
+import { Router, Route, browserHistory, IndexRedirect } from 'react-router'
 import createRoot from './libs/create-root'
+import DashBoard from '../dashboard/containers/DashBoard'
+import RichLoginForm from '../auth/components/RichLoginForm'
 
-export default function (inject, { Store, Meteor, Accounts, ACCOUNT_STATES }) {
-  function composer (props, onData) {
-    if (Meteor.subscribe('globalconfig').ready()) {
-      if (Store.getState().auth.id) Store.dispatch(notifySubReady())
-      onData(null, { })
-    }
-  }
-  const MainLayoutCtx = composeWithTracker(composer)(inject(MainLayout))
+export default function (inject, { Store, ACCOUNT_STATES, ROUTES, t, nav }) {
+  const MainLayoutCtx = inject(MainLayout)
   const history = syncHistoryWithStore(browserHistory, Store)
+  const loginProps = {
+    goToSignUp: () => Store.dispatch(nav(ROUTES.REGISTER)),
+    goToSignIn: () => Store.dispatch(nav(ROUTES.LOGIN))
+  }
+  const LoginForm = () => <RichLoginForm formState={ ACCOUNT_STATES.SIGN_IN } { ...loginProps } />
+  const RegisterForm = () => <RichLoginForm loginPath={ ROUTES.LOGIN } formState={ ACCOUNT_STATES.SIGN_UP } { ...loginProps } />
+
+  RegisterForm.switchToSignIn = () => {
+    console.info('LOGIN')
+    Store.dispatch(nav(ROUTES.LOGIN))
+  }
+  console.info(ACCOUNT_STATES)
   ReactDOM.render(
-    <MainLayoutCtx>
+    <MainLayoutCtx t={t}>
       <Router history={history}>
-        <Route path='/' component={Layout}>
-          <Route path='/login' component={ Accounts.ui.LoginForm } formState={ ACCOUNT_STATES.SIGN_IN } />
-          <Route path='/register' component={ Accounts.ui.LoginForm } formState={ ACCOUNT_STATES.SIGN_UP } />
+        <Route path='/' component={App}>
+          <IndexRedirect to={ ROUTES.HOME } />
+          <Route path={ ROUTES.LOGIN } component={ LoginForm } />
+          <Route path={ ROUTES.REGISTER } component={ RegisterForm } />
+          <Route path={ ROUTES.HOME } component={ DashBoard } />
         </Route>
       </Router>
     </MainLayoutCtx>,

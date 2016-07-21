@@ -2,6 +2,7 @@ import { LOGIN, LOGOUT } from '../actions/actionTypes'
 
 function getDefaultState () {
   return {
+    // instance of CurrentUser
     user: null,
     id: null
   }
@@ -10,7 +11,6 @@ function getDefaultState () {
 export function auth (state = getDefaultState(), action) {
   switch (action.type) {
     case LOGIN:
-      console.info('yo logging in')
       return action.value
     case LOGOUT:
       return getDefaultState()

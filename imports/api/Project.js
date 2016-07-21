@@ -1,3 +1,5 @@
+import '/imports/init-behaviors'
+import '/imports/init-conf-cadenas'
 import { Mongo } from 'meteor/mongo'
 import { Serrurier, cadenas, server } from 'meteor/svein:serrurier'
 // import { AnnotationType } from './AnnotationType'
@@ -8,6 +10,7 @@ import includes from 'lodash/includes'
 import Exp from './Exp'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
+import Config from './Config'
 // import { ensures } from 'meteor/svein:serrurier-core'
 
 import { parts } from 'meteor/svein:serrurier-cadenas-roles'
@@ -295,5 +298,9 @@ const Project = Serrurier.createClass({
     }
   }
 })
+
+Project.getOwn = function () {
+  return Project.find({ owner: Meteor.userId() })
+}
 
 export default Project

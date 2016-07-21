@@ -1,5 +1,6 @@
 import 'meteor/svein:serrurier-reporter-paranoid'
-import '/imports/cadenas'
+import '/imports/init-cadenas'
+import '/imports/init-conf-cadenas'
 import '/imports/init-behaviors'
 // import '/imports/unsecure-login-mock'
 import { createApp } from 'mantra-core'
@@ -20,6 +21,7 @@ const reducers = {
 }
 
 console.info('reducers', Object.keys(reducers))
+
 const reducer = combineReducers(reducers)
 
 const context = initContext({ reducer })
@@ -28,6 +30,6 @@ const app = createApp(context)
 
 app.loadModule(coreModule)
 app.loadModule(authModule)
-app.loadModule(mediaModule)
+// app.loadModule(mediaModule)
 
 app.init()

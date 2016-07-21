@@ -9,19 +9,19 @@ function pushIfNoExists (array, value) {
 
 function * syncFlow () {
   const actions = []
-  function * oneRound () {
+  function * oneCycle () {
     let action = yield take([ LOGIN, NOTIFY_SUBSCRIPTION_READY ])
-    pushIfNoExists(actions, action)
+    pushIfNoExists(actions, action.type)
     if (actions.length === 2) {
       yield put({ type: START_MEDIA_NODE_AUTH })
       yield take(LOGOUT)
       pull(actions, LOGIN)
     }
-    yield call(oneRound)
+    yield call(oneCycle)
   }
-  yield call(oneRound)
+  yield call(oneCycle)
 }
 
-export default function * syncSaga (config) {
+export default function * syncSaga () {
   yield * syncFlow()
 }

@@ -1,18 +1,18 @@
 import * as actions from './actions'
 import * as reducer from './configs/reducer.js'
-
+import { CurrentUser } from '/imports/api/User'
+import authSaga from './libs/auth-saga'
 export default {
   actions,
   reducer,
-  load ({ Meteor, Accounts, Store }) {
-    function getUserCredentials () {
-      return {
-        user: Meteor.user(),
-        id: Meteor.userId()
+  load (context) {
+    const { Meteor, Store, Tracker, sagaMiddleWare } = context
+    Tracker.autorun(() => {
+      const userSub = Meteor.subscribe('currentuser')
+      if (userSub.ready()) {
+        Store.dispatch(actions.update(CurrentUser.findOne(Meteor.userId())))
       }
-    }
-    const onLogin = () => Store.dispatch(actions.login(getUserCredentials()))
-    Accounts.onLogin(onLogin)
-    Accounts.onLogout(() => Store.dispatch(actions.logout()))
+    })
+    sagaMiddleWare.run(authSaga, context)
   }
 }

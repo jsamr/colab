@@ -1,10 +1,10 @@
-import '/imports/cadenas'
+import '/imports/init-cadenas'
 import { Mongo } from 'meteor/mongo'
 import { Meteor } from 'meteor/meteor'
-import { Serrurier, DefaultCadenas, cadenas, server } from 'meteor/svein:serrurier'
+import { Serrurier, cadenas, server } from 'meteor/svein:serrurier'
 import { ensuresArg, IsNonEmptyString } from 'meteor/svein:serrurier-core/lib/ensures'
 import { Roles } from 'meteor/alanning:roles'
-import { roles, propagateException, assertUserExists, isLoggedUserInRolesAndChecked } from '../security'
+import { roles, propagateException, assertUserExists } from '../security'
 import { EmailType, URLType, extendType } from '../astro-types'
 
 const config = new Mongo.Collection('globalconfig')
@@ -182,7 +182,7 @@ const Config = Serrurier.createClass({
     beforeRemove (/* e */) {
       propagateException({ reason: 'client.config.remove.forbidden', exceptionId: 'removeForbidden' })
     },
-    @cadenas('loggedUserIsAdmin')
+    // @cadenas('loggedUserIsAdmin')
     beforeUpdate (e) {},
     beforeInsert (e) {
       // force Config to singleton
@@ -206,12 +206,3 @@ export const getConfig = function () {
 
 export default Config
 
-new DefaultCadenas({
-  name: 'configOptionEnabled',
-  doesAssertionFails (accessor) {
-    const config = getConfig()
-    if (!isLoggedUserInRolesAndChecked(roles.ADMIN) && !getp(config, accessor)) return 'not.allowed.by.conf.' + accessor
-    else return false
-  },
-  matchPatterns: [ String ]
-})

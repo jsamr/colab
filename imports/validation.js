@@ -1,6 +1,7 @@
 import isURL from 'validator/lib/isURL'
 import isInteger from 'lodash/isInteger'
 import { Validator } from 'meteor/jagi:astronomy'
+import i18n from 'meteor/universe:i18n'
 
 function mustBeInt (validatorName) {
   return function (param) {
@@ -12,14 +13,18 @@ function mustBeInt (validatorName) {
   }
 }
 
+function fetchFieldName (name) {
+  return i18n.__(`validate.fields.${name}`)
+}
+
 Validator.create({
   name: 'url',
   parseParam () {},
   isValid ({ value }) {
     return isURL(value)
   },
-  resolveError ({ name }) {
-    return `${name} must be a valid URL`
+  resolveError ({ nestedName }) {
+    return i18n.__('validate.mustbe.url', { name: fetchFieldName(nestedName)})
   }
 })
 
@@ -29,8 +34,8 @@ Validator.create({
   isValid ({ value }) {
     return isInteger(value)
   },
-  resolveError ({ name }) {
-    return `${name} must be an integer`
+  resolveError ({ nestedName }) {
+    return i18n.__('validate.mustbe.integer', { name: fetchFieldName(nestedName)})
   }
 })
 
@@ -40,8 +45,8 @@ Validator.create({
   isValid ({ value, param }) {
     return isInteger(value.length) && value.length <= param
   },
-  resolveError ({ name, param }) {
-    return `${name} must be composed of maximum ${param} characters`
+  resolveError ({ nestedName, param }) {
+    return i18n.__('validate.mustbe.composedof', { name: fetchFieldName(nestedName) }) + i18n.__('restrictions.maxchar', { param })
   }
 })
 
@@ -51,8 +56,8 @@ Validator.create({
   isValid ({ value, param }) {
     return isInteger(value.length) && value.length >= param
   },
-  resolveError ({ name, param }) {
-    return `${name} must be composed of minimum ${param} characters`
+  resolveError ({ nestedName, param }) {
+    return i18n.__('validate.mustbe.composedof', { name: fetchFieldName(nestedName) }) + i18n.__('restrictions.minchars', { param })
   }
 })
 

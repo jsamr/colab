@@ -1,5 +1,11 @@
 # CoLab
 
+
+## Conventions
+
+[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
+
 ## Stack
 
 L'application est construite avec [Meteor v1.3](https://www.meteor.com/), en implémentant les [spécifications de l'architecture Mantra](https://kadirahq.github.io/mantra/#sec-Overview), qui oblige à un fort découplage.
@@ -7,7 +13,7 @@ L'application est construite avec [Meteor v1.3](https://www.meteor.com/), en imp
  
 ### Object Model Layer
 
-Le modèle est implémenté avec [Astronomy v2](http://jagi.github.io/meteor-astronomy/) + [Serrurier]()
+Le modèle est implémenté avec [Astronomy v2](http://jagi.github.io/meteor-astronomy/) + [Serrurier](https://github.com/sveinburne/serrurier)
 
 ### Roles management
 
