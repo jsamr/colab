@@ -12,18 +12,16 @@
 meteor-base                         # Packages every Meteor app needs to have
 mongo                               # The database Meteor supports right now
 http                                # Http utilities
-blaze-html-templates                # Compile .html files into Meteor Blaze views
 reactive-var                        # Reactive variable for tracker
 jquery                              # Helpful client-side library
 tracker                             # Meteor's client-side reactive programming library
 accounts-base                       # A user account system
 accounts-password                   # Secured layer for accounts
 
-standard-minifier-css               # CSS minifier run for production mode
 standard-minifier-js                # JS minifier run for production mode
 ecmascript                          # Enable ECMAScript2015+ syntax in app code
 
-jagi:astronomy                # Model Layer
+jagi:astronomy@=2.1.0                # Model Layer
 jagi:astronomy-softremove-behavior
 
 alanning:roles@=2.0.0                # Roles management
@@ -51,3 +49,9 @@ svein:serrurier-reporter-paranoid
 lmieulet:meteor-coverage
 svein:serrurier-cadenas-defaults
 std:accounts-ui
+seba:minifiers-autoprefixer
+fourseven:scss
+dapearce:material-icons
+std:accounts-basic
+universe:i18n
+softwarerero:accounts-t9n
