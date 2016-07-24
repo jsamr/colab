@@ -11,7 +11,6 @@ import Exp from './Exp'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
 import Config from './Config'
-// import { ensures } from 'meteor/svein:serrurier-core'
 
 import { parts } from 'meteor/svein:serrurier-cadenas-roles'
 

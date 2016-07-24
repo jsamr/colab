@@ -1,4 +1,4 @@
-import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE } from '../actions/actionTypes.js'
+import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE } from './actions/actionTypes.js'
 
 const defaultState = {
   height: 0,

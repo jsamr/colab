@@ -14,7 +14,7 @@ import 'lodash/sortBy'
 import 'lodash/filter'
 import 'lodash/reject'
 import 'lodash/forEach'
-import { ensures } from 'meteor/svein:serrurier-core'
+import { ensures } from '../ensure'
 
 function hasParent (tsk) {
   return isInteger(tsk.parentId)

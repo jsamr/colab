@@ -3,6 +3,7 @@ import Serrurier from 'meteor/svein:serrurier'
 import Project from './Project'
 const experiments = new Mongo.Collection('exps')
 import Session from '../medianode/Session'
+import { raw } from '../time'
 /**
  * An experiment
  * @constructor
@@ -17,6 +18,9 @@ const Exp = Serrurier.createClass({
   },
   /** @lends Exp.prototype */
   methods: {
+    getReadableDuration () {
+      return raw.readable(this.duration)
+    },
     updateTaskSegment () {},
     createTaskIfNotExists () {},
     insertCaptions () {},
@@ -36,7 +40,16 @@ const Exp = Serrurier.createClass({
     }
   },
   /** @lends Exp.prototype */
-  fields: {},
+  fields: {
+    name: String,
+    duration: Number,
+    date: String,
+    projectId: String,
+    ownerId: String,
+    synchronized: Boolean,
+    prevalidatedTech: Boolean,
+    published: Boolean
+  },
   indexes: {
     uniqProject: {
       fields: {

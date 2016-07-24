@@ -11,8 +11,10 @@ class MainLayout extends Component {
   constructor (props) {
     super(props)
     this.handleResize = debounce(() => {
-      this.props.store.dispatch(setWinHeight(window.innerHeight))
-      this.props.store.dispatch(setWinWidth(window.innerWidth))
+      const height = window.innerHeight
+      const width = window.innerWidth
+      this.props.store.dispatch(setWinHeight(height))
+      this.props.store.dispatch(setWinWidth(width))
     }, WIN_UPDATE_PERIOD)
   }
 
@@ -29,7 +31,12 @@ class MainLayout extends Component {
   }
 
   getChildContext () {
-    return { muiTheme: getMuiTheme(darkBaseTheme), t: this.props.t, user: this.props.user }
+    return {
+      muiTheme: getMuiTheme(this.props.theme),
+      t: this.props.t,
+      VERSION: this.props.VERSION,
+      theme: this.props.theme
+    }
   }
 
   render () {
@@ -45,13 +52,15 @@ MainLayout.propTypes = {
   t: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
-  user: PropTypes.object
+  VERSION: PropTypes.string,
+  theme: PropTypes.object.isRequired
 }
 
 MainLayout.childContextTypes = {
   muiTheme: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
-  user: PropTypes.object
+  VERSION: PropTypes.string,
+  theme: PropTypes.object.isRequired
 }
 
 export default MainLayout

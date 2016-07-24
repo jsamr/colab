@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
 import { createStore, applyMiddleware, compose } from 'redux'
 import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui'
+import * as time from '/imports/time'
 import Logger from '/imports/Logger'
 import createSagaMiddleware from 'redux-saga'
 import * as CONF from './params'
@@ -13,16 +14,17 @@ import { browserHistory } from 'react-router'
 import { routerMiddleware, push } from 'react-router-redux'
 import i18n from 'meteor/universe:i18n'
 import ROUTES from './routes'
+import colabDefaultTheme from './colabDefaultTheme'
 
 const logger = new Logger('redux')
 
 const loggerMiddleware = store => next => action => {
   let result = next(action)
-  logger.debug('dispatching', action, ' with next state', store.getState())
+  logger.debug('dispatching', action.type, ' with next state', store.getState())
   return result
 }
 
-const defaultState = {}
+const defaultState = { }
 
 export default function ({ reducer }) {
   injectTapEventPlugin()
@@ -35,6 +37,7 @@ export default function ({ reducer }) {
   return {
     Accounts,
     ACCOUNT_STATES,
+    VERSION: CONF.VERSION,
     Meteor,
     Logger,
     Tracker,
@@ -43,6 +46,8 @@ export default function ({ reducer }) {
     sagaMiddleWare,
     ROUTES,
     t: i18n.__,
-    nav: push
+    nav: push,
+    time,
+    theme: colabDefaultTheme
   }
 }

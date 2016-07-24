@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT } from '../actions/actionTypes'
+import { LOGIN, LOGOUT } from './actions/actionTypes'
 
 function getDefaultState () {
   return {

@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 const mapStateToProps = (state) => {
   return {
-    user: state.auth.user
+    user: state.auth.user,
+    wHeight: state.window.height
   }
 }
 

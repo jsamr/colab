@@ -27,9 +27,13 @@ export function * authenticateWithCredentials (conf) {
     let result = yield call(asyncPost, conf.getRootUrl() + 'auth/c/' + conf.appName, args)
     let { data } = yield result
     conf.token = { value: data.token, epoch_s: data.epoch_s }
+    // TODO use a composer instead
+    yield delay(1000)
     yield put({ type: AUTH_OK })
   } catch (error) {
     console.error(error)
+    // TODO use a composer instead
+    yield delay(1000)
     let standardError = errors.SERVER_OFFLINE
     if (error.response && error.response.data) {
       const possibleError = errors[error.response.data]

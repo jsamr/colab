@@ -1,4 +1,8 @@
 {
+  "actions" : {
+    "joinproject" : "rejoindre un projet",
+    "editprofile" : "éditer le profil"
+  },
   "restrictions" : {
     "validemail" : "email valide",
     "maxchars": "d'un maximum de {$param} caractères",
@@ -11,7 +15,8 @@
   },
   "dashboard" : {
     "myprojects" : "mes projets",
-    "noprojects": "vous n'appartenez actuellement à aucun projet"
+    "noprojects": "vous n'appartenez actuellement à aucun projet",
+    "noexps": "Aucune expérimentation n'a été trouvée."
   },
   "errors": {
     "passwordnomatch": "les mots de passe de correspondent pas"
@@ -32,6 +37,22 @@
     "isrequired" : "est requis"
   },
   "topbar" : {
-    "exit" : "quitter CoLab"
+    "exit" : "quitter CoLab",
+    "dashboard" : "tableau de bord"
+  },
+  "loading": "chargement en cours...",
+  "medianode" : {
+    "available" : "le serveur média est disponible",
+    "unavailable" : "le serveur média n'est pas disponible"
+  },
+  "exp" : {
+    "published" : "L'expérimentation est publiée : tous les collaborateurs y ont accès.",
+    "unpublished" : "L'expérimentation n'est pas rendue publique : seuls les responsables et membres autorisés y ont accès.",
+    "techvalid" : "L'expérimentation a été validée par l'équipe technique : la présence des vidéos à été confirmée sur le serveur par un responsable.",
+    "techinvalid" : "L'expérimentation n'a pas été validée par l'équipe technique : la présence des vidéos sur le serveur n'a pas été confirmée par un technicien.",
+    "clinicvalid" : "L'expérimentation a été validée par l'équipe clinique.",
+    "clinicinvalid" : "L'expérimentation n'a pas été validée par l'équipe clinique.",
+    "synchronized" : "L'ensemble des vidéos de l'expérimentation a été synchronisé manuellement.",
+    "notsynchronized" : "Les vidéos de l'expérimentation n'ont pas encore été synchronisées manuellement."
   }
 }

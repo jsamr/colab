@@ -1,0 +1,37 @@
+
+.fa {
+  &.fa-mirror {
+    transform: scale(-1, 1);
+  }
+  &.fa-bottom-left {
+    position:absolute;
+    bottom:-0.1em;
+    left:-0.15em;
+  }
+  &.fa-bottom-right {
+    position:absolute;
+    bottom:-0.1em;
+    right:-0.6em;
+  }
+  &.fa-border-dark {
+    text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black;
+  }
+  &.fa-padded {
+    padding:1px;
+  }
+  &.fa-bg-black::before {
+    background: black;
+  }
+  &.fa-dark::before {
+
+    color:white;
+    border-radius: 1em;
+    @extend .fa-padded, .fa-bg-black;
+  }
+  &.fa-light::before {
+    background: white;
+    color:black;
+    border-radius: 1em;
+    @extend .fa-padded;
+  }
+}

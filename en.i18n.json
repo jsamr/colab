@@ -1,4 +1,8 @@
 {
+  "actions" : {
+    "joinproject" : "join a project",
+    "editprofile" : "edit profile"
+  },
   "restrictions" : {
     "validemail" : "valid email",
     "maxchars": "maximum {$param} characters",
@@ -11,7 +15,8 @@
   },
   "dashboard" : {
     "myprojects" : "my projects",
-    "noprojects": "you actually don't belong to any project"
+    "noprojects": "you actually don't belong to any project",
+    "noexps": "No experiment has been found."
   },
   "errors": {
     "passwordnomatch": "the passwords do not match"
@@ -34,6 +39,22 @@
   },
   "topbar" : {
     "exit" : "quit CoLab",
-    "notifications" : "notifications"
+    "notifications" : "notifications",
+    "dashboard" : "dashboard"
+  },
+  "loading": "loading...",
+  "medianode" : {
+      "available" : "the media server is vailable",
+      "unavailable" : "the media server is unavailable"
+  },
+  "exp" : {
+    "published" : "The experiment is published, all collaborators have access to it",
+    "unpublished" : "The experiment is not yet published, only responsibles have access to it",
+    "techvalid" : "The experiment has been validated by the tech team, the presence of videos on the server has been confirmed by a tech member.",
+    "techinvalid" : "The experiment has not been validated by the tech team, the presence of videos on the server has not been confirmed by a tech member.",
+    "clinicvalid" : "The experiment has been validated by the clinic team.",
+    "clinicinvalid" : "The experiment has not been validated by the clinic team.",
+    "synchronized" : "All the videos attached to this experiment have been synchronized manually.",
+    "notsynchronized" : "The videos attached to this experiment have not yet been synchronized manually."
   }
 }

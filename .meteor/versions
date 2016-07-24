@@ -28,6 +28,7 @@ ecmascript-runtime@0.2.12
 ejson@1.0.12
 email@1.0.15
 es5-shim@4.5.13
+fortawesome:fontawesome@4.5.0
 fourseven:scss@3.8.0_1
 geojson-utils@1.0.9
 hot-code-push@1.0.4
@@ -44,6 +45,7 @@ livedata@1.0.18
 lmieulet:meteor-coverage@0.8.1
 localstorage@1.0.11
 logging@1.0.14
+lookback:tooltips@0.5.2
 mdg:validation-error@0.5.1
 meteor@1.1.16
 meteor-base@1.0.4
@@ -83,6 +85,7 @@ spacebars@1.0.12
 spacebars-compiler@1.0.12
 srp@1.0.9
 standard-minifier-js@1.0.8
+static-html@1.0.11
 std:accounts-basic@1.1.12
 std:accounts-ui@1.2.6
 svein:serrurier@1.0.1

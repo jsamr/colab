@@ -64,8 +64,8 @@ Meteor.publish('project.by-id', function (id) {
   else return []
 })
 
-Meteor.publish('experiments.by-id', function (projectId) {
-  ensuresArg('Publishing experiments.by-id, argument `projectId`', projectId, String)
+Meteor.publish('experiments.by-project-id', function (projectId) {
+  ensuresArg('Publishing experiments.by-project-id, argument `projectId`', projectId, String)
   const prj = Project.findOne({ _id: projectId }, { fields: basicPrjFields })
   if (prj && prj.isUserMember(this.userId)) return Exp.find(extend({projectId}, expRetrievalConstrains.call(this, prj)))
   else return []

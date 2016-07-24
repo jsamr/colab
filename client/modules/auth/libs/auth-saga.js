@@ -16,6 +16,7 @@ function * authFlow ({ ROUTES }) {
     }
     while (!logout) {
       let { user } = yield take(UPDATE_PROFILE)
+      console.info('USER AUTH', user)
       if (user == null) {
         yield put({ type: LOGOUT })
         yield put(push(ROUTES.LOGIN))

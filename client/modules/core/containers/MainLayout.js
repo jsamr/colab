@@ -1,14 +1,16 @@
 import { notifySubReady } from '../actions'
 import MainLayout from '../components/MainLayout.jsx'
-import { useDeps, composeAll, composeWithTracker } from 'mantra-core'
+import { useDeps } from 'mantra-core'
+import {  composeAll, composeWithTracker, compose } from 'react-komposer'
 import { getConfig } from '/imports/api/Config'
+import { connect } from 'react-redux'
+import AppLoading from '/imports/ui/AppLoading'
 
 const storeMapper = (context, actions) => ({
   store: context.Store
 })
 
 function confComposer ({ context }, onData) {
-  console.info(arguments)
   const { Store, Meteor } = context()
   const confSub = Meteor.subscribe('globalconfig')
   if (confSub.ready()) {
@@ -17,9 +19,14 @@ function confComposer ({ context }, onData) {
   }
 }
 
+function loadComposer(params, onData) {
+  setTimeout(() => onData(null, {}), 500)
+}
+
 export default composeAll(
-  composeWithTracker(confComposer),
+  composeWithTracker(confComposer, AppLoading),
   useDeps(),
+  compose(loadComposer, AppLoading),
   useDeps(storeMapper)
 )(MainLayout)
 
