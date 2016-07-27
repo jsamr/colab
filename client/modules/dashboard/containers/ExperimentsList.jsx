@@ -1,16 +1,21 @@
+import { PropTypes } from 'react'
 import ExperimentsList from '../components/ExperimentsList'
 import { composeWithTracker, composeAll } from 'react-komposer'
 import { useDeps } from 'mantra-core'
-import SimpleLoading from '/imports/ui/SimpleLoading'
 
-function trackExps  ({ context, project }, onData) {
+function trackExps ({ context, project, filter }, onData) {
   let { Meteor } = context()
-  if (project && Meteor.subscribe('experiments.by-project-id', project._id)) {
-    onData(null, { experiments: project.getExperiments().fetch() })
+  if (project && Meteor.subscribe('experiments.by-project-id', project._id).ready()) {
+    const experiments = project.getExperiments({ name: new RegExp(filter, 'i') }).fetch()
+    onData(null, { experiments: experiments, loading: false })
+  } else {
+    onData(null, { loading: true })
   }
 }
 
-export default composeAll(
-  composeWithTracker(trackExps, SimpleLoading),
+const ExperimentsListContainer = composeAll(
+  composeWithTracker(trackExps),
   useDeps()
 )(ExperimentsList)
+
+export default ExperimentsListContainer

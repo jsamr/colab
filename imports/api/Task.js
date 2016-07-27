@@ -11,7 +11,12 @@ const Task = Serrurier.createClass({
     update: true,
     remove: true
   },
-  fields: {},
+  fields: {
+    taskTypeId: Number,
+    expId: String,
+    segments: [Object],
+    projectId: String
+  },
   behaviors: {
     softremove: {
       removedFieldName: '_removed'

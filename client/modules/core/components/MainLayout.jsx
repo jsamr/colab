@@ -13,8 +13,8 @@ class MainLayout extends Component {
     this.handleResize = debounce(() => {
       const height = window.innerHeight
       const width = window.innerWidth
-      this.props.store.dispatch(setWinHeight(height))
-      this.props.store.dispatch(setWinWidth(width))
+      this.props.setWinHeight(height)
+      this.props.setWinWidth(width)
     }, WIN_UPDATE_PERIOD)
   }
 
@@ -35,7 +35,10 @@ class MainLayout extends Component {
       muiTheme: getMuiTheme(this.props.theme),
       t: this.props.t,
       VERSION: this.props.VERSION,
-      theme: this.props.theme
+      theme: this.props.theme,
+      ROUTES: this.props.ROUTES,
+      nav: this.props.nav,
+      ACCOUNT_STATES: this.props.ACCOUNT_STATES
     }
   }
 
@@ -50,17 +53,25 @@ class MainLayout extends Component {
 
 MainLayout.propTypes = {
   t: PropTypes.func.isRequired,
-  store: PropTypes.object.isRequired,
+  setWinHeight: PropTypes.func.isRequired,
+  setWinWidth: PropTypes.func.isRequired,
   config: PropTypes.object.isRequired,
   VERSION: PropTypes.string,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  ROUTES: PropTypes.object.isRequired,
+  nav: PropTypes.func.isRequired,
+  ACCOUNT_STATES: PropTypes.object.isRequired,
+  store: PropTypes.object.isRequired
 }
 
 MainLayout.childContextTypes = {
   muiTheme: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   VERSION: PropTypes.string,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  ROUTES: PropTypes.object.isRequired,
+  nav: PropTypes.func.isRequired,
+  ACCOUNT_STATES: PropTypes.object.isRequired
 }
 
 export default MainLayout

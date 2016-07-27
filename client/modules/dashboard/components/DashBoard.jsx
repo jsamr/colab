@@ -1,17 +1,18 @@
-import React from 'react'
-import Account from '../containers/Account'
+import React, { PropTypes } from 'react'
+import Account from './Account'
 import Projects from './Projects'
 
 const DASHBOARD_SECTION_ICON_SIZE = 60
 
-const DashBoard = () => {
-  const root = (
+const DashBoard = (context, { user }) => (
     <div style={{ display: 'flex', flexFlow: 'row wrap', flexGrow: 1, minHeight: '100%', alignSelf: 'stretch' }}>
-      <Projects iconSize={DASHBOARD_SECTION_ICON_SIZE} />
-      <Account iconSize={DASHBOARD_SECTION_ICON_SIZE} />
+      <Projects iconSize={DASHBOARD_SECTION_ICON_SIZE} user={user} />
+      <Account iconSize={DASHBOARD_SECTION_ICON_SIZE} user={user} />
     </div>
   )
-  return root
+
+DashBoard.contextTypes = {
+  user: PropTypes.object.isRequired
 }
 
 export default DashBoard

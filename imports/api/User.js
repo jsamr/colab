@@ -1,18 +1,15 @@
 import { Serrurier } from 'meteor/svein:serrurier'
 import { Roles } from 'meteor/alanning:roles'
 import { roles } from '/imports/security'
-import chain from 'lodash/chain'
+import _ from 'lodash'
 import getp from 'lodash/get'
 import includes from 'lodash/includes'
-import 'lodash/filter'
-import 'lodash/map'
-import 'lodash/value'
 import Project from './Project'
 import { Meteor } from 'meteor/meteor'
 import { propagateException } from 'meteor/svein:serrurier/lib/api/security'
 
 function getUserProjectsId (user, userRole = roles.project$MEMBER) {
-  return chain(Roles.getRolesForUser(user._id, { fullObjects: true, anyPartition: true }))
+  return _(Roles.getRolesForUser(user._id, { fullObjects: true, anyPartition: true }))
     .filter(role => role._id === userRole)
     .map(function (role) {
       let { partition } = role

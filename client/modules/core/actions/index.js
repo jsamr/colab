@@ -1,13 +1,21 @@
 import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE, NOTIFY_SUBSCRIPTION_READY } from './actionTypes'
 
-export function setWinHeight (height) {
-  return { type: WINDOW_HEIGHT_UPDATE, height }
+const window = {
+  setHeight ({ Store }, height) {
+    Store.dispatch({ type: WINDOW_HEIGHT_UPDATE, height })
+  },
+  setWidth ({ Store }, width) {
+    Store.dispatch({ type: WINDOW_WIDTH_UPDATE, width })
+  }
 }
 
-export function setWinWidth (width) {
-  return { type: WINDOW_WIDTH_UPDATE, width }
+const sub = {
+  notifyReady ({ Store }) {
+    Store.dispatch({ type: NOTIFY_SUBSCRIPTION_READY })
+  }
 }
 
-export function notifySubReady () {
-  return { type: NOTIFY_SUBSCRIPTION_READY }
+export default {
+  window,
+  sub
 }

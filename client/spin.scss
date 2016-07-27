@@ -7,6 +7,10 @@
     animation: spin 0.6s infinite ease-in-out;
 }
 
+.mdi-spin-constant {
+    animation: spin 0.6s infinite linear;
+}
+
 body {
     margin:0;
     background: #efeffa;

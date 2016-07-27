@@ -11,7 +11,13 @@ const Annotation = Serrurier.createClass({
     update: true,
     remove: true
   },
-  fields: {},
+  fields: {
+    projectId: String,
+    expId: String,
+    observations: String,
+    rawMinutes: Number,
+    categories: [Object]
+  },
   behaviors: {
     softremove: {
       removedFieldName: '_removed'

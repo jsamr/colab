@@ -1,34 +1,35 @@
-import Project from '/imports/api/Project'
 import ProjectsList from '../components/ProjectsList'
 import { composeWithTracker } from 'react-komposer'
-import { useDeps, composeAll, compose } from 'mantra-core'
-import SimpleLoading from '/imports/ui/SimpleLoading'
+import { useDeps, composeAll } from 'mantra-core'
 import { connect } from 'react-redux'
-import { selectProject } from '../actions'
-import head from 'lodash/head'
+import map from 'lodash/map'
 
-const composer = function ({ context }, onData) {
+function composer ({ context, user, selectProject, fetchOwnProjects }, onData) {
   const { Meteor, Store } = context()
   if (Meteor.subscribe('projects').ready()) {
-    const projects = Project.find().fetch()
-    Store.dispatch(selectProject(head(projects) || null))
-    onData(null, { projects: projects })
-  }
+    const projects = user.hisProjects()
+    const retrievedProjectId = Store.getState().dashboard.projectId
+    const fallbackProjectId = projects.length ? projects[0]._id : null
+    fetchOwnProjects(map(projects, '_id'))
+    selectProject(retrievedProjectId || fallbackProjectId)
+    onData(null, { projects: projects, loading: false })
+  } else onData(null, { loading: true })
 }
 
-function mapSelectAction (dispatch) {
-  return {
-    selectProject: (project) => dispatch(selectProject(project))
-  }
-}
+const mapActions = (context, actions) => ({
+  selectProject: actions.projects.select,
+  fetchOwnProjects: actions.projects.fetchOwn,
+  context: () => context
+})
 
-function mapSelectedProject ({ dashboard }) {
+function mapOwnProjects ({ dashboard }) {
   return {
-    selectedProject: dashboard.project
+    selectedProjectId: dashboard.projectId
   }
 }
 
 export default composeAll(
-  composeWithTracker(composer, SimpleLoading),
-  useDeps()
-)(connect(mapSelectedProject, mapSelectAction, null, { pure: false })(ProjectsList))
+  connect(mapOwnProjects),
+  composeWithTracker(composer),
+  useDeps(mapActions)
+)(ProjectsList)

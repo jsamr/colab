@@ -53,6 +53,12 @@
     "clinicvalid" : "L'expérimentation a été validée par l'équipe clinique.",
     "clinicinvalid" : "L'expérimentation n'a pas été validée par l'équipe clinique.",
     "synchronized" : "L'ensemble des vidéos de l'expérimentation a été synchronisé manuellement.",
-    "notsynchronized" : "Les vidéos de l'expérimentation n'ont pas encore été synchronisées manuellement."
+    "notsynchronized" : "Les vidéos de l'expérimentation n'ont pas encore été synchronisées manuellement.",
+    "notfound" : "L'expérimentation n'existe pas!"
+  },
+  "auth" : {
+    "must" : "S'authentifier",
+    "register" : "S'inscrire",
+    "should" : "Veuillez vous authentifier pour accéder à cette page"
   }
 }

@@ -1,12 +1,23 @@
 import App from '../components/App'
+import { composeAll } from 'react-komposer'
+import { useDeps } from 'mantra-core'
 
 import { connect } from 'react-redux'
+
+const mapDeps = ({ ROUTES, t }) => ({
+  ROUTES,
+  t
+})
 
 const mapStateToProps = (state) => {
   return {
     user: state.auth.user,
-    wHeight: state.window.height
+    mainHeight: state.window.mainHeight,
+    topBarHeight: state.window.topBarHeight
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default composeAll(
+  connect(mapStateToProps),
+  useDeps(mapDeps)
+)(App)

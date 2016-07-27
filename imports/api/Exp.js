@@ -28,7 +28,7 @@ const Exp = Serrurier.createClass({
       return new Session(this)
     },
     /**
-     * @returns {Project}
+     * @returns {ProjectCard}
      */
     getProject () {
       return Project.findOne(this.projectId)

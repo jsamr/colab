@@ -1,13 +1,24 @@
 import { LOGIN, LOGOUT, UPDATE_PROFILE } from './actionTypes'
 
-export function login (value) {
-  return { type: LOGIN, value }
+function login ({ Store }, value) {
+  Store.dispatch({ type: LOGIN, value })
 }
 
-export function logout () {
-  return { type: LOGOUT }
+function update ({ Store }, user) {
+  Store.dispatch({ type: UPDATE_PROFILE, user })
 }
 
-export function update (user) {
-  return { type: UPDATE_PROFILE, user }
+function logout ({ Meteor }) {
+  Meteor.logout()
 }
+
+const auth = {
+  login,
+  update,
+  logout
+}
+
+export default {
+  auth
+}
+

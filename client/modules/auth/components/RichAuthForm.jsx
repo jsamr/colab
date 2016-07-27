@@ -3,20 +3,20 @@ import { Accounts, STATES } from 'meteor/std:accounts-ui'
 import React, { PropTypes } from 'react'
 import { SimpleUser } from '/imports/api/User'
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeFirstLetter (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 class RichLoginForm extends Accounts.ui.LoginForm {
 
   switchToSignUp (e) {
     e.preventDefault()
-    this.props.goToSignUp()
+    this.context.nav(this.context.ROUTES.REGISTER)
   }
 
   switchToSignIn (e) {
     e.preventDefault()
-    this.props.goToSignIn()
+    this.context.nav(this.context.ROUTES.LOGIN)
   }
 
   fields () {
@@ -87,8 +87,12 @@ class RichLoginForm extends Accounts.ui.LoginForm {
 }
 
 RichLoginForm.propTypes = {
-  goToSignUp: PropTypes.func,
-  goToSignIn: PropTypes.func
+  formState: PropTypes.symbol.isRequired
+}
+
+RichLoginForm.contextTypes = {
+  ROUTES: PropTypes.object.isRequired,
+  nav: PropTypes.func.isRequired
 }
 
 export default RichLoginForm

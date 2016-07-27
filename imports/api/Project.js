@@ -37,7 +37,7 @@ const Project = Serrurier.createClass({
       // Adds #getPartition method
     }
   },
-  /** @lends Project.prototype */
+  /** @lends ProjectCard.prototype */
   methods: {
     /**
      * @throws {Error} If the current project has not been persisted yet.
@@ -50,9 +50,26 @@ const Project = Serrurier.createClass({
     /**
      * @return {Array.<Exp>} - Experiments cursor associated with this project. Not fetched!
      * Meteor.subscribe must have been called.
+     * @param {object} [selector] - Mongo selector
+     * @param {...*} [args] - Any arguments passed to `find`
      */
-    getExperiments () {
-      return Exp.find({projectId: this._id})
+    getExperiments (selector = {}, ... args) {
+      return Exp.find({ ...selector, projectId: this._id }, ...args)
+    },
+    /**
+     * Get all task types
+     * @returns {TaskType[]}
+     */
+    getTasksTypes () {
+      return this.plugins.task._types
+    },
+    /**
+     * Fetch a task type from id
+     * @param taskTypeId
+     * @returns {TaskType}
+     */
+    getTaskType (taskTypeId) {
+      return this.plugins.task.getType(taskTypeId)
     },
     /**
      * @async
@@ -199,7 +216,7 @@ const Project = Serrurier.createClass({
       this.plugins.task.updateType(taskType)
     }
   },
-  /** @lends Project.prototype */
+  /** @lends ProjectCard.prototype */
   fields: {
     /**
      * @type {String}

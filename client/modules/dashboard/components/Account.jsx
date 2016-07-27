@@ -6,7 +6,6 @@ import HeadBar from './HeadBar.jsx'
 import { Card, CardTitle, CardText } from 'material-ui/Card'
 
 const Account = ({ iconSize, user }, { t, theme }) => {
-  console.info('USER IN ACCONUT', user)
   if (user) {
     return (
       <Paper rounded={false} zDepth={5} style={{

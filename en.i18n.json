@@ -55,6 +55,12 @@
     "clinicvalid" : "The experiment has been validated by the clinic team.",
     "clinicinvalid" : "The experiment has not been validated by the clinic team.",
     "synchronized" : "All the videos attached to this experiment have been synchronized manually.",
-    "notsynchronized" : "The videos attached to this experiment have not yet been synchronized manually."
+    "notsynchronized" : "The videos attached to this experiment have not yet been synchronized manually.",
+    "notfound" : "The experiment does not exist!"
+  },
+  "auth" : {
+    "must" : "Authentication",
+    "register" : "Registering",
+    "should" : "Please authenticate to reach this page."
   }
 }

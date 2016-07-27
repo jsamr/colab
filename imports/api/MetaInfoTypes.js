@@ -8,7 +8,7 @@ import partial from 'lodash/partial'
 import findIndex from 'lodash/findIndex'
 import pick from 'lodash/pick'
 import max from 'lodash/max'
-import chain from 'lodash/chain'
+import _ from 'lodash'
 import 'lodash/map'
 import 'lodash/sortBy'
 import 'lodash/filter'
@@ -55,7 +55,7 @@ export const MetaInfoTypes = Serrurier.createClass({
       this._types.push(type)
       // refer children
       if (childrenIds.length) {
-        chain(this._types)
+        _(this._types)
           .filter(depends)
           .forEach((child) => {
             child.parentId = type._id
@@ -80,7 +80,7 @@ export const MetaInfoTypes = Serrurier.createClass({
       if (!fetched) throw new ReferenceError(`No ${this.getTypeName()} found matching id ${type._id || type}`)
       pull(this._types, fetched)
       // update children parentId to this type parentId
-      chain(this._types).filter(isChild).forEach((child) => {
+      _(this._types).filter(isChild).forEach((child) => {
         child.parentId = type.parentId
       })
     },
@@ -116,12 +116,19 @@ export const MetaInfoTypes = Serrurier.createClass({
       return this.getTypeClass().getName()
     },
     /**
+     * Fetch a single type from id
+     * @param typeId
+     */
+    getType (typeId) {
+      return find(this._types, (type) => type._id === typeId)
+    },
+    /**
      * @instance
      * @memberof MetaInfoTypes#
      * @return {number[]}
      */
     getAllTypesIds () {
-      return chain(this._types).map('_id').value()
+      return _(this._types).map('_id').value()
     },
     /**
      * @instance
@@ -139,7 +146,7 @@ export const MetaInfoTypes = Serrurier.createClass({
      */
     getConcreteTypesIds () {
       // noinspection JSCheckFunctionSignatures
-      return chain(this._types).filter(hasParent).map('_id').value()
+      return _(this._types).filter(hasParent).map('_id').value()
     },
     /**
      * @instance
@@ -149,7 +156,7 @@ export const MetaInfoTypes = Serrurier.createClass({
      */
     getAbstractTypesIds () {
       // noinspection JSCheckFunctionSignatures
-      return chain(this._types).reject(hasParent).map('_id').value()
+      return _(this._types).reject(hasParent).map('_id').value()
     },
     /**
      * @instance
@@ -158,7 +165,7 @@ export const MetaInfoTypes = Serrurier.createClass({
      * @see MetaInfoType#parentId
      */
     getConcreteTypes () {
-      return chain(this._types).filter(hasParent).sortBy('_id').value()
+      return _(this._types).filter(hasParent).sortBy('_id').value()
     }
   },
   fields: {

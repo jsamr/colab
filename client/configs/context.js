@@ -46,7 +46,7 @@ export default function ({ reducer }) {
     sagaMiddleWare,
     ROUTES,
     t: i18n.__,
-    nav: push,
+    nav: (route) => store.dispatch(push(route)),
     time,
     theme: colabDefaultTheme
   }

@@ -1,6 +1,6 @@
 import Paper from 'material-ui/Paper'
 import React, { PropTypes } from 'react'
-import ProjectIcon from '/imports/icons/ProjectIcon'
+import ProjectIcon from '/imports/ui/icons/ProjectIcon'
 import JoinIcon from 'material-ui/svg-icons/action/launch'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeadBar from './HeadBar.jsx'
@@ -11,7 +11,7 @@ const columnFlexStyle = {
   flexFlow: 'column nowrap'
 }
 
-const Projects = ({ iconSize }, { t, theme }) => {
+const Projects = ({ iconSize, user }, { t, theme }) => {
   const joinIcon = <JoinIcon/>
   return (
     <Paper rounded={false} zDepth={3} style={{ flexGrow: 4, flexBasis: 1200, background: theme.palette.accent2Color, padding: 10, ...columnFlexStyle }}>
@@ -22,9 +22,14 @@ const Projects = ({ iconSize }, { t, theme }) => {
       <ProjectsList cardStyle={{ background: theme.palette.accent3Color, flexGrow: 1, borderRadius: 0, ...columnFlexStyle }}
                     headerBackground={ theme.palette.primary1Color }
                     style={{ marginTop: 10, flexGrow: 1, ...columnFlexStyle }}
-                    iconSize={iconSize} />
+                    iconSize={iconSize}
+                    user={user} />
     </Paper>
   )
+}
+
+Projects.PropTypes = {
+  user: PropTypes.object.isRequired
 }
 
 Projects.contextTypes = {
