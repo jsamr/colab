@@ -1,12 +1,17 @@
 import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
-
-const VideoControls = ({ expLoading }, { theme }) => {
-  const getInner = () => <span></span>
+import { TimeControls } from '../containers/controledComponents'
+import { fInlineCenter } from '/imports/styles'
+import Paper from 'material-ui/Paper'
+const VideoControls = ({ expLoading, experiment }, { theme }) => {
+  const getInner = () => (
+        [<div key='VideoControls' style={{ flexGrow: 1 }} />,
+        <TimeControls key='TimeControls' experiment={experiment} />]
+  )
   return <LoadableComponent
     getInner={getInner}
     loading={expLoading}
-    style={{ background: theme.palette.accent2Color, height: 39, display: 'flex' }} />
+    style={{ background: theme.palette.accent3Color, flexBasis: 60, display: 'flex' }} />
 }
 
 VideoControls.propTypes = {

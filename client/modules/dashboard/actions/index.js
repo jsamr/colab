@@ -12,20 +12,22 @@ const projects = {
   select ({ Store }, projectId) {
     Store.dispatch({
       type: DASHBOARD_SELECT_PROJECT,
-      projectId
+      payload: projectId
     })
   },
   fetchOwn ({ Store }, ownProjectsIds) {
     Store.dispatch({
       type: DASHBOARD_FETCH_OWN_PROJECTS,
-      ownProjects: zipObject(ownProjectsIds, map(ownProjectsIds, emptyPojoBuilder))
+      payload: zipObject(ownProjectsIds, map(ownProjectsIds, emptyPojoBuilder))
     })
   },
   setExpsFilter ({ Store }, projectId, filter) {
     Store.dispatch({
       type: DASHBOARD_SET_EXPS_FILTER,
-      projectId,
-      filter
+      payload : {
+        projectId,
+        filter
+      }
     })
   }
 }

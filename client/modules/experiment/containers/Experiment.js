@@ -5,8 +5,9 @@ import { connect } from 'react-redux'
 import Exp from '/imports/api/Exp'
 import Project from '/imports/api/Project'
 
-function trackExperiment ({ context, params }, onData) {
+function trackExperiment ({ context, params, actions }, onData) {
   let { Meteor } = context()
+  let { requireExpPage } = actions().experiments
   const { projectAcronym, experimentName } = params
   const projectSub = Meteor.subscribe('project.by-acronym', projectAcronym)
   if (projectSub.ready()) {
@@ -14,6 +15,7 @@ function trackExperiment ({ context, params }, onData) {
     if (!project) onData(null, { experiment: null, project: null, loading: false })
     else if (Meteor.subscribe('experiment.by-name', experimentName, project._id).ready()) {
       const experiment = Exp.findOne({ name: experimentName })
+      if (experiment != null) requireExpPage(experiment)
       onData(null, { experiment, project, loading: false })
     } else onData(null, { loading: true })
   } else onData(null, { loading: true })

@@ -5,6 +5,7 @@ import TaskDisplayComputer from '../libs/TaskDisplayComputer'
 import SizeMe from 'react-sizeme'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
+import Paper from 'material-ui/Paper'
 
 const MAGIC_MULTIPLE = 55.3
 
@@ -173,7 +174,7 @@ class TimeReferential extends Component {
     }) : null
 
     return (
-        <div style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>
+        <Paper rounded={false} zDepth={2} style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>
           <svg
             id='time-referential-svg-root'
             height={viewHeight}
@@ -230,7 +231,7 @@ class TimeReferential extends Component {
               </g>
             </svg>
           </svg>
-        </div>
+        </Paper>
     )
   }
 }

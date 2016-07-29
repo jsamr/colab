@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
 
 const VideoBox = ({ expLoading }, { theme }) => {
-  const getInner = () => <span></span>
+  const getInner = () => <span style={{ flexGrow: 1 }} />
   return <LoadableComponent
-    loading={expLoading}
+    loading={true}
     getInner={getInner}
     style={{ background: theme.palette.headerColor, order: 2, flexGrow: 1, display: 'flex' }} />
 }

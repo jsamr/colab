@@ -39,7 +39,7 @@ export function * authenticateWithCredentials (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put({ type: AUTH_FAIL, error: standardError })
+    yield put({ type: AUTH_FAIL, payload: standardError })
   }
 }
 
@@ -64,7 +64,7 @@ export function * authenticateWithToken (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put({ type: AUTH_FAIL, error: standardError })
+    yield put({ type: AUTH_FAIL, payload: standardError })
   }
 }
 

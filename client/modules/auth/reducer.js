@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT } from './actions/actionTypes'
+import { LOGIN, LOGOUT, UPDATE_PROFILE } from './actions/actionTypes'
 
 function getDefaultState () {
   return {
@@ -10,8 +10,9 @@ function getDefaultState () {
 
 export function auth (state = getDefaultState(), action) {
   switch (action.type) {
+    case UPDATE_PROFILE: return { ...state, user: action.payload }
     case LOGIN:
-      return action.value
+      return action.payload
     case LOGOUT:
       return getDefaultState()
     default:

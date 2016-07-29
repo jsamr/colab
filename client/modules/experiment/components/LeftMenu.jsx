@@ -1,10 +1,6 @@
 import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
-
-const flexNoWrap = {
-  display: 'flex',
-  flexFlow: 'column nowrap'
-}
+import { fColumnNoWrap } from '/imports/styles'
 
 const LeftMenu = ({ expLoading }, { theme }) => {
   const getInner = () => <span></span>
@@ -12,7 +8,7 @@ const LeftMenu = ({ expLoading }, { theme }) => {
     <LoadableComponent
       loading={expLoading}
       getInner={getInner}
-      style={{ background: theme.palette.primary2Color, order: 1, flexBasis: 300, ...flexNoWrap }} />)
+      style={{ background: theme.palette.primary1Color, order: 1, flexBasis: 300, ...fColumnNoWrap }} />)
 }
 
 LeftMenu.propTypes = {

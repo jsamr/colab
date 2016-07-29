@@ -56,7 +56,9 @@
     "clinicinvalid" : "The experiment has not been validated by the clinic team.",
     "synchronized" : "All the videos attached to this experiment have been synchronized manually.",
     "notsynchronized" : "The videos attached to this experiment have not yet been synchronized manually.",
-    "notfound" : "The experiment does not exist!"
+    "notfound" : "The experiment has not been found!",
+    "project" : "project",
+    "experiment" : "experiment"
   },
   "auth" : {
     "must" : "Authentication",

@@ -5,7 +5,7 @@ import FontIcon from 'material-ui/FontIcon'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import FlatButton from 'material-ui/FlatButton'
 import ExperimentState from '../../experiment/components/ExperimentState'
-
+import { fColumnNoWrap } from '/imports/styles'
 const AlignedSpan = ({ children }) => <span style={{ display: 'flex', alignItems: 'center' }}>{children}</span>
 
 const flexInline = { display: 'flex', justifyContent: 'space-around', alignItems: 'center' }
@@ -15,9 +15,7 @@ const expStyle = {
   width: 250,
   height: 150,
   margin: 10,
-  display: 'flex',
-  flexFlow: 'column wrap',
-  alignItems: 'space-between'
+  ...fColumnNoWrap
 }
 
 const ExperimentsList = ({ experiments, loading, project }, { theme, t, nav }) => {

@@ -44,6 +44,7 @@ const Exp = Serrurier.createClass({
     name: String,
     duration: Number,
     date: String,
+    time: String,
     projectId: String,
     ownerId: String,
     synchronized: Boolean,

@@ -54,7 +54,9 @@
     "clinicinvalid" : "L'expérimentation n'a pas été validée par l'équipe clinique.",
     "synchronized" : "L'ensemble des vidéos de l'expérimentation a été synchronisé manuellement.",
     "notsynchronized" : "Les vidéos de l'expérimentation n'ont pas encore été synchronisées manuellement.",
-    "notfound" : "L'expérimentation n'existe pas!"
+    "notfound" : "L'expérimentation n'a pas été trouvée!",
+    "project" : "projet",
+    "experiment" : "expérimentation"
   },
   "auth" : {
     "must" : "S'authentifier",

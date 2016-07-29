@@ -8,7 +8,7 @@ function * authFlow () {
     while (!login) {
       let { user } = yield take(UPDATE_PROFILE)
       if (user) {
-        yield put({ type: LOGIN, value: { user, id: user._id } })
+        yield put({ type: LOGIN, payload: { user, id: user._id } })
         login = true
       }
     }

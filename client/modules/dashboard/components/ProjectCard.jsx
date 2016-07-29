@@ -7,6 +7,7 @@ import ExperimentsList from '../containers/ExperimentsList'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import { fInlineAround, fInlineCenter } from '/imports/styles'
 
 class ProjectCard extends Component {
   render () {
@@ -19,11 +20,11 @@ class ProjectCard extends Component {
               expanded={true}
               initiallyExpanded={true}
               containerStyle={{ flexGrow: 1 }}>
-          <CardTitle style={{ display: 'flex', alignItems: 'center', background: headerBackground }}
+          <CardTitle style={{ background: headerBackground, ...fInlineCenter }}
                      titleStyle={{ flexBasis: 400 }}
                      title={project.fullName}>
             <Toolbar
-              style={{ display: 'flex', justifyContent: 'space-around', flexGrow: 1, marginLeft: 20, height: 'auto', background: theme.palette.canvasColor }}>
+              style={{ flexGrow: 1, marginLeft: 20, height: 'auto', background: theme.palette.canvasColor, ...fInlineAround }}>
               <ToolbarGroup style={{ alignItems: 'center', display: 'flex', flexGrow: 1, justifyContent: 'center' }}>
                 <SearchIcon style={{ width: 65, height: 65 }}/>
                 <TextField onChange={(e) => selectFilter(e.target.value)}

@@ -1,9 +1,9 @@
 import React from 'react'
+import { fInlineNoWrapCentered } from '/imports/styles'
 
-const Header = (props) => <h1 {...props} style={Object.assign(props.style || {}, { display: 'flex', alignItems: 'center', margin: 0 })} />
-
+const Header = (props) => <h1 {...props} style={{ margin: 0, ...fInlineNoWrapCentered, ...props.style }} />
 const HeadBar = (props) => (
-  <div style={Object.assign(props.style || {}, { display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap' })}>
+  <div style={{ ...props.style, ...fInlineNoWrapCentered }}>
     <Header style={{ flexGrow: 1 }}>
       {props.children}
     </Header>

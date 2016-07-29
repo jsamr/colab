@@ -3,27 +3,23 @@ import SimpleLoading from '/imports/ui/SimpleLoading'
 import DefaultPageRoot from '/imports/ui/DefaultPageRoot'
 import LeftMenu from './LeftMenu'
 import VideoBox from './VideoBox'
-import RightControls from './RightControls'
 import VideoControls from './VideoControls'
 import TimeLine from '../containers/TimeLine'
+import NotFound from '/imports/ui/NotFound'
 
-const flexNoWrap = {
-  display: 'flex',
-  flexFlow: 'column nowrap'
-}
+import { fColumnNoWrap } from '/imports/styles'
 
 const Experiment = ({ height, loading, project, experiment }, { t }) => {
   let elems
-  if (!loading && !experiment) elems = <DefaultPageRoot>{ t('exp.notfound') }</DefaultPageRoot>
+  if (!loading && !experiment) elems = <NotFound message={t('exp.notfound')}/>
   else {
     elems = (
       <div style={{ height: height, width: '100%' }}>
         { /* Upper section */ }
-        <div style={{ ...flexNoWrap, height: '76%' }}>
-          <div style={{ alignItems: 'stretch', background: 'black', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1 }}>
+        <div style={{ ...fColumnNoWrap, height: '76%' }}>
+          <div style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1 }}>
             <LeftMenu experiment={experiment} expLoading={loading} />
             <VideoBox experiment={experiment} expLoading={loading} />
-            <RightControls experiment={experiment} expLoading={loading} />
           </div>
           <VideoControls experiment={experiment} expLoading={loading} />
         </div>

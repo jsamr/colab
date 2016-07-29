@@ -12,13 +12,14 @@ function getDefaultState () {
 
 export function media (state, action) {
   if (state === undefined) return getDefaultState()
+  const { payload } = action
   switch (action.type) {
     case AUTH:
       return merge({}, state, { pending: true })
     case AUTH_FAIL:
-      return merge({}, state, { pending: false, valid: false, error: action.error })
+      return merge({}, state, { pending: false, valid: false, error: payload })
     case AUTH_OK:
-      return merge({}, state, { pending: false, valid: true, error: null, token: action.token || undefined })
+      return merge({}, state, { pending: false, valid: true, error: null })
     case RESET:
       return getDefaultState()
     default:

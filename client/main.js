@@ -12,12 +12,14 @@ import coreModule from './modules/core'
 import authModule from './modules/auth'
 import mediaModule from './modules/medianode'
 import dashBoardModule from './modules/dashboard'
+import experimentModule from './modules/experiment'
 
 const reducers = {
   ...coreModule.reducer,
   ...authModule.reducer,
   ...mediaModule.reducer,
   ...dashBoardModule.reducer,
+  ...experimentModule.reducer,
   routing: routerReducer
 }
 
@@ -30,6 +32,7 @@ const app = createApp(context)
 app.loadModule(coreModule)
 app.loadModule(authModule)
 app.loadModule(dashBoardModule)
-// app.loadModule(mediaModule)
+app.loadModule(mediaModule)
+app.loadModule(experimentModule)
 
 app.init()

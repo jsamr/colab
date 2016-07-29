@@ -3,11 +3,10 @@ import ExpPublished from '/imports/ui/indicators/ExpPublished'
 import PrevalidatedTech from '/imports/ui/indicators/PrevalidatedTech'
 import PrevalidatedClinic from '/imports/ui/indicators/PrevalidatedClinic'
 import Synchronized from '/imports/ui/indicators/Synchronized'
-
-const flexInline = { display: 'flex', justifyContent: 'space-around', alignItems: 'center' }
+import { fInlineAround } from '/imports/styles'
 
 const ExperimentState = ({ experiment, style }) => (
-  <div style={{ flexGrow: 1, ...flexInline, ...style }}>
+  <div style={{ flexGrow: 1, ...fInlineAround, ...style }}>
     <ExpPublished published={experiment.published} />
     <PrevalidatedTech prevalidatedTech={experiment.prevalidatedTech} />
     <PrevalidatedClinic prevalidatedClinic={experiment.prevalidatedClinic} />
