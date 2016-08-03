@@ -39,8 +39,7 @@ class VolumeControl extends Component {
   }
 
   render () {
-    const { theme } = this.context
-    const { setVolumeLevel, volumeLevel, style, preferedWidth = 200 } = this.props
+    const { theme, setVolumeLevel, volumeLevel, style, preferedWidth = 200 } = this.props
     const { hovered, cachedVolumeLevel } = this.state
     const clazz = volumeLevel ? 'fa-volume-up' : 'fa-volume-off'
     let sliderStyle = hovered ? { flexGrow: 1 } : { flexGrow: 0, width: 0, display: 'none' }
@@ -50,7 +49,7 @@ class VolumeControl extends Component {
            onMouseEnter={this.handleMouseEnter}
            onMouseLeave={this.handleMouseLeave}
       >
-        <FloatingActionButton style={style} backgroundColor={theme.palette.primary1Color }
+        <FloatingActionButton style={style} backgroundColor={theme.main}
                               mini={true}
                               onClick={() => setVolumeLevel(volumeLevel ? 0 : cachedVolumeLevel)}
         >
@@ -69,9 +68,8 @@ class VolumeControl extends Component {
 VolumeControl.propTypes = {
   setVolumeLevel: PropTypes.func.isRequired,
   volumeLevel: PropTypes.number.isRequired,
-  preferedWidth: PropTypes.number
-}
-VolumeControl.contextTypes = {
+  preferedWidth: PropTypes.number,
   theme: PropTypes.object.isRequired
 }
+
 export default VolumeControl

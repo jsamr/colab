@@ -26,11 +26,13 @@ import { teal200,
 import { fade } from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
 
-export default {
+const primary1 = blueGrey900
+
+const theme = {
   spacing: spacing,
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: blueGrey900,
+    primary1Color: primary1,
     primary2Color: blueGrey500,
     primary3Color: blueGrey300,
     accent1Color: indigo300,
@@ -49,6 +51,9 @@ export default {
     successColor: lightGreen500,
     failureColor: red700,
     warningColor: amber500,
-    infoColor: lightBlue900
+    infoColor: lightBlue900,
+    controlsColor: fade(primary1, 0.6)
   }
 }
+
+export default theme

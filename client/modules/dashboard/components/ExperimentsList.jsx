@@ -81,10 +81,17 @@ ExperimentCard.contextTypes = {
   theme: PropTypes.object.isRequired
 }
 
-const ExperimentsList = ({ experiments, loading, cardBackground, project }, { theme, t, nav }) => {
+ExperimentCard.propTypes = {
+  defaultBackground: PropTypes.string.isRequired,
+  hoverBackground: PropTypes.string.isRequired,
+  project: PropTypes.object.isRequired,
+  experiment: PropTypes.object.isRequired
+}
+
+const ExperimentsList = ({ experiments, loading, cardBackground, project }, { t }) => {
   if (!loading) {
     let experimentsItems = experiments.map((experiment) => (
-      <ExperimentCard project={project} defaultBackground={cardBackground} hoverBackground={lighten(cardBackground, 0.1)} experiment={experiment} />
+      <ExperimentCard key={experiment._id} project={project} defaultBackground={cardBackground} hoverBackground={lighten(cardBackground, 0.1)} experiment={experiment} />
     ))
     if (experimentsItems.length === 0) experimentsItems = <div>{t('dashboard.noexps')}</div>
     return (
@@ -101,13 +108,11 @@ ExperimentsList.propTypes = {
   filter: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   project: PropTypes.object.isRequired,
-  background: PropTypes.string.isRequired
+  cardBackground: PropTypes.string.isRequired
 }
 
 ExperimentsList.contextTypes = {
-  theme: PropTypes.object.isRequired,
-  t: PropTypes.func.isRequired,
-  nav: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired
 }
 
 export default ExperimentsList

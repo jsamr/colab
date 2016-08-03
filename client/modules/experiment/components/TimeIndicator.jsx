@@ -1,20 +1,26 @@
 import React, { PropTypes, Component } from 'react'
 import { fInlineNoWrapCentered } from '/imports/styles'
 import IconButton from 'material-ui/IconButton'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FontIcon from 'material-ui/FontIcon'
 import { ABSOLUTE_TIME_MODE, RELATIVE_TIME_MODE } from '../libs/time-modes'
 import { readableAbsoluteTime, readableRelativeTime } from '../libs/cursor-time'
+import Chip from 'material-ui/Chip'
+import { fInlineAround } from '/imports/styles'
+import autobind from 'autobind-decorator'
 
-const SelectableIconButton = ({ selected, iconClass, ...props }, { theme }) => (
-  <IconButton style={{ borderBottomWidth: selected ? '4px' : 0, borderBottomColor: theme.palette.accent1Color, borderBottomStyle: 'solid' }}
+const SelectableIconButton = ({ selected, iconClass, style, ...props }, { theme }) => (
+  <FloatingActionButton secondary={true} mini={true} style={style}
     {...props}>
     <FontIcon className={iconClass}/>
-  </IconButton>
+  </FloatingActionButton>
 )
 
-const timeMatcher = /^(\d{1,2})h(\d{1,2}).(\d{1,2})$/
-
+@autobind
 class CursorTimeView extends Component {
+
+  static TIME_MATCHER = /^(\d{1,2})h(\d{1,2}).(\d{1,2})$/
+
   constructor ({ experiment }) {
     super(...arguments)
     this.state = {
@@ -24,18 +30,40 @@ class CursorTimeView extends Component {
 
   componentWillReceiveProps ({ experiment }) {
     const begin = new Date(0)
-    const time = timeMatcher.exec(experiment.time)
+    const time = CursorTimeView.TIME_MATCHER.exec(experiment.time)
     if (time != null) begin.setHours(Number.parseInt(time[1]), Number.parseInt(time[2]), Number.parseInt(time[3]))
     this.setState({
       begin
     })
   }
 
+  selectAbsolute () {
+    const { selectTimeMode } = this.props
+    selectTimeMode(ABSOLUTE_TIME_MODE)
+  }
+
+  selectRelative () {
+    const { selectTimeMode } = this.props
+    selectTimeMode(RELATIVE_TIME_MODE)
+  }
+
   render () {
     const { timeMode, cursor, style } = this.props
+    const isAbsolute = timeMode === ABSOLUTE_TIME_MODE
+    const button = <SelectableIconButton onClick={ isAbsolute ? this.selectRelative : this.selectAbsolute}
+                                         iconClass={ isAbsolute ? 'fa fa-clock-o' : 'fa fa-hourglass-half' } />
+
     const { begin } = this.state
-    if (timeMode === ABSOLUTE_TIME_MODE) return <div style={style}>{readableAbsoluteTime(cursor, begin)}</div>
-    else return <div style={style}>{readableRelativeTime(cursor)}</div>
+    let inner
+    if (timeMode === ABSOLUTE_TIME_MODE) {
+      inner = readableAbsoluteTime(cursor, begin)
+    } else inner = readableRelativeTime(cursor)
+    return (
+      <div style={{ ...fInlineAround, justifyContent: 'space-between', ...style }}>
+        <span style={{ textAlign: 'center', flexGrow: 1 }}>{inner}</span>
+        {button}
+      </div>
+    )
   }
 }
 
@@ -43,13 +71,14 @@ SelectableIconButton.contextTypes = {
   theme: PropTypes.object.isRequired
 }
 
-const TimeIndicator = ({ cursor, timeMode, selectTimeMode, experiment }, { theme }) => {
+const TimeIndicator = ({ cursor, timeMode, selectTimeMode, experiment, style }, { theme }) => {
   return (
-    <div style={{ ...fInlineNoWrapCentered, justifyContent: 'center', flexGrow: 1 }}>
-      <SelectableIconButton onClick={() => selectTimeMode(ABSOLUTE_TIME_MODE)} selected={timeMode === ABSOLUTE_TIME_MODE} iconClass='fa fa-clock-o'/>
-      <SelectableIconButton onClick={() => selectTimeMode(RELATIVE_TIME_MODE)} selected={timeMode === RELATIVE_TIME_MODE} iconClass='fa fa-hourglass-half'/>
-      <CursorTimeView style={{ flexBasis: 120 }} experiment={experiment} timeMode={timeMode} cursor={cursor} />
-    </div>)
+    <CursorTimeView style={{ fontSize: 25, width: 200, fontFamily: 'monospace', color: theme.palette.alternateTextColor, ...style }}
+                    experiment={experiment}
+                    timeMode={timeMode}
+                    cursor={cursor}
+                    selectTimeMode={selectTimeMode}/>
+  )
 }
 
 TimeIndicator.propTypes = {
@@ -57,6 +86,10 @@ TimeIndicator.propTypes = {
   cursor: PropTypes.number.isRequired,
   timeMode: PropTypes.string.isRequired,
   selectTimeMode: PropTypes.func.isRequired
+}
+
+TimeIndicator.contextTypes = {
+  theme: PropTypes.object.isRequired
 }
 
 export default TimeIndicator

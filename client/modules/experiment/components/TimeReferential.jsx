@@ -26,6 +26,8 @@ const defaultControls = {
   cursor: 0
 }
 
+const Container = ({ style, children }) => <Paper rounded={false} zDepth={2} style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>{children}</Paper>
+
 class TimeReferential extends Component {
 
   constructor (props) {
@@ -61,7 +63,7 @@ class TimeReferential extends Component {
     let updatedBounds
     const halfRange = range / 2
     if (cannotSlideRight && cannotSlideLeft) {
-      updatedBounds ={
+      updatedBounds = {
         upper: cursor + halfRange,
         lower: cursor - halfRange
       }
@@ -77,7 +79,7 @@ class TimeReferential extends Component {
       }
     }
     this.animateMeta(updatedBounds.lower, range, rows)
-    this.animateMinutes(updatedBounds.lower, range, range * height / width )
+    this.animateMinutes(updatedBounds.lower, range, range * height / width)
   }
 
   render () {
@@ -86,13 +88,11 @@ class TimeReferential extends Component {
     const { displayTasks, displayAnnotations, zoom, cursor } = controls
     const viewHeight = size.height
     const viewWidth = size.width
-    console.info('COMPUTING TIME REFERENTIAL')
-    console.info('SIZE = ', size)
+    if (viewWidth === 0) return <Container style={style}>LOADING</Container>
     // General computations
     const range = experiment.duration / zoom
 
     const pxpm = viewWidth / experiment.duration
-    console.info('PXPM', pxpm)
     const step = Math.ceil(25 / pxpm)
     const minutes = makeRange(1, Math.ceil(experiment.duration - 0.5), step)
     const computedMinutesStrokeWidth = 0.01 * MAGIC_MULTIPLE / pxpm
@@ -104,7 +104,7 @@ class TimeReferential extends Component {
     // uppper & lower
     this.updateInternals({
       rows: computer.nRows(),
-      cannotSlideLeft:  cursor - range / 2 < 0,
+      cannotSlideLeft: cursor - range / 2 < 0,
       cannotSlideRight: cursor + range / 2 > experiment.duration,
       range
     })
@@ -157,7 +157,7 @@ class TimeReferential extends Component {
               height='1'
               y={`${index}`}
               x='0'
-              style={{ fill: color, strokeWidth: '0.015', stroke: 'rgb(0,0,0)' }}/>
+              style={{ fill: color, strokeWidth: '0.015', stroke: 'rgb(0, 0, 0)' }}/>
           ))
         } else {
           categoriesDisplay = (<rect
@@ -185,7 +185,7 @@ class TimeReferential extends Component {
     }) : null
 
     return (
-        <Paper rounded={false} zDepth={2} style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>
+        <Container style={style}>
           <svg
             id='time-referential-svg-root'
             height={viewHeight}
@@ -242,7 +242,7 @@ class TimeReferential extends Component {
               </g>
             </svg>
           </svg>
-        </Paper>
+        </Container>
     )
   }
 }

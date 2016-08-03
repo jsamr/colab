@@ -104,7 +104,7 @@ class DraggableCursor extends Component {
 
 DraggableCursor.propTypes = {
   onCursorUpdate: PropTypes.func.isRequired,
-  containerRef: PropTypes.node.isRequired,
+  containerRef: PropTypes.object.isRequired,
   fallbackCursorOffset: PropTypes.number.isRequired
 }
 
@@ -130,10 +130,9 @@ class VideoSlidebar extends Component {
   }
 
   render () {
-    const { theme } = this.context
     const { durationEl } = this.state
-    const { played, loaded, userSelectPlayerCursor, style = {} } = this.props
-    const cursorColor = theme.palette.primary1Color
+    const { theme, played, loaded, userSelectPlayerCursor, style = {} } = this.props
+    const cursorColor = theme.main
     const width = `${played * 100}%`
     const draggable = durationEl ? <DraggableCursor fontSize={25}
                                                     fallbackCursorOffset={played}
@@ -142,13 +141,13 @@ class VideoSlidebar extends Component {
                                                     onCursorUpdate={userSelectPlayerCursor}
     /> : null
     return (
-      <div style={{ flexGrow: 1, position: 'relative', height: 10, ...style, background: 'white' }}>
+      <div style={{ flexGrow: 1, position: 'relative', height: 10, marginRight: 10, ...style }}>
         {/* duration */}
-        <div ref='duration' style={{ position: 'absolute', background: theme.palette.headerColor, height: '100%', width: '100%' }}></div>
+        <div ref='duration' style={{ position: 'absolute', background: theme.notLoaded, height: '100%', width: '100%' }}></div>
         {/* Dragger */}
         {draggable}
         {/* buffer */}
-        <div style={{ position: 'absolute', background: 'grey', height: '100%', width: `${loaded * 100}%` }}></div>
+        <div style={{ position: 'absolute', background: theme.loaded, height: '100%', width: `${loaded * 100}%` }}></div>
         {/* cursor */}
         <div style={{ position: 'absolute', background: cursorColor, height: '100%', width: width }}>
           <SimpleCursor color={cursorColor} fontSize={22} />
@@ -165,10 +164,7 @@ VideoSlidebar.propTypes = {
   played: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   userSelectPlayerCursor: PropTypes.func.isRequired,
-  style: PropTypes.object
-}
-
-VideoSlidebar.contextTypes = {
+  style: PropTypes.object,
   theme: PropTypes.object.isRequired
 }
 

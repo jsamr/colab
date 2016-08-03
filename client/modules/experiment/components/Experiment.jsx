@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import DefaultPageRoot from '/imports/ui/DefaultPageRoot'
 import LeftMenu from './LeftMenu'
-import VideoBox from './VideoBox'
+import VideoBox from '../containers/VideoBox'
 import VideoControls from './VideoControls'
 import TimeLine from '../containers/TimeLine'
 import NotFound from '/imports/ui/NotFound'
@@ -15,14 +15,13 @@ const Experiment = ({ height, width, loading, project, experiment }, { t, theme 
   if (!loading && !experiment) elems = <NotFound message={t('exp.notfound')}/>
   else {
     elems = (
-      <div style={{ height: height, width: '100%', background: theme.palette.headerColor }}>
+      <div style={{ height, width: '100%', background: theme.palette.headerColor }}>
         { /* Upper section */ }
-        <div style={{ ...fColumnNoWrap, height: '76%', width: '100%' }}>
+        <div style={{ ...fColumnNoWrap, height: '76%', width: '100%', position: 'relative' }}>
           <div style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1 }}>
             <LeftMenu experiment={experiment} minWidth={LEFT_MENU_MIN_WIDTH} expLoading={loading} />
-            <VideoBox experiment={experiment} maxWidth={width - LEFT_MENU_MIN_WIDTH} expLoading={loading} />
+            <VideoBox experiment={experiment} maxWidth={width - LEFT_MENU_MIN_WIDTH} expLoading={loading} mainHeight={height} />
           </div>
-          <VideoControls experiment={experiment} expLoading={loading} />
         </div>
         { /* Lower section */ }
         <div style={{ height: '24%', background: theme.palette.primary1Color }}>

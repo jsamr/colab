@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import ExperimentState from './ExperimentState'
 import SimpleLoading from '/imports/ui/SimpleLoading'
-import TimeIndicator from '../containers/TimeIndicator'
 import LoadableComponent from './LoadableComponent'
 import Toolbar, { ToolbarGroup, ToolbarSeparator } from 'material-ui/'
 import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
@@ -22,10 +21,8 @@ const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
         children.push(
           <Separator key='sep2'/>,
           <ToolbarGroup key='experimentState' style={{ fontSize: 15, flexGrow: 0, flexBasis: 270 }}>
-            <ExperimentState experiment={experiment} />
-          </ToolbarGroup>,
-          <Separator key='sep3'/>,
-          <TimeIndicator key='experimentCursor' experiment={experiment} style={{ flexGrow: 1, textAlign: 'center' }} />
+            <ExperimentState experiment={experiment} style={{ width: 270 }} />
+          </ToolbarGroup>
         )
       }
       return children
@@ -36,8 +33,6 @@ const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
       marginLeft: 30,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      flexBasis: 800,
-      flexGrow: 1,
       height: '100%'
      }}
   />

@@ -101,7 +101,8 @@ TimeControls.propTypes = {
   controls: PropTypes.object.isRequired,
   setTimeLineAnnotationsVisibility: PropTypes.func.isRequired,
   setTimeLineZoom: PropTypes.func.isRequired,
-  setTimeLineTasksVisibility: PropTypes.func.isRequired
+  setTimeLineTasksVisibility: PropTypes.func.isRequired,
+  experiment: PropTypes.object.isRequired
 }
 
 export default TimeControls

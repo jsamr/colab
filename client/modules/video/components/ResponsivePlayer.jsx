@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import autobind from 'autobind-decorator'
 import { transitionSlow } from '/imports/styles'
+
 @autobind
 class VideoContainer extends Component {
 
@@ -62,9 +63,11 @@ class VideoContainer extends Component {
 
   handlePlayerMount (player) {
     this._player = player
-    const rPlayer = player.refs.player
-    this._playerEl = rPlayer.refs.player
-    this._playerEl.addEventListener('loadedmetadata', this.handleLoadedMetaData)
+    if (player) {
+      const rPlayer = player.refs.player
+      this._playerEl = rPlayer.refs.player
+      this._playerEl.addEventListener('loadedmetadata', this.handleLoadedMetaData)
+    }
   }
 
   componentWillUnmount () {
@@ -89,12 +92,12 @@ class VideoContainer extends Component {
   }
 
   render () {
-    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, ...props } = this.props
+    const { isPlaying, volumeLevel, dataLoading, style, maxWidth } = this.props
     const { containerLoading, playerLoading } = this.state
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
     return (
-      <div ref={this.handleLoadContainer} style={{ flexBasis: width, ...transitionSlow, ...style }} {...props}>
+      <div ref={this.handleLoadContainer} style={{ flexBasis: width, ...transitionSlow, ...style }} >
         <div style={{ position: 'relative', display: loading ? 'none' : 'block'  }}>
           <ReactPlayer
             ref={this.handlePlayerMount}

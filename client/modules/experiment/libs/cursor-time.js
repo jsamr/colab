@@ -1,7 +1,7 @@
 import { raw } from '/imports/time'
 
 function readableRelativeTime (cursor) {
-  return raw.readable(cursor)
+  return raw.readable(cursor, '′', '″')
 }
 
 function readableAbsoluteTime (cursor, begin) {
