@@ -5,7 +5,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { setWinHeight, setWinWidth } from '../actions/index'
 import debounce from 'lodash/debounce'
-import { WIN_UPDATE_PERIOD } from '/client/configs/params'
+import AppLoading from '/imports/ui/AppLoading'
 
 class MainLayout extends Component {
   constructor (props) {
@@ -15,7 +15,7 @@ class MainLayout extends Component {
       const width = window.innerWidth
       this.props.setWinHeight(height)
       this.props.setWinWidth(width)
-    }, WIN_UPDATE_PERIOD)
+    }, props.CONF.WIN_UPDATE_PERIOD)
   }
 
   componentWillMount () {
@@ -38,12 +38,15 @@ class MainLayout extends Component {
       theme: this.props.theme,
       ROUTES: this.props.ROUTES,
       nav: this.props.nav,
-      ACCOUNT_STATES: this.props.ACCOUNT_STATES
+      ACCOUNT_STATES: this.props.ACCOUNT_STATES,
+      CONF: this.props.CONF
     }
   }
 
   render () {
-    return (
+    const { delayLoading, configLoading } = this.props
+    if (delayLoading || configLoading) return <AppLoading />
+    else return (
       <Provider store={this.props.store}>
         {this.props.children}
       </Provider>
@@ -55,13 +58,16 @@ MainLayout.propTypes = {
   t: PropTypes.func.isRequired,
   setWinHeight: PropTypes.func.isRequired,
   setWinWidth: PropTypes.func.isRequired,
-  config: PropTypes.object.isRequired,
+  config: PropTypes.object,
   VERSION: PropTypes.string,
   theme: PropTypes.object.isRequired,
   ROUTES: PropTypes.object.isRequired,
   nav: PropTypes.func.isRequired,
   ACCOUNT_STATES: PropTypes.object.isRequired,
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
+  delayLoading: PropTypes.bool.isRequired,
+  configLoading: PropTypes.bool.isRequired,
+  CONF: PropTypes.object.isRequired
 }
 
 MainLayout.childContextTypes = {
@@ -71,7 +77,8 @@ MainLayout.childContextTypes = {
   theme: PropTypes.object.isRequired,
   ROUTES: PropTypes.object.isRequired,
   nav: PropTypes.func.isRequired,
-  ACCOUNT_STATES: PropTypes.object.isRequired
+  ACCOUNT_STATES: PropTypes.object.isRequired,
+  CONF: PropTypes.object.isRequired
 }
 
 export default MainLayout

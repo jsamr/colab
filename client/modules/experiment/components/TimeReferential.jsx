@@ -2,12 +2,22 @@ import React, { PropTypes, Component } from 'react'
 import ReactDOM from 'react-dom'
 import makeRange from 'lodash/range'
 import TaskDisplayComputer from '../libs/TaskDisplayComputer'
-import SizeMe from 'react-sizeme'
+import Sizer from '/imports/ui/Sizer'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
 import Paper from 'material-ui/Paper'
 
 const MAGIC_MULTIPLE = 55.3
+
+const MINUTES_DISPLAY_HEIGHT_PRCT = 12
+const META_DISPLAY_HEIGHT_PRCT = 100 - MINUTES_DISPLAY_HEIGHT_PRCT
+const META_DISPLAY_HEIGHT_OFFSET = 5
+const META_DISPLAY_INNER_HEIGHT_PRCT = META_DISPLAY_HEIGHT_PRCT - META_DISPLAY_HEIGHT_OFFSET
+const CURSOR_HEIGHT = META_DISPLAY_INNER_HEIGHT_PRCT
+
+function intToPercent (int) {
+  return `${int}%`
+}
 
 const defaultControls = {
   displayTasks: true,
@@ -72,6 +82,7 @@ class TimeReferential extends Component {
 
   render () {
     const { project, experiment, tasks, annotations, size, controls = defaultControls, style } = this.props
+    const { theme } = this.context
     const { displayTasks, displayAnnotations, zoom, cursor } = controls
     const viewHeight = size.height
     const viewWidth = size.width
@@ -101,20 +112,20 @@ class TimeReferential extends Component {
       <g key={`minute_${minute}`}
          strokeWidth={computedMinutesStrokeWidth}>
         <text
-          color='white'
-          fill='white'
+          color={theme.palette.textColor}
+          fill={theme.palette.textColor}
           fontFamily='Verdana'
-          y='100%'
+          y='98%'
           x={minute}>
           {minute}'
         </text>
         <line
           className='minute'
-          y2='90%'
+          y2={intToPercent(META_DISPLAY_HEIGHT_PRCT)}
           y1='0'
           x2={minute}
           x1={minute}
-          style={{ stroke: 'white' }} />
+          style={{ stroke: theme.palette.primary1Color }} />
       </g>))
 
     const tasksDisplay = displayTasks ? segments.map((segment) => {
@@ -181,32 +192,32 @@ class TimeReferential extends Component {
             width={viewWidth}>
             <rect
               id='svg-ruler'
-              fill='#202435'
+              fill={theme.palette.primary1Color}
               width='100%'
-              height='10%'
-              y='90%' />
+              height={intToPercent(MINUTES_DISPLAY_HEIGHT_PRCT)}
+              y={intToPercent(META_DISPLAY_HEIGHT_PRCT)} />
             {/* Minutes and cursor display */}
             <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none'>
               <g fontSize={computedTextFontSize}>
                 {minuteDisplay}
                 {/* Cursor */}
-                <g style={{ stroke: 'black' }} transform={`translate(${cursor})`}>
+                <g style={{ stroke: theme.palette.textColor }} transform={`translate(${cursor})`}>
                   <g strokeWidth={computedCursorStrokeWidth}>
                     <line
                       fill='black'
                       y1='0'
-                      y2='85%'
+                      y2={intToPercent(CURSOR_HEIGHT)}
                       x1='0'
                       x2='0' />
                   </g>
                   <g transform={`translate(${-5 * computedCursorStrokeWidth})`}>
                     <svg
-                      y='85%'
+                      y={intToPercent(CURSOR_HEIGHT)}
                       preserveAspectRatio='none'
                       viewBox='-1 0 2 1'
                       width={10 * computedCursorStrokeWidth}
                       height='5%'>
-                      <polygon fill='black' strokeWidth='0' points='-1,1 1,1 0,0' />
+                      <polygon fill={theme.palette.textColor} strokeWidth='0' points='-1,1 1,1 0,0' />
                     </svg>
                   </g>
                 </g>
@@ -216,8 +227,8 @@ class TimeReferential extends Component {
             <svg
               preserveAspectRatio='none'
               className='scalable-svg-meta-viewport'
-              height='80%'
-              y='5%'>
+              height={intToPercent(META_DISPLAY_INNER_HEIGHT_PRCT)}
+              y={intToPercent(META_DISPLAY_HEIGHT_OFFSET)}>
               {/* Tasks display */}
               <g fillOpacity='0.5'>
                 {tasksDisplay}
@@ -242,11 +253,11 @@ TimeReferential.propTypes = {
   annotations: PropTypes.array.isRequired,
   tasks: PropTypes.array.isRequired,
   size: PropTypes.object.isRequired,
-  controls: PropTypes.object
+  controls: PropTypes.object.isRequired
 }
 
-export default SizeMe({
-  monitorWidth: true,
-  monitorHeight: true,
-  refreshRate: 150
-})(TimeReferential)
+TimeReferential.contextTypes = {
+  theme: PropTypes.object.isRequired
+}
+
+export default Sizer(TimeReferential)

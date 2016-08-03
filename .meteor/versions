@@ -103,5 +103,6 @@ underscore@1.0.9
 universe:i18n@1.7.0
 universe:utilities@2.3.2
 url@1.0.10
+velocityjs:velocityjs@1.2.1
 webapp@1.2.10
 webapp-hashing@1.0.9

@@ -7,7 +7,7 @@ import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui'
 import * as time from '/imports/time'
 import Logger from '/imports/Logger'
 import createSagaMiddleware from 'redux-saga'
-import * as CONF from './params'
+import * as CONF from './configuration'
 const sagaMiddleWare = createSagaMiddleware()
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { browserHistory } from 'react-router'

@@ -3,7 +3,6 @@ import { useDeps } from 'mantra-core'
 import {  composeAll, composeWithTracker, compose } from 'react-komposer'
 import { getConfig } from '/imports/api/Config'
 import { connect } from 'react-redux'
-import AppLoading from '/imports/ui/AppLoading'
 
 const mapDepsToProps = (context, { window, sub }) => ({
   setWinHeight: window.setHeight,
@@ -18,17 +17,20 @@ function confComposer ({ context, notifySubReady }, onData) {
   const confSub = Meteor.subscribe('globalconfig')
   if (confSub.ready()) {
     notifySubReady()
-    onData(null, { config: getConfig() })
+    onData(null, { config: getConfig(), configLoading: false })
+  } else {
+    onData(null, { configLoading: true })
   }
 }
 
 function loadComposer (params, onData) {
-  setTimeout(() => onData(null, {}), 500)
+  setTimeout(() => onData(null, { delayLoading: false }), 600)
+  onData(null, { delayLoading: true })
 }
 
 export default composeAll(
-  composeWithTracker(confComposer, AppLoading),
-  compose(loadComposer, AppLoading),
+  composeWithTracker(confComposer),
+  compose(loadComposer),
   useDeps(mapDepsToProps)
 )(MainLayout)
 

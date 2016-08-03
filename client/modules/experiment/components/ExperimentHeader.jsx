@@ -4,39 +4,19 @@ import SimpleLoading from '/imports/ui/SimpleLoading'
 import TimeIndicator from '../containers/TimeIndicator'
 import LoadableComponent from './LoadableComponent'
 import Toolbar, { ToolbarGroup, ToolbarSeparator } from 'material-ui/'
-import { fInlineAround } from '/imports/styles'
+import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
+
 const Separator = ({ children }) => <ToolbarSeparator style={{ top: 0, height: '70%', margin: '15% 0' }} children={children} />
 
-const itemize = (text) => text.split('').map((char, index) => <span key={index}>{char}</span>)
-
-const SpreadChars = ({text, style}) => <div style={{ ...fInlineAround, justifyContent: 'space-between', margin: '0 15px', ...style }}>{itemize(text)}</div>
-
-const upperIdentifierStyle = {
-  fontSize: 10
-}
-
-const identifierStyle = {
-  display: 'flex',
-  justifyContent: 'space-around',
-  flexFlow: 'column nowrap',
-  height: '100%'
-}
-
-const ExperimentHeader = ({ params, experiment, loading }, { theme, t }) => {
+const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
   let { experimentName, projectAcronym } = params
   return <LoadableComponent
     loading={loading}
     getInner={() => {
       const children = [
-        <div key='projectAcronym' style={{ ...identifierStyle, flexBasis: 90 }}>
-          <SpreadChars text={t('exp.project')} style={upperIdentifierStyle} />
-          <SpreadChars text={projectAcronym} />
-        </div>,
+        <StylizedLabeledIdentifier key='projectAcronym' label={t('exp.project')} identifier={projectAcronym} stripColor='transparent'/>,
         <Separator key='sep1' />,
-        <div key='experimentName' style={{ ...identifierStyle, flexBasis: 160 }}>
-          <SpreadChars text={t('exp.experiment')} style={upperIdentifierStyle} />
-          <SpreadChars text={experimentName}/>
-        </div>
+        <StylizedLabeledIdentifier key='experimentName' label={t('exp.experiment')} identifier={experimentName} preferredWidth={150} stripColor='transparent' />
       ]
       if (experiment != null) {
         children.push(

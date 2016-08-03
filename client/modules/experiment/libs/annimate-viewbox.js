@@ -1,17 +1,9 @@
 import { $ } from 'meteor/jquery'
+import autobind from 'autobind-decorator'
 
+@autobind
 class ViewBox {
   constructor (el) {
-    this.getWidth = this.getWidth.bind(this)
-    this.getHeight = this.getHeight.bind(this)
-    this.getXstart = this.getXstart.bind(this)
-    this.getYstart = this.getYstart.bind(this)
-    this.setWidth = this.setWidth.bind(this)
-    this.setHeight = this.setHeight.bind(this)
-    this.setXstart = this.setXstart.bind(this)
-    this.setYstart = this.setYstart.bind(this)
-    this.reset = this.reset.bind(this)
-    this.write = this.write.bind(this)
     this.el = el
     this.reset()
   }

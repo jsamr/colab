@@ -34,11 +34,21 @@ const fInlineNoWrapCentered = {
   alignItems: 'center'
 }
 
+const transitionFast = {
+  transition: 'all 0.41s ease'
+}
+
+const transitionSlow = {
+  transition: 'all 0.66s ease'
+}
+
 export {
   fColumnNoWrap,
   fColumnNoWrapCenter,
   fInlineNoWrap,
   fInlineAround,
   fInlineCenter,
-  fInlineNoWrapCentered
+  fInlineNoWrapCentered,
+  transitionFast,
+  transitionSlow
 }

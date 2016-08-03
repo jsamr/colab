@@ -23,7 +23,8 @@ function trackExperiment ({ context, params, actions }, onData) {
 
 const mapStateToProps = (state) => {
   return {
-    height: state.window.mainHeight
+    height: state.window.mainHeight,
+    width: state.window.width
   }
 }
 

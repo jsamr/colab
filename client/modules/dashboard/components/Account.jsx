@@ -3,12 +3,21 @@ import FontIcon from 'material-ui/FontIcon'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
 import HeadBar from './HeadBar.jsx'
-import { Card, CardTitle, CardText } from 'material-ui/Card'
+import JoinIcon from 'material-ui/svg-icons/action/launch'
+import { Card, CardTitle, CardText, CardHeader } from 'material-ui/Card'
 import { fColumnNoWrap } from '/imports/styles'
 
-const Account = ({ iconSize, user }, { t, theme }) => {
+const Account = ({ user }, { t, theme }) => {
   if (user) {
+    const joinIcon = <JoinIcon/>
+    const actions = [
+      <RaisedButton key='join' label={t('actions.joinproject')} secondary={true} icon={joinIcon} />,
+      <RaisedButton key='edit' label={t('actions.editprofile')} primary={true} icon={<FontIcon className='mdi mdi-pencil-box' />} />
+    ]
+    const name = `${user.profile.firstname} ${user.profile.lastname}`
+    const userIcon = <FontIcon className='mdi mdi-account' style={{ padding: `0 ${0}px`, fontSize: 40 }}/>
     return (
+
       <Paper rounded={false} zDepth={5} style={{
         padding: 10,
         flexGrow: 1,
@@ -18,11 +27,9 @@ const Account = ({ iconSize, user }, { t, theme }) => {
         ...fColumnNoWrap,
         justifyContent: 'flex-start'
       }}>
-        <HeadBar actions={<RaisedButton label={t('actions.editprofile')} primary={true} icon={<FontIcon className='mdi mdi-pencil-box' />} />}>
-          <FontIcon className='mdi mdi-account' style={{ padding: `0 ${iconSize}px`, fontSize: iconSize }}/>
-        </HeadBar>
-        <Card rounded={false} style={{ marginTop: 10 }}>
-          <CardTitle title={`${user.profile.firstname} ${user.profile.lastname}`} subtitle={`@${user.username}`} subtitleStyle={{ fontFamily: 'monospace', fontWeight: 'bold' }} />
+        <HeadBar actions={actions} />
+        <Card rounded={false} style={{ marginTop: 10, background: 'transparent' }}>
+          <CardHeader avatar={userIcon} title={name} subtitle={`@${user.username}`} subtitleStyle={{ fontFamily: 'monospace', fontWeight: 'bold' }} />
           <CardText>
             {<h3>{user.getFirstAddress()}</h3>}
           </CardText>

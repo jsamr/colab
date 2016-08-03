@@ -13,11 +13,11 @@ import ExperimentHeader from '../experiment/containers/ExperimentHeader'
 import Root from './components/Root'
 import Warning from 'material-ui/svg-icons/alert/warning'
 
-export default function (inject, { Store, ACCOUNT_STATES, ROUTES, t, nav, VERSION, theme }) {
+export default function (inject, { Store, ACCOUNT_STATES, ROUTES, t, nav, VERSION, theme, CONF }) {
   const MainLayoutCtx = inject(MainLayout)
   const history = syncHistoryWithStore(browserHistory, Store)
   ReactDOM.render(
-    <MainLayoutCtx t={t} VERSION={VERSION} theme={theme} nav={nav} ROUTES={ROUTES} ACCOUNT_STATES={ACCOUNT_STATES}>
+    <MainLayoutCtx t={t} VERSION={VERSION} theme={theme} nav={nav} ROUTES={ROUTES} ACCOUNT_STATES={ACCOUNT_STATES} CONF={CONF}>
       <Router history={history} >
         <Route path='/' component={App}>
           <IndexRoute components={{ content: Root }} />

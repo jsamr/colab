@@ -2,17 +2,26 @@ import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
 import { fColumnNoWrap } from '/imports/styles'
 
-const LeftMenu = ({ expLoading }, { theme }) => {
+const LeftMenu = ({ expLoading, minWidth = 300 }, { theme }) => {
   const getInner = () => <span></span>
   return (
     <LoadableComponent
-      loading={expLoading}
+      loading={true}
       getInner={getInner}
-      style={{ background: theme.palette.primary1Color, order: 1, flexBasis: 300, ...fColumnNoWrap }} />)
+      style={{
+        background: theme.palette.canvasColor,
+        order: 1,
+        margin: '8px 0',
+        flexBasis: 300,
+        minWidth,
+        flexGrow: 5,
+        ...fColumnNoWrap
+      }} />)
 }
 
 LeftMenu.propTypes = {
-  expLoading: PropTypes.bool.isRequired
+  expLoading: PropTypes.bool.isRequired,
+  minWidth: PropTypes.number
 }
 
 LeftMenu.contextTypes = {

@@ -561,6 +561,7 @@
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/require/d.coffee" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/require/require.js" />
         <item url="file://$USER_HOME$/.meteor/packages/random/1.0.10/web.browser/random_tests.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/velocityjs_velocityjs/1.2.1/web.browser/packages/velocityjs:velocityjs.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/exports.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/bdd.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/qunit.js" />
@@ -1281,6 +1282,7 @@
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/require/d.coffee" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/require/require.js" />
       <root url="file://$USER_HOME$/.meteor/packages/random/1.0.10/web.browser/random_tests.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/velocityjs_velocityjs/1.2.1/web.browser/packages/velocityjs:velocityjs.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/exports.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/bdd.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/test/acceptance/interfaces/qunit.js" />

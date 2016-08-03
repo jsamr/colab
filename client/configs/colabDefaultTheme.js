@@ -1,5 +1,5 @@
 import { teal200,
-  blueGrey700,
+  blueGrey900,
   blueGrey500,
   blueGrey300,
   grey700,
@@ -20,7 +20,8 @@ import { teal200,
   grey500,
   red700,
   grey900,
-  blue700
+  blue700,
+  lightBlue900
 } from 'material-ui/styles/colors'
 import { fade } from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
@@ -29,7 +30,7 @@ export default {
   spacing: spacing,
   fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: blueGrey700,
+    primary1Color: blueGrey900,
     primary2Color: blueGrey500,
     primary3Color: blueGrey300,
     accent1Color: indigo300,
@@ -48,6 +49,6 @@ export default {
     successColor: lightGreen500,
     failureColor: red700,
     warningColor: amber500,
-    infoColor: blue700
+    infoColor: lightBlue900
   }
 }
