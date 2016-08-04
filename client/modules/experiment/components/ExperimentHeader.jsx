@@ -7,7 +7,7 @@ import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
 
 const Separator = ({ children }) => <ToolbarSeparator style={{ top: 0, height: '70%', margin: '15% 0' }} children={children} />
 
-const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
+const ExperimentHeader = ({ params, experiment, loading }, { t, theme }) => {
   let { experimentName, projectAcronym } = params
   return <LoadableComponent
     loading={loading}
@@ -34,7 +34,8 @@ const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
       alignItems: 'center',
       justifyContent: 'flex-start',
       height: '100%',
-      borderRadius: 18
+      borderRadius: 3,
+      background: theme.palette.accent3Color
      }}
   />
 }

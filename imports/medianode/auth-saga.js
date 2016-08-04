@@ -91,7 +91,9 @@ export function * authFlow (conf) {
   // the recursive flow logic
   let run = function * () {
     // wait for auth event
+    console.info('WAITING FOR AUTH EVENT')
     yield take(AUTH)
+    console.info('AUTH EVENT RECEIVED')
     // fork async authentication mediaserver call
     let authTask = yield fork(authenticate, conf)
     let action = yield take([ RESET, REQUEST_AUTO_AUTH ])

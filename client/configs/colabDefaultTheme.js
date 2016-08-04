@@ -23,7 +23,7 @@ import { teal200,
   blue700,
   lightBlue900
 } from 'material-ui/styles/colors'
-import { fade } from 'material-ui/utils/colorManipulator'
+import { fade, lighten } from 'material-ui/utils/colorManipulator'
 import spacing from 'material-ui/styles/spacing'
 
 const primary1 = blueGrey900
@@ -41,7 +41,7 @@ const theme = {
     accent4Color: indigo700,
     textColor: grey100,
     alternateTextColor: grey300,
-    canvasColor: grey700,
+    canvasColor: lighten(primary1, 0.26),
     borderColor: brown900,
     disabledColor: fade(darkBlack, 0.3),
     pickerHeaderColor: cyan500,
@@ -52,7 +52,7 @@ const theme = {
     failureColor: red700,
     warningColor: amber500,
     infoColor: lightBlue900,
-    controlsColor: fade(primary1, 0.6)
+    controlsColor: fade(primary1, 0.38)
   }
 }
 

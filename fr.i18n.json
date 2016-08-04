@@ -57,7 +57,8 @@
     "notfound" : "L'expérimentation n'a pas été trouvée!",
     "project" : "projet",
     "experiment" : "expérimentation",
-    "display-time-explorer": "Afficher l'explorateur temporel"
+    "display-time-explorer": "Afficher l'explorateur temporel",
+    "tasks": "tâches"
   },
   "auth" : {
     "must" : "S'authentifier",

@@ -3,13 +3,14 @@ import LoadableComponent from './LoadableComponent'
 import { fColumnNoWrap, fInlineNoWrapCentered } from '/imports/styles'
 import TimeControls from '../containers/TimeControls'
 import ToggleTimeLine from '../containers/ToggleTimeLine'
+import ExperimentMenu from '../containers/ExperimentMenu'
 
 const CONTROLS_HEIGHT = 50
 
 const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme }) => {
   const getInner = () => (
     [
-      <div key='body' style={{ flexGrow: 1, width: '100%', height: 1}} ></div>,
+      <ExperimentMenu key='menu' experiment={experiment} />,
       <div key='controls' style={{ ...fInlineNoWrapCentered, flexWrap: 'wrap', justifyContent: 'space-around', background: theme.palette.controlsColor  }}>
         <ToggleTimeLine experiment={experiment} height={CONTROLS_HEIGHT} />
         <TimeControls experiment={experiment} style={{ height: CONTROLS_HEIGHT }} />

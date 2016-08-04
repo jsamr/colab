@@ -10,7 +10,7 @@ function getDefaultState () {
 
 export function auth (state = getDefaultState(), action) {
   switch (action.type) {
-    case UPDATE_PROFILE: return { ...state, user: action.payload }
+    case UPDATE_PROFILE: return { ...state, ...action.payload }
     case LOGIN:
       return action.payload
     case LOGOUT:

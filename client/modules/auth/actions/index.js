@@ -5,7 +5,7 @@ function login ({ Store }, value) {
 }
 
 function update ({ Store }, user) {
-  Store.dispatch({ type: UPDATE_PROFILE, payload: user })
+  Store.dispatch({ type: UPDATE_PROFILE, payload: { user, _id: user && user._id } })
 }
 
 function logout ({ Meteor }) {

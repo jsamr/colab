@@ -112,10 +112,12 @@ class VideoContainer extends Component {
 
   handleLoadContainer (container) {
     this._container = container
-    this.setState({
-      containerLoading: false,
-      height: container.getBoundingClientRect().height
-    })
+    if (container){
+      this.setState({
+        containerLoading: false,
+        height: container.getBoundingClientRect().height
+      })
+    }
   }
 
   render () {
@@ -123,7 +125,6 @@ class VideoContainer extends Component {
     const { containerLoading, playerLoading } = this.state
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
-    console.info('COMPUTED SIZE', width, height)
     return (
       <div className='videoContainer'
            ref={this.handleLoadContainer}

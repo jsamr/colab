@@ -59,7 +59,11 @@
     "notfound" : "The experiment has not been found!",
     "project" : "project",
     "experiment" : "experiment",
-    "display-time-explorer": "Display time explorer"
+    "display-time-explorer": "Display time explorer",
+    "infos": "infos",
+    "sources": "sources",
+    "tasks": "tasks",
+    "collaboration": "collab"
   },
   "auth" : {
     "must" : "Authentication",

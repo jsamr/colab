@@ -6,14 +6,16 @@ function * authFlow () {
     let logout = false
     let login = false
     while (!login) {
-      let { user } = yield take(UPDATE_PROFILE)
+      let { payload } = yield take(UPDATE_PROFILE)
+      const { user } = payload
       if (user) {
         yield put({ type: LOGIN, payload: { user, id: user._id } })
         login = true
       }
     }
     while (!logout) {
-      let { user } = yield take(UPDATE_PROFILE)
+      let { payload } = yield take(UPDATE_PROFILE)
+      const { user } = payload
       if (user == null) {
         yield put({ type: LOGOUT })
         logout = true

@@ -73,7 +73,7 @@ SelectableIconButton.contextTypes = {
 
 const TimeIndicator = ({ cursor, timeMode, selectTimeMode, experiment, style }, { theme }) => {
   return (
-    <CursorTimeView style={{ fontSize: 25, width: 200, fontFamily: 'monospace', color: theme.palette.alternateTextColor, ...style }}
+    <CursorTimeView style={{ fontSize: 25, width: 230, fontFamily: 'monospace', color: theme.palette.alternateTextColor, ...style }}
                     experiment={experiment}
                     timeMode={timeMode}
                     cursor={cursor}
