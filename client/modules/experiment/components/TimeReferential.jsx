@@ -46,10 +46,6 @@ class TimeReferential extends Component {
     this.animateMinutes = animateVB(() => findNode().find('.scalable-svg-minutes-viewport'), this.props.experiment.duration)
   }
 
-  componentDidMount () {
-
-  }
-
   updateInternals (internals) {
     const { cursor } = this.props.controls || defaultControls
     const { duration } = this.props.experiment

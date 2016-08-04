@@ -38,19 +38,23 @@ class VideoBox extends Component {
   }
 
   render () {
-    const { expLoading, experiment, maxWidth, mainHeight, isPlaying } = this.props
-    const { theme } = this.context
+    const { expLoading, experiment, maxWidth, mainHeight, fullHeight, isPlaying } = this.props
+    const { theme, CONF } = this.context
     const { hovered } = this.state
     const background = theme.palette.controlsColor
-    const timeIndicator = experiment ? <TimeIndicator experiment={experiment} style={{ background, flexGrow: 1, textAlign: 'center', position: 'absolute', top: 0, right: 0 }} /> : null
+    const timeIndicator = experiment ? <TimeIndicator experiment={experiment} style={{ background, flexGrow: 1, textAlign: 'center', position: 'absolute', top: 0, right: 5 }} /> : null
     const showControls = !isPlaying || hovered
-    console.info('SHOW CONTROLS : ', showControls, 'HOVERED : ', hovered, 'PLAYING: ', isPlaying)
     return (
       <div
         onMouseEnter={this.handleHoverIn}
         onMouseLeave={this.handleHoverOut}
         style={{ flexGrow: expLoading ? 3 : 1, background: 'transparent', order: 2, display: 'flex', justifyContent: 'flex-start', position: 'relative', ...transitionSlow }}>
-        <ResponsivePlayer dataLoading={expLoading} maxWidth={maxWidth} mainHeight={mainHeight} />
+        <ResponsivePlayer
+          progressUpdateFrequency={CONF.VIDEO_PROGRESS_UPDATE_FREQUENCY}
+          dataLoading={expLoading}
+          maxWidth={maxWidth}
+          mainHeight={mainHeight}
+          fullHeight={fullHeight} />
         {timeIndicator}
         <VideoControls
           style={{ ...CONTROLS_DIMENSIONS, background, opacity: showControls ? 1 : 0 }}
@@ -64,11 +68,14 @@ class VideoBox extends Component {
 VideoBox.propTypes = {
   expLoading: PropTypes.bool.isRequired,
   maxWidth: PropTypes.number.isRequired,
-  isPlaying: PropTypes.bool.isRequired
+  isPlaying: PropTypes.bool.isRequired,
+  mainHeight: PropTypes.number,
+  fullHeight: PropTypes.bool
 }
 
 VideoBox.contextTypes = {
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  CONF: PropTypes.object.isRequired
 }
 
 export default VideoBox

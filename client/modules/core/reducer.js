@@ -1,5 +1,5 @@
 import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE } from './actions/actionTypes.js'
-
+import merge from 'lodash/merge'
 const defaultState = {
   height: 0,
   width: 0,
@@ -11,9 +11,9 @@ const defaultState = {
 export function window (state = defaultState, { height, width, type }) {
   switch (type) {
     case WINDOW_HEIGHT_UPDATE:
-      return Object.assign({}, state, { height: height, mainHeight: height - state.topBarHeight })
+      return merge({}, state, { height: height, mainHeight: height - state.topBarHeight })
     case WINDOW_WIDTH_UPDATE:
-      return Object.assign({}, state, { width: width })
+      return merge({}, state, { width: width })
     default:
       return state
   }

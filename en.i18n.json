@@ -58,7 +58,8 @@
     "notsynchronized" : "The videos attached to this experiment have not yet been synchronized manually.",
     "notfound" : "The experiment has not been found!",
     "project" : "project",
-    "experiment" : "experiment"
+    "experiment" : "experiment",
+    "display-time-explorer": "Display time explorer"
   },
   "auth" : {
     "must" : "Authentication",

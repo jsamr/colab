@@ -1,5 +1,9 @@
 # CoLab
 
+REACT HOTKEYS : https://github.com/Chrisui/react-hotkeys
+AWESOME REDUX : http://ricostacruz.com/cheatsheets/awesome-redux.html
+REDUX STORAGE : https://github.com/michaelcontento/redux-storage
+REDUX FORMS : http://redux-form.com/5.3.1/#/?_k=alguzq
 
 ## Conventions
 

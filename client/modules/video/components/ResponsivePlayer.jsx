@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import autobind from 'autobind-decorator'
 import { transitionSlow } from '/imports/styles'
+import { $ } from 'meteor/jquery'
 
 @autobind
 class VideoContainer extends Component {
@@ -15,17 +16,43 @@ class VideoContainer extends Component {
       duration: 0,
       videoRatio: 0,
       containerLoading: true,
-      playerLoading: true
+      playerLoading: true,
+      height: null,
+      cachedHeight: 0
     }
   }
 
-  componentWillReceiveProps ({ userCursor }) {
+  componentWillReceiveProps ({ userCursor, mainHeight, fullHeight }) {
+    let newState = {}
+    let shouldUpdate = false
     if (userCursor !== this.state.userCursor) {
-      this.setState({ userCursor })
+      shouldUpdate = true
+      newState.userCursor = userCursor
     }
+    if (mainHeight !== this.props.mainHeight) {
+      shouldUpdate = true
+      if (this._container) {
+        const newHeight = this._container.getBoundingClientRect().height
+        if (fullHeight) {
+          // apply transformation to cached height
+          newState.cachedHeight = mainHeight / this.props.mainHeight * this.state.cachedHeight
+        }
+        newState.height = newHeight
+      }
+    }
+    if (fullHeight !== this.props.fullHeight) {
+      shouldUpdate = true
+      if (fullHeight) {
+        newState = { ...newState, cachedHeight: this.state.height, height: mainHeight }
+      } else {
+        newState = { ...newState, height: this.state.cachedHeight }
+      }
+    }
+    if (shouldUpdate) this.setState(newState)
   }
 
   componentWillUpdate (nextProp, { userCursor, videoRatio }) {
+    // TODO check if this operation is costy
     if (userCursor !== this.state.userCursor) {
       if (userCursor !== this._player.prevPlayed) this._player.seekTo(userCursor)
     }
@@ -76,8 +103,7 @@ class VideoContainer extends Component {
 
   computeWidthBasis () {
     const { maxWidth } = this.props
-    const { videoRatio } = this.state
-    const height = this._container.offsetHeight
+    const { videoRatio, height } = this.state
     return {
       width: Math.min(height * videoRatio, maxWidth),
       height
@@ -87,18 +113,22 @@ class VideoContainer extends Component {
   handleLoadContainer (container) {
     this._container = container
     this.setState({
-      containerLoading: false
+      containerLoading: false,
+      height: container.getBoundingClientRect().height
     })
   }
 
   render () {
-    const { isPlaying, volumeLevel, dataLoading, style, maxWidth } = this.props
+    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, progressUpdateFrequency = 50 } = this.props
     const { containerLoading, playerLoading } = this.state
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
+    console.info('COMPUTED SIZE', width, height)
     return (
-      <div ref={this.handleLoadContainer} style={{ flexBasis: width, ...transitionSlow, ...style }} >
-        <div style={{ position: 'relative', display: loading ? 'none' : 'block'  }}>
+      <div className='videoContainer'
+           ref={this.handleLoadContainer}
+           style={{ flexBasis: width, ...transitionSlow, ...style }} >
+        <div style={{ position: 'relative', display: loading ? 'none' : 'flex' }}>
           <ReactPlayer
             ref={this.handlePlayerMount}
             controls={false}
@@ -110,7 +140,8 @@ class VideoContainer extends Component {
             onProgress={this.handleOnProgress}
             onDuration={this.handleOnDuration}
             onEnded={this.handleReachEnd}
-            progressFrequency={50}
+            progressFrequency={progressUpdateFrequency}
+            className='fastTransition'
           />
         </div>
         <SimpleLoading style={{ margin: 'auto', textAlign: 'center', display: loading ? null : 'none' }} />
@@ -129,7 +160,10 @@ ResponsivePlayer.propTypes = {
   userCursor: PropTypes.number.isRequired,
   volumeLevel: PropTypes.number.isRequired,
   maxWidth: PropTypes.number.isRequired,
-  dataLoading: PropTypes.bool.isRequired
+  dataLoading: PropTypes.bool.isRequired,
+  mainHeight: PropTypes.number,
+  fullHeight: PropTypes.bool,
+  progressUpdateFrequency: PropTypes.number
 }
 
 export default ResponsivePlayer

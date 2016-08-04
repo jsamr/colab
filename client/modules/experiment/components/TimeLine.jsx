@@ -2,16 +2,21 @@ import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
 import TimeReferential from '../containers/TimeReferential'
 
-const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment }, { theme }) => {
+const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment, style, visible }, { theme }) => {
+  const referential = visible ? <TimeReferential style={{ background: theme.palette.headerColor }}
+                                                 project={project}
+                                                 annotations={annotations}
+                                                 tasks={tasks}
+                                                 experiment={experiment} /> : null
   const getInner = () => (
-    <div style={{ display: 'flex', alignItems: 'stretch', margin: 10, width: '100%', background: 'white' }}>
-      <TimeReferential style={{ background: theme.palette.headerColor }}  project={project} annotations={annotations} tasks={tasks} experiment={experiment} />
+    <div style={{ display: 'flex', alignItems: 'stretch', width: '100%', background: 'white', margin: visible ? 6 : 0 }}>
+      {referential}
     </div>
   )
   return (<LoadableComponent
     loading={expLoading || loading}
     getInner={getInner}
-    style={{ background: 'transparent', height: '100%', display: 'flex' }} />)
+    style={{ background: 'transparent', height: '100%', width: '100%', display: 'flex', ...style }} />)
 }
 
 TimeLine.propTypes = {
@@ -20,7 +25,8 @@ TimeLine.propTypes = {
   experiment: PropTypes.object,
   project: PropTypes.object,
   annotations: PropTypes.array,
-  tasks: PropTypes.array
+  tasks: PropTypes.array,
+  visible: PropTypes.bool.isRequired
 }
 
 TimeLine.contextTypes = {

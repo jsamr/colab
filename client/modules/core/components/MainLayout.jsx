@@ -4,13 +4,13 @@ import { Provider } from 'react-redux'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { setWinHeight, setWinWidth } from '../actions/index'
-import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 import AppLoading from '/imports/ui/AppLoading'
 
 class MainLayout extends Component {
   constructor (props) {
     super(props)
-    this.handleResize = debounce(() => {
+    this.handleResize = throttle(() => {
       const height = window.innerHeight
       const width = window.innerWidth
       this.props.setWinHeight(height)

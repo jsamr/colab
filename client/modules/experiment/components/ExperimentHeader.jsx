@@ -33,7 +33,8 @@ const ExperimentHeader = ({ params, experiment, loading }, { t }) => {
       marginLeft: 30,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      height: '100%'
+      height: '100%',
+      borderRadius: 18
      }}
   />
 }

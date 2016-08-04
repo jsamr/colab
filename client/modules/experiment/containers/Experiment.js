@@ -21,10 +21,11 @@ function trackExperiment ({ context, params, actions }, onData) {
   } else onData(null, { loading: true })
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ window, experiments }, { experiment }) => {
   return {
-    height: state.window.mainHeight,
-    width: state.window.width
+    height: window.mainHeight,
+    width: window.width,
+    timeLineVisible: experiment ? experiments[experiment._id].controls.timeLineVisible : true
   }
 }
 
