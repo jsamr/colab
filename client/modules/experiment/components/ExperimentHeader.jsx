@@ -13,9 +13,9 @@ const ExperimentHeader = ({ params, experiment, loading }, { t, theme }) => {
     loading={loading}
     getInner={() => {
       const children = [
-        <StylizedLabeledIdentifier key='projectAcronym' label={t('exp.project')} identifier={projectAcronym} stripColor='transparent'/>,
+        <StylizedLabeledIdentifier key='projectAcronym' label={t('experiment.project')} identifier={projectAcronym} stripColor='transparent'/>,
         <Separator key='sep1' />,
-        <StylizedLabeledIdentifier key='experimentName' label={t('exp.experiment')} identifier={experimentName} preferredWidth={150} stripColor='transparent' />
+        <StylizedLabeledIdentifier key='experimentName' label={t('experiment.experiment')} identifier={experimentName} preferredWidth={150} stripColor='transparent' />
       ]
       if (experiment != null) {
         children.push(

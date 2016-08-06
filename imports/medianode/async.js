@@ -1,6 +1,6 @@
 import { HTTP } from 'meteor/http'
 
-export function asyncPost (url, options) {
+export function asyncPost (url, options = {}) {
   return new Promise(function (resolve, reject) {
     HTTP.post(url, options, (err, result) => {
       if (err) reject(err)
@@ -9,9 +9,9 @@ export function asyncPost (url, options) {
   })
 }
 
-export function asyncGet (url) {
+export function asyncGet (url, options = {}) {
   return new Promise(function (resolve, reject) {
-    HTTP.get(url, (err, result) => {
+    HTTP.get(url, options, (err, result) => {
       if (err) reject(err)
       else resolve(result)
     })

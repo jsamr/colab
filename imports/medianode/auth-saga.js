@@ -29,7 +29,7 @@ export function * authenticateWithCredentials (conf) {
     conf.token = { value: data.token, epoch_s: data.epoch_s }
     // TODO use a composer instead
     yield delay(1000)
-    yield put({ type: AUTH_OK })
+    yield put({ type: AUTH_OK, payload: data.token })
   } catch (error) {
     console.error(error)
     // TODO use a composer instead
@@ -91,9 +91,7 @@ export function * authFlow (conf) {
   // the recursive flow logic
   let run = function * () {
     // wait for auth event
-    console.info('WAITING FOR AUTH EVENT')
     yield take(AUTH)
-    console.info('AUTH EVENT RECEIVED')
     // fork async authentication mediaserver call
     let authTask = yield fork(authenticate, conf)
     let action = yield take([ RESET, REQUEST_AUTO_AUTH ])

@@ -1,7 +1,8 @@
 {
   "actions" : {
     "joinproject" : "join a project",
-    "editprofile" : "edit profile"
+    "editprofile" : "edit profile",
+    "refresh": "refresh"
   },
   "restrictions" : {
     "validemail" : "valid email",
@@ -45,9 +46,10 @@
   "loading": "loading...",
   "medianode" : {
       "available" : "the media server is vailable",
-      "unavailable" : "the media server is unavailable"
+      "unavailable" : "the media server is unavailable",
+      "notfound" : "Le média n'a pu être chargé"
   },
-  "exp" : {
+  "experiment": {
     "published" : "The experiment is published, all collaborators have access to it",
     "unpublished" : "The experiment is not yet published, only responsibles have access to it",
     "techvalid" : "The experiment has been validated by the tech team, the presence of videos on the server has been confirmed by a tech member.",
@@ -63,7 +65,8 @@
     "infos": "infos",
     "sources": "sources",
     "tasks": "tasks",
-    "collaboration": "collab"
+    "collaboration": "collab",
+    "no-place": "There is no source associated to this experiment."
   },
   "auth" : {
     "must" : "Authentication",

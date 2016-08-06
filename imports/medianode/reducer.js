@@ -6,7 +6,8 @@ function getDefaultState () {
   return {
     error: null,
     valid: false,
-    pending: false
+    pending: false,
+    token: null
   }
 }
 
@@ -19,7 +20,7 @@ export function media (state, action) {
     case AUTH_FAIL:
       return merge({}, state, { pending: false, valid: false, error: payload })
     case AUTH_OK:
-      return merge({}, state, { pending: false, valid: true, error: null })
+      return merge({}, state, { pending: false, valid: true, error: null, token: payload || state.token })
     case RESET:
       return getDefaultState()
     default:

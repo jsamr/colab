@@ -1,7 +1,8 @@
 {
   "actions" : {
     "joinproject" : "rejoindre un projet",
-    "editprofile" : "éditer le profil"
+    "editprofile" : "éditer le profil",
+    "refresh": "actualiser"
   },
   "restrictions" : {
     "validemail" : "email valide",
@@ -43,9 +44,10 @@
   "loading": "chargement en cours...",
   "medianode" : {
     "available" : "le serveur média est disponible",
-    "unavailable" : "le serveur média n'est pas disponible"
+    "unavailable" : "le serveur média n'est pas disponible",
+    "notfound" : "Le média n'a pu être chargé"
   },
-  "exp" : {
+  "experiment": {
     "published" : "L'expérimentation est publiée : tous les collaborateurs y ont accès.",
     "unpublished" : "L'expérimentation n'est pas rendue publique : seuls les responsables et membres autorisés y ont accès.",
     "techvalid" : "L'expérimentation a été validée par l'équipe technique : la présence des vidéos à été confirmée sur le serveur par un responsable.",
@@ -58,7 +60,8 @@
     "project" : "projet",
     "experiment" : "expérimentation",
     "display-time-explorer": "Afficher l'explorateur temporel",
-    "tasks": "tâches"
+    "tasks": "tâches",
+    "no-place": "Aucune source n'est associée à cette expérimentation."
   },
   "auth" : {
     "must" : "S'authentifier",

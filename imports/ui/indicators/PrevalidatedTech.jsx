@@ -3,7 +3,7 @@ import Tooltipable from '/imports/ui/Tooltipable'
 import IconStackWhite from '../icons/IconStackWhite'
 
 const PrevalidatedTech = ({ prevalidatedTech = false }, { theme }) => {
-  const localizedTextId = prevalidatedTech ? 'exp.techvalid' : 'exp.techinvalid'
+  const localizedTextId = prevalidatedTech ? 'experiment.techvalid' : 'experiment.techinvalid'
   const icon2 = prevalidatedTech ? 'fa-check-circle' : 'fa-times-circle'
   const color = prevalidatedTech ? theme.palette.successColor : theme.palette.failureColor
   return (

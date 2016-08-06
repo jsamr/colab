@@ -41,6 +41,9 @@ const transitionFast = {
 const transitionSlow = {
   transition: 'all 0.66s ease'
 }
+const transitionVerySlow = {
+  transition: 'all 2s ease'
+}
 
 export {
   fColumnNoWrap,
@@ -50,5 +53,6 @@ export {
   fInlineCenter,
   fInlineNoWrapCentered,
   transitionFast,
-  transitionSlow
+  transitionSlow,
+  transitionVerySlow
 }

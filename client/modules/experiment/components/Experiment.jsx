@@ -12,16 +12,24 @@ const LEFT_MENU_MIN_WIDTH = 300
 
 const Experiment = ({ height, width, loading, project, experiment, timeLineVisible }, { t, theme }) => {
   let elems
-  if (!loading && !experiment) elems = <NotFound message={t('exp.notfound')}/>
+  if (!loading && !experiment) elems = <NotFound message={t('experiment.notfound')}/>
   else {
     const showTimeLine = timeLineVisible || loading
     elems = (
       <div style={{ height, width: '100%', background: theme.palette.headerColor, overflow: 'hidden' }}>
         { /* Upper section */ }
         <div style={{ ...fColumnNoWrap, height: showTimeLine ? '76%' : '100%', width: '100%', position: 'relative', ...transitionFast }}>
-          <div style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1, height: '100%' }}>
-            <LeftMenu experiment={experiment} minWidth={LEFT_MENU_MIN_WIDTH} expLoading={loading} />
-            <VideoBox experiment={experiment} maxWidth={width - LEFT_MENU_MIN_WIDTH} expLoading={loading} mainHeight={height} fullHeight={!showTimeLine} />
+          <div style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1, height: '100%', justifyContent: 'space-between' }}>
+            <LeftMenu experiment={experiment}
+                      minWidth={LEFT_MENU_MIN_WIDTH}
+                      expLoading={loading}
+                      />
+            <VideoBox experiment={experiment}
+                      maxWidth={width - LEFT_MENU_MIN_WIDTH}
+                      expLoading={loading}
+                      mainHeight={height}
+                      fullHeight={!showTimeLine}
+                      />
           </div>
         </div>
         { /* Lower section */ }
@@ -45,7 +53,7 @@ Experiment.propTypes = {
   project: PropTypes.object,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  timeLineVisible: PropTypes.bool
+  timeLineVisible: PropTypes.bool.isRequired
 }
 
 export default Experiment

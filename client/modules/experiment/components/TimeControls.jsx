@@ -64,9 +64,9 @@ class ZoomButton extends Component {
 }
 
 const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTimeLineZoom, setTimeLineTasksVisibility }) => {
-  let { zoom, displayTasks, displayAnnotations } = controls
+  let { zoom, displayTasks, displayAnnotations, timeLineVisible } = controls
   return (
-    <div style={{ ...fInlineNoWrap, flexBasis: 350, ...style }}>
+    <div style={{ ...fInlineNoWrap, flexBasis: 350, ...style, display: timeLineVisible ? 'flex' : 'none' }}>
       <ControlLine>
         <Button onClick={() => setTimeLineAnnotationsVisibility(!displayAnnotations)}>
           <ToggleAnnotations visible={displayAnnotations} />

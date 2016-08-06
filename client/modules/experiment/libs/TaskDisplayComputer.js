@@ -19,7 +19,7 @@ class TaskDisplayComputer {
     this.nRows = this.nRows.bind(this)
     this.generateSegments = this.generateSegments.bind(this)
     this.selection = selection
-    this.exp = exp
+    this.experiment = exp
     this.segs = []
     this.ranges = {}
     this.project = project
@@ -57,7 +57,7 @@ class TaskDisplayComputer {
           } else { range = undefined }
         }
         seg.taskType = taskType
-        seg.group = () => task.isAbstract ? lodash.create(Task.prototype, task) : this.exp.getTask(task._id)
+        seg.group = () => task.isAbstract ? lodash.create(Task.prototype, task) : this.experiment.getTask(task._id)
         seg.tskTypeId = taskType._id
         seg.width = seg.stop - seg.start
         seg.index = () => i

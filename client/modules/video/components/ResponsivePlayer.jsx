@@ -4,6 +4,7 @@ import SimpleLoading from '/imports/ui/SimpleLoading'
 import autobind from 'autobind-decorator'
 import { transitionSlow } from '/imports/styles'
 import { $ } from 'meteor/jquery'
+import NotFound from '/imports/ui/NotFound'
 
 @autobind
 class VideoContainer extends Component {
@@ -18,17 +19,26 @@ class VideoContainer extends Component {
       containerLoading: true,
       playerLoading: true,
       height: null,
-      cachedHeight: 0
+      cachedHeight: 0,
+      error: null
     }
   }
 
-  componentWillReceiveProps ({ userCursor, mainHeight, fullHeight }) {
+  componentWillReceiveProps ({ userCursor, mainHeight, fullHeight, url }) {
     let newState = {}
     let shouldUpdate = false
     if (userCursor !== this.state.userCursor) {
       shouldUpdate = true
       newState.userCursor = userCursor
     }
+
+    if (url !== this.props.url) {
+      shouldUpdate = true
+      this.setState({
+        error: null
+      })
+    }
+
     if (mainHeight !== this.props.mainHeight) {
       shouldUpdate = true
       if (this._container) {
@@ -80,20 +90,25 @@ class VideoContainer extends Component {
   handleLoadedMetaData (e) {
     const playerEl = e.target
     const { videoHeight, videoWidth } = playerEl
+    const { onLoad } = this.props
     if (videoWidth && videoHeight) {
       this.setState({
         videoRatio: videoWidth / videoHeight,
         playerLoading: false
       })
+      if (onLoad) onLoad(true)
     }
   }
 
   handlePlayerMount (player) {
     this._player = player
+    const { onLoad } = this.props
     if (player) {
       const rPlayer = player.refs.player
       this._playerEl = rPlayer.refs.player
       this._playerEl.addEventListener('loadedmetadata', this.handleLoadedMetaData)
+    } else {
+      if (onLoad) onLoad(false)
     }
   }
 
@@ -102,10 +117,12 @@ class VideoContainer extends Component {
   }
 
   computeWidthBasis () {
-    const { maxWidth } = this.props
+    const { maxWidth, onWidthUpdate } = this.props
     const { videoRatio, height } = this.state
+    const width = Math.min(height * videoRatio, maxWidth)
+    if (onWidthUpdate) onWidthUpdate(width)
     return {
-      width: Math.min(height * videoRatio, maxWidth),
+      width,
       height
     }
   }
@@ -120,11 +137,24 @@ class VideoContainer extends Component {
     }
   }
 
+  handleError (error) {
+    this.setState({
+      error: true
+    })
+  }
+
+  renderLoading (display) {
+    return <SimpleLoading style={{ alignItems: 'center', justifyContent: 'center', height: '100%', display }} />
+  }
+
   render () {
-    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, progressUpdateFrequency = 50 } = this.props
-    const { containerLoading, playerLoading } = this.state
+    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, url, progressUpdateFrequency = 50 } = this.props
+    const { containerLoading, playerLoading, error } = this.state
+    const { t } = this.context
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
+    if (url == null) return this.renderLoading('flex')
+    if (error != null) return <NotFound message={ t('medianode.notfound') } />
     return (
       <div className='videoContainer'
            ref={this.handleLoadContainer}
@@ -133,7 +163,7 @@ class VideoContainer extends Component {
           <ReactPlayer
             ref={this.handlePlayerMount}
             controls={false}
-            url='http://www.w3schools.com/html/mov_bbb.ogg'
+            url={url}
             width={width}
             height={height}
             volume={volumeLevel}
@@ -141,14 +171,16 @@ class VideoContainer extends Component {
             onProgress={this.handleOnProgress}
             onDuration={this.handleOnDuration}
             onEnded={this.handleReachEnd}
+            onError={this.handleError}
             progressFrequency={progressUpdateFrequency}
             className='fastTransition'
           />
         </div>
-        <SimpleLoading style={{ margin: 'auto', textAlign: 'center', display: loading ? null : 'none' }} />
+        {this.renderLoading(loading ? 'flex' : 'none')}
       </div>
     )
   }
+
 }
 
 const ResponsivePlayer = VideoContainer
@@ -164,7 +196,14 @@ ResponsivePlayer.propTypes = {
   dataLoading: PropTypes.bool.isRequired,
   mainHeight: PropTypes.number,
   fullHeight: PropTypes.bool,
-  progressUpdateFrequency: PropTypes.number
+  progressUpdateFrequency: PropTypes.number,
+  url: PropTypes.string,
+  onLoad: PropTypes.func,
+  onWidthUpdate: PropTypes.func
+}
+
+ResponsivePlayer.contextTypes = {
+  t: PropTypes.func.isRequired
 }
 
 export default ResponsivePlayer

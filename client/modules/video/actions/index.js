@@ -3,7 +3,8 @@ import {
   AUTO_UPDATE_PLAYER_DURATION,
   SET_PLAYER_PLAYING_STATE,
   USER_SET_PLAYER_CURSOR,
-  SET_VOLUME_LEVEL
+  SET_VOLUME_LEVEL,
+  VIDEO_LOAD_URL
 } from './actionsTypes'
 
 const video = {
@@ -35,6 +36,12 @@ const video = {
     Store.dispatch({
       type: SET_VOLUME_LEVEL,
       payload: volumeLevel
+    })
+  },
+  loadSourceUrl ({ Store }, url) {
+    Store.dispatch({
+      type: VIDEO_LOAD_URL,
+      payload: url
     })
   }
 }

@@ -15,7 +15,8 @@ function mapState (state) {
   return {
     userCursor: state.video.userCursor,
     isPlaying: state.video.isPlaying,
-    volumeLevel: state.video.volumeLevel
+    volumeLevel: state.video.volumeLevel,
+    url: state.video.url
   }
 }
 

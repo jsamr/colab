@@ -24,8 +24,8 @@ const Exp = Serrurier.createClass({
     updateTaskSegment () {},
     createTaskIfNotExists () {},
     insertCaptions () {},
-    createSession () {
-      return new Session(this)
+    createSession (application, token) {
+      return new Session(this, this.getProject(), application, token)
     },
     /**
      * @returns {ProjectCard}

@@ -5,7 +5,7 @@ const ToggleTimeLine = ({ height, setTimeLineVisibility, timeLineVisible }, { t 
   <div style={{ height, display: 'flex', alignItems: 'center' }}>
     <Toggle style={{ margin: 'auto' }}
             labelStyle={{ fontSize: 14, textAlign: 'center', width: 140, lineHeight: '14px' }}
-            label={t('exp.display-time-explorer')}
+            label={t('experiment.display-time-explorer')}
             toggled={timeLineVisible}
             onToggle={() => setTimeLineVisibility(!timeLineVisible)}
     />
@@ -13,10 +13,13 @@ const ToggleTimeLine = ({ height, setTimeLineVisibility, timeLineVisible }, { t 
 )
 
 ToggleTimeLine.contextTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
+}
+
+ToggleTimeLine.propTypes = {
   timeLineVisible: PropTypes.bool.isRequired,
   setTimeLineVisibility: PropTypes.func.isRequired,
-  experiment: PropTypes.object
+  experiment: PropTypes.object.isRequired
 }
 
 export default ToggleTimeLine

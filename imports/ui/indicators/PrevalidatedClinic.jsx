@@ -3,7 +3,7 @@ import Tooltipable from '/imports/ui/Tooltipable'
 import IconStackWhite from '../icons/IconStackWhite'
 
 const PrevalidatedClinic = ({ prevalidatedClinic = false }, { theme }) => {
-  const localizedTextId = prevalidatedClinic ? 'exp.clinicvalid' : 'exp.clinicinvalid'
+  const localizedTextId = prevalidatedClinic ? 'experiment.clinicvalid' : 'experiment.clinicinvalid'
   const icon2 = prevalidatedClinic ? 'fa-check-circle' : 'fa-times-circle'
   const color = prevalidatedClinic ? theme.palette.successColor : theme.palette.failureColor
   return (

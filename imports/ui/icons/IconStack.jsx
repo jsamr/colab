@@ -8,7 +8,7 @@ const IconStack = ({ big = false, dark = false, icon1, icon2, icon3 = null, ...o
     <a className={`fa-stack minibutton-icon ${bigClass}`} style={{ position: 'relative' }} { ...otherProps }>
       <i className={`fa fa-stack-2x ${icon1}`} />
       {icon3Elem}
-      <i className={`fa fa-bottom-right ${icon2} ${lightClass}`} />
+      <i className={`fa fa-bottom-right ${icon2} ${lightClass}`}/>
     </a>
   )
 }

@@ -2,12 +2,15 @@ import {
   REQUIRE_EXPERIMENT_PAGE,
   SELECT_TIME_MODE,
   TIME_LINE_ADD_ANNOTATION,
+  REFRESH_MEDIA_NODE_PLACES,
   TIME_LINE_SET_ANNOTATIONS_VISIBILITY,
   TIME_LINE_SET_TASKS_VISIBILITY,
   TIME_LINE_SET_ZOOM,
   TIME_LINE_SET_TASKS_TYPE,
   TIME_LINE_SET_VISIBILITY,
-  TIME_LINE_SET_CURSOR
+  TIME_LINE_SET_CURSOR,
+  SELECT_SOURCE,
+  MENU_SET_TAB
 } from './actionsTypes'
 
 const experiments = {
@@ -77,6 +80,32 @@ const experiments = {
       payload: {
         cursor: cursor,
         _id: experiment._id
+      }
+    })
+  },
+  selectMenuTab ({ Store }, menuTab, experiment) {
+    Store.dispatch({
+      type: MENU_SET_TAB,
+      payload: {
+        menuTab,
+        _id: experiment._id
+      }
+    })
+  },
+  selectSource ({ Store }, source, experiment) {
+    Store.dispatch({
+      type: SELECT_SOURCE,
+      payload: {
+        source,
+        _id: experiment._id
+      }
+    })
+  },
+  refreshSources ({ Store }, experiment) {
+    Store.dispatch({
+      type: REFRESH_MEDIA_NODE_PLACES,
+      meta: {
+        experiment
       }
     })
   }

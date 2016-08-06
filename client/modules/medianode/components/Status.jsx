@@ -7,7 +7,7 @@ const Status = ({ style, valid, pending }, { t, theme }) => {
   let tooltip = null
   let color
   let iconStyle = {
-    background: theme.palette.textColor,
+    background: theme.palette.accent2Color,
     borderRadius: '50%'
   }
   if (pending) {

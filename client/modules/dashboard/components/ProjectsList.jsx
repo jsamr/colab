@@ -5,15 +5,7 @@ import SimpleLoading from '/imports/ui/SimpleLoading.jsx'
 import Project from '/imports/api/Project'
 import { fInlineNoWrapCentered } from '/imports/styles'
 import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
-
-class TabTemplate extends React.Component {
-  render () {
-    if (!this.props.selected) {
-      return null
-    }
-    return this.props.children
-  }
-}
+import TabTemplate from '/imports/ui/TabTemplate'
 
 const ProjectsList = ({ projects, selectedProjectId, selectProject, headerBackground, cardBackground, style, cardStyle = null, loading }, { t, theme }) => {
   if (!loading) {
@@ -21,7 +13,7 @@ const ProjectsList = ({ projects, selectedProjectId, selectProject, headerBackgr
       <Tab key={prj._id}
            label={
            <div style={{ width: '100%', ...fInlineNoWrapCentered, justifyContent: 'center' }} >
-            <StylizedLabeledIdentifier style={{ flexGrow: 1 }} label={t('exp.project')} identifier={prj.acronym} idFontSize={40} stripColor={theme.palette.accent2Color} />
+            <StylizedLabeledIdentifier style={{ flexGrow: 1 }} label={t('experiment.project')} identifier={prj.acronym} idFontSize={40} stripColor={theme.palette.accent2Color} />
            </div>
            }
            value={prj._id}

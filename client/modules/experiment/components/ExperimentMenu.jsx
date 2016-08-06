@@ -3,26 +3,39 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import Sources from '../containers/Sources'
+import TabTemplate from '/imports/ui/TabTemplate'
 
-const ExperimentMenu = ({ experiment }, { t }) => (
-  <Tabs key='body' style={{ flexGrow: 1, width: '100%', height: 1}} >
-    <Tab icon={<FontIcon className='fa fa-info'/>} label={t('exp.infos')}>
-      INFO TAB
-    </Tab>
-    <Tab icon={<FontIcon className='fa fa-video-camera'/>} label={t('exp.sources')}>
-      <Sources experiment={experiment} />
-    </Tab>
-    <Tab icon={<FontIcon className='fa fa-tasks'/>} label={t('exp.tasks')}>
-      TASKS TAB
-    </Tab>
-    <Tab icon={<FontIcon className='fa fa-users'/>} label={t('exp.collaboration')}>
-      USERS TAB
-    </Tab>
-  </Tabs>
-)
+const ExperimentMenu = ({ experiment, selectedMenuTab, selectMenuTab }, { t }) => {
+  const tabsDefinition = [
+    { value: 'infos', icon: 'fa fa-info', content: <span>INFO TAB</span> },
+    { value: 'sources', icon: 'mdi mdi-video', content: <Sources experiment={experiment} /> },
+    { value: 'tasks', icon: 'fa fa-tasks', content: <span>INFO TASKS</span> },
+    { value: 'collaboration', icon: 'fa fa-users', content: <span>INFO COLLAB</span> }
+  ]
+  return (
+    <Tabs key='body'
+          style={{ flexGrow: 1, width: '100%', display: 'flex', flexFlow: 'column nowrap', background: 'transparent' }}
+          contentContainerStyle={{ flexGrow: 1, display: 'flex', flexFlow: 'column nowrap' }}
+          value={selectedMenuTab}
+          tabTemplate={TabTemplate}
+          onChange={(newValue) => {
+            if (typeof newValue === 'string') {
+              selectMenuTab(newValue)
+            }
+        }}>
+      {tabsDefinition.map(({ value, icon, content }) => (
+        <Tab key={value} icon={<FontIcon className={icon}/>} label={t(`experiment.${value}`)} value={value} >
+          {content}
+        </Tab>
+      ))}
+    </Tabs>
+  )
+}
 
 ExperimentMenu.propTypes = {
-  experiment: PropTypes.object.isRequired
+  experiment: PropTypes.object.isRequired,
+  selectedMenuTab: PropTypes.oneOf(['infos', 'sources', 'tasks', 'collaboration']).isRequired,
+  selectMenuTab: PropTypes.func.isRequired
 }
 
 ExperimentMenu.contextTypes = {

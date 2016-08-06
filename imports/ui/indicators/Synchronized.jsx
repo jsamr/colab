@@ -3,7 +3,7 @@ import Tooltipable from '/imports/ui/Tooltipable'
 import IconStackWhite from '../icons/IconStackWhite'
 
 const Synchronized = ({ synchronized = false }, { theme }) => {
-  const localizedTextId = synchronized ? 'exp.synchronized' : 'exp.notsynchronized'
+  const localizedTextId = synchronized ? 'experiment.synchronized' : 'experiment.notsynchronized'
   const icon2 = synchronized ? 'fa-check-circle' : 'fa-times-circle'
   const color = synchronized ? theme.palette.successColor : theme.palette.failureColor
   return (

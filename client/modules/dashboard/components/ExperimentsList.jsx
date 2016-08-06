@@ -59,7 +59,7 @@ class ExperimentCard extends Component {
              onMouseLeave={this.handleMouseLeave}
              style={{ background, cursor: 'pointer', ...expStyle }}>
         <div style={{ fontSize: 28 }}>
-          <StylizedLabeledIdentifier label={t('exp.experiment')} identifier={name} idFontSize={28} stripColor={theme.palette.primary2Color}/>
+          <StylizedLabeledIdentifier label={t('experiment.experiment')} identifier={name} idFontSize={28} stripColor={theme.palette.primary2Color}/>
         </div>
         <div style={{ flexInline, flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
           <AlignedSpan>
