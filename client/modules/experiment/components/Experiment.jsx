@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import DefaultPageRoot from '/imports/ui/DefaultPageRoot'
 import LeftMenu from './LeftMenu'
@@ -10,36 +10,43 @@ import NotFound from '/imports/ui/NotFound'
 import { fColumnNoWrap, transitionFast } from '/imports/styles'
 const LEFT_MENU_MIN_WIDTH = 300
 
-const Experiment = ({ height, width, loading, project, experiment, timeLineVisible }, { t, theme }) => {
-  let elems
-  if (!loading && !experiment) elems = <NotFound message={t('experiment.notfound')}/>
-  else {
-    const showTimeLine = timeLineVisible || loading
-    elems = (
-      <div style={{ height, width: '100%', background: theme.palette.headerColor, overflow: 'hidden' }}>
-        { /* Upper section */ }
-        <div style={{ ...fColumnNoWrap, height: showTimeLine ? '76%' : '100%', width: '100%', position: 'relative', ...transitionFast }}>
-          <div style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1, height: '100%', justifyContent: 'space-between' }}>
-            <LeftMenu experiment={experiment}
-                      minWidth={LEFT_MENU_MIN_WIDTH}
-                      expLoading={loading}
-                      />
-            <VideoBox experiment={experiment}
-                      maxWidth={width - LEFT_MENU_MIN_WIDTH}
-                      expLoading={loading}
-                      mainHeight={height}
-                      fullHeight={!showTimeLine}
-                      />
+class Experiment extends Component {
+
+  render () {
+    const { height, width, loading, project, experiment, timeLineVisible } = this.props
+    const { t, theme } = this.context
+    let elems
+    if (!loading && !experiment) elems = <NotFound message={t('experiment.notfound')}/>
+    else {
+      const showTimeLine = timeLineVisible || loading
+      elems = (
+        <div style={{ height, width: '100%', background: theme.palette.headerColor, overflow: 'hidden' }}>
+          { /* Upper section */ }
+          <div
+            style={{ ...fColumnNoWrap, height: showTimeLine ? '76%' : '100%', width: '100%', position: 'relative', ...transitionFast }}>
+            <div
+              style={{ alignItems: 'stretch', display: 'flex', flexFlow: 'row nowrap', flexGrow: 1, height: '100%', justifyContent: 'space-between' }}>
+              <LeftMenu experiment={experiment}
+                        minWidth={LEFT_MENU_MIN_WIDTH}
+                        expLoading={loading}
+              />
+              <VideoBox experiment={experiment}
+                        maxWidth={width - LEFT_MENU_MIN_WIDTH}
+                        expLoading={loading}
+                        mainHeight={height}
+                        fullHeight={!showTimeLine}
+              />
+            </div>
+          </div>
+          { /* Lower section */ }
+          <div style={{ height: showTimeLine ? '24%' : '0%', background: theme.palette.primary1Color }}>
+            <TimeLine project={project} experiment={experiment} expLoading={loading} visible={showTimeLine}/>
           </div>
         </div>
-        { /* Lower section */ }
-        <div style={{ height: showTimeLine ? '24%' : '0%', background: theme.palette.primary1Color }}>
-          <TimeLine project={project} experiment={experiment} expLoading={loading} visible={showTimeLine}/>
-        </div>
-      </div>
-    )
+      )
+      return elems
+    }
   }
-  return elems
 }
 
 Experiment.contextTypes = {

@@ -32,7 +32,7 @@ function * mediaFlow (experiment, context, token) {
   try {
     const session = experiment.createSession(appName, token)
     while (true) {
-      if (mediaLoopTask) cancel(mediaLoopTask)
+      if (mediaLoopTask) yield cancel(mediaLoopTask)
       try {
         const places = yield call([session, session.requirePlaces])
         const placesUrlMap = keyBy(wrapPlaces(places, (place) => session.buildPlaceUrl(place)), 'place')
@@ -44,7 +44,11 @@ function * mediaFlow (experiment, context, token) {
       } catch (e) {
         yield put({ type: SET_MEDIA_NODE_PLACES, payload: e, error: true, meta: { experiment } })
       } finally {
-        yield take(REFRESH_MEDIA_NODE_PLACES)
+        let shallRun = true
+        while (shallRun) {
+          const { meta } = yield take(REFRESH_MEDIA_NODE_PLACES)
+          if (meta.experiment._id === experiment._id) shallRun = false
+        }
         yield put({ type: VIDEO_CLEAR })
       }
     }
@@ -81,7 +85,7 @@ function * authFlow (context) {
   let token = null
   function * oneExpCycle () {
     if (experiment && token) {
-      if (mediaFlowTask) cancel(mediaFlowTask)
+      if (mediaFlowTask) yield cancel(mediaFlowTask)
       mediaFlowTask = yield fork(mediaFlow, experiment, context, token)
     }
     let { type, payload } = yield take([AUTH_OK, REQUIRE_EXPERIMENT_PAGE])
@@ -100,7 +104,7 @@ function * expFlow (context) {
   function * oneExpCycle () {
     const { payload } = yield take(REQUIRE_EXPERIMENT_PAGE)
     const experiment = payload
-    if (cursorFlowTask) cancel(cursorFlowTask)
+    if (cursorFlowTask) yield cancel(cursorFlowTask)
     cursorFlowTask = yield fork(cursorFlow, experiment, context)
     yield call(oneExpCycle)
   }

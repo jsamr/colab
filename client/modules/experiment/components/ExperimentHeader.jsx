@@ -35,7 +35,7 @@ const ExperimentHeader = ({ params, experiment, loading }, { t, theme }) => {
       justifyContent: 'flex-start',
       height: '100%',
       borderRadius: 3,
-      background: theme.palette.accent3Color
+      background: 'transparent'
      }}
   />
 }

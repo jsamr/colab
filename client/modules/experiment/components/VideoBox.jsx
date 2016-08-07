@@ -59,9 +59,11 @@ class VideoBox extends Component {
   }
 
   handleWidthUpdate (width) {
-    this.setState({
-      preferredWidth: width
-    })
+    setTimeout(() => {
+      this.setState({
+        preferredWidth: width
+      })
+    }, 0)
   }
 
   renderPlayer () {

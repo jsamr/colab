@@ -1,3 +1,4 @@
+import { CANCEL } from 'redux-saga'
 import { getConfig } from '/imports/api/Config'
 import { asyncGet } from './async'
 import isString from 'lodash/isString'
@@ -27,10 +28,11 @@ class Session {
    * @return {Promise} Accepted value is a list of spots, rejected value is a string describing the error.
    */
   requirePlaces () {
-    return new Promise((resolve, reject) => {
+    let xhr = null
+    const promise = new Promise((resolve, reject) => {
       const a = this.application
       const t = this.token
-      asyncGet(this.buildRequesPlacesUrl(), { params: { a, t } })
+      asyncGet(this.buildRequesPlacesUrl(), { params: { a, t }, beforeSend: (aXhr) => xhr = aXhr })
         .then((result) => {
           const data = result.data
           if (isString(data)) {
@@ -49,6 +51,10 @@ class Session {
           reject(this.placesError)
         })
     })
+    promise[CANCEL] = () => {
+      xhr && xhr.abort()
+    }
+    return promise
   }
 
   /**

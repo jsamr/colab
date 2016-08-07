@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import DefaultPageRoot from './DefaultPageRoot'
 
 const BigFeedback = ({message, children, style, Icon, color}) => (
-  <DefaultPageRoot style={style}>
+  <DefaultPageRoot style={{ background: 'transparent', ...style }}>
     <div>
       <h1 style={{ textAlign: 'center' }}><Icon style={{ width: 100, height: 100, color }} /></h1>
       <h1 style={{ textAlign: 'center' }}>{message}</h1>
