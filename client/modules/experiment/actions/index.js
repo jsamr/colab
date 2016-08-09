@@ -1,113 +1,50 @@
 import {
-  REQUIRE_EXPERIMENT_PAGE,
-  SELECT_TIME_MODE,
-  TIME_LINE_ADD_ANNOTATION,
-  REFRESH_MEDIA_NODE_PLACES,
-  TIME_LINE_SET_ANNOTATIONS_VISIBILITY,
-  TIME_LINE_SET_TASKS_VISIBILITY,
-  TIME_LINE_SET_ZOOM,
-  TIME_LINE_SET_TASKS_TYPE,
-  TIME_LINE_SET_VISIBILITY,
-  TIME_LINE_SET_CURSOR,
-  SELECT_SOURCE,
-  MENU_SET_TAB
-} from './actionsTypes'
+  requireExperimentPage,
+  selectTimeMode,
+  setTimeLineAnnotationVisibility,
+  setTimeLineTasksVisibilty,
+  setTimeLineZoom,
+  setTimeLineTasksType,
+  requestMediaNodePlacesRefresh,
+  setTimeLineVisibility,
+  setTimeLineCursor,
+  setMenuTab,
+  selectSource
+} from './actionsCreators'
 
 const experiments = {
   requireExpPage ({ Store }, experiment) {
-    Store.dispatch({
-      type: REQUIRE_EXPERIMENT_PAGE,
-      payload: experiment
-    })
+    Store.dispatch(requireExperimentPage(experiment))
   },
   selectTimeMode ({ Store }, timeMode, experiment) {
-    Store.dispatch({
-      type: SELECT_TIME_MODE,
-      payload: {
-        timeMode,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(selectTimeMode(timeMode, experiment))
   },
   setTimeLineAnnotationsVisibility ({ Store }, visibility, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_ANNOTATIONS_VISIBILITY,
-      payload: {
-        displayAnnotations: visibility,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineAnnotationVisibility(visibility, experiment))
   },
   setTimeLineTasksVisibility ({ Store }, visibility, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_TASKS_VISIBILITY,
-      payload: {
-        displayTasks: visibility,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineTasksVisibilty(visibility, experiment))
   },
   setTimeLineZoom ({ Store }, zoom, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_ZOOM,
-      payload: {
-        zoom,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineZoom(zoom, experiment))
   },
   setTasksType ({ Store }, taskType, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_TASKS_TYPE,
-      payload: {
-        taskType,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineTasksType(taskType, experiment))
   },
   setTimeLineVisibility ({ Store }, visibility, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_VISIBILITY,
-      payload: {
-        timeLineVisible: visibility,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineVisibility(visibility, experiment))
   },
   setTimeLineCursor ({ Store }, cursor, experiment) {
-    Store.dispatch({
-      type: TIME_LINE_SET_CURSOR,
-      payload: {
-        cursor: cursor,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setTimeLineCursor(cursor, experiment))
   },
   selectMenuTab ({ Store }, menuTab, experiment) {
-    Store.dispatch({
-      type: MENU_SET_TAB,
-      payload: {
-        menuTab,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(setMenuTab(menuTab, experiment))
   },
   selectSource ({ Store }, source, experiment) {
-    Store.dispatch({
-      type: SELECT_SOURCE,
-      payload: {
-        source,
-        _id: experiment._id
-      }
-    })
+    Store.dispatch(selectSource(source, experiment))
   },
   refreshSources ({ Store }, experiment) {
-    Store.dispatch({
-      type: REFRESH_MEDIA_NODE_PLACES,
-      meta: {
-        experiment
-      }
-    })
+    Store.dispatch(requestMediaNodePlacesRefresh(experiment))
   }
 }
 

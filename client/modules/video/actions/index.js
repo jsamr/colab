@@ -1,48 +1,30 @@
 import {
-  AUTO_UPDATE_PLAYER_LOAD_STATUS,
-  AUTO_UPDATE_PLAYER_DURATION,
-  SET_PLAYER_PLAYING_STATE,
-  USER_SET_PLAYER_CURSOR,
-  SET_VOLUME_LEVEL,
-  VIDEO_LOAD_URL
-} from './actionsTypes'
+  reportUpdatePlayerLoadStatus,
+  reportUpdatePlayerDuration,
+  requestVideoLoadUrl,
+  setPlayingState,
+  setVolumeLevel,
+  setPlayerCursor
+} from './actionsCreators'
 
 const video = {
-  autoUpdatePlayerLoadStatus ({ Store }, newValue) {
-    Store.dispatch({
-      type: AUTO_UPDATE_PLAYER_LOAD_STATUS,
-      payload: newValue
-    })
+  autoUpdatePlayerLoadStatus ({ Store }, loadStatus) {
+    Store.dispatch(reportUpdatePlayerLoadStatus(loadStatus))
   },
   autoUpdatePlayerDuration ({ Store }, duration) {
-    Store.dispatch({
-      type: AUTO_UPDATE_PLAYER_DURATION,
-      payload: duration
-    })
+    Store.dispatch(reportUpdatePlayerDuration(duration))
   },
-  userSelectPlayerCursor ({ Store }, newValue) {
-    Store.dispatch({
-      type: USER_SET_PLAYER_CURSOR,
-      payload: newValue
-    })
+  userSelectPlayerCursor ({ Store }, cursor) {
+    Store.dispatch(setPlayerCursor(cursor))
   },
   setPlayingState ({ Store }, playingState) {
-    Store.dispatch({
-      type: SET_PLAYER_PLAYING_STATE,
-      payload: playingState
-    })
+    Store.dispatch(setPlayingState(playingState))
   },
   setVolumeLevel ({ Store }, volumeLevel) {
-    Store.dispatch({
-      type: SET_VOLUME_LEVEL,
-      payload: volumeLevel
-    })
+    Store.dispatch(setVolumeLevel(volumeLevel))
   },
   loadSourceUrl ({ Store }, url) {
-    Store.dispatch({
-      type: VIDEO_LOAD_URL,
-      payload: url
-    })
+    Store.dispatch(requestVideoLoadUrl(url))
   }
 }
 

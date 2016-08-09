@@ -38,6 +38,22 @@ const BOX_STYLE_BASE = {
 @autobind
 class VideoBox extends Component {
 
+  static propTypes = {
+    expLoading: PropTypes.bool.isRequired,
+    maxWidth: PropTypes.number.isRequired,
+    isPlaying: PropTypes.bool.isRequired,
+    places: PropTypes.array,
+    mainHeight: PropTypes.number,
+    fullHeight: PropTypes.bool,
+    experiment: PropTypes.object
+  }
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
+    t: PropTypes.func.isRequired,
+    CONF: PropTypes.object.isRequired
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -128,22 +144,6 @@ class VideoBox extends Component {
       </div>
     )
   }
-}
-
-VideoBox.propTypes = {
-  expLoading: PropTypes.bool.isRequired,
-  maxWidth: PropTypes.number.isRequired,
-  isPlaying: PropTypes.bool.isRequired,
-  places: PropTypes.array,
-  mainHeight: PropTypes.number,
-  fullHeight: PropTypes.bool,
-  experiment: PropTypes.object
-}
-
-VideoBox.contextTypes = {
-  theme: PropTypes.object.isRequired,
-  t: PropTypes.func.isRequired,
-  CONF: PropTypes.object.isRequired
 }
 
 export default VideoBox

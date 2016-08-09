@@ -1,5 +1,7 @@
-import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE } from './actions/actionTypes.js'
+import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE } from './actions/actionsTypes.js'
+import { handleActions } from 'redux-actions'
 import merge from 'lodash/merge'
+
 const defaultState = {
   height: 0,
   width: 0,
@@ -8,13 +10,11 @@ const defaultState = {
   topBarHeight: 64
 }
 
-export function window (state = defaultState, { height, width, type }) {
-  switch (type) {
-    case WINDOW_HEIGHT_UPDATE:
-      return merge({}, state, { height: height, mainHeight: height - state.topBarHeight })
-    case WINDOW_WIDTH_UPDATE:
-      return merge({}, state, { width: width })
-    default:
-      return state
-  }
+const window = handleActions({
+  [WINDOW_HEIGHT_UPDATE]: (state, { payload }) => merge({}, state, { height: payload, mainHeight: payload - state.topBarHeight }),
+  [WINDOW_WIDTH_UPDATE]: (state, { payload }) => merge({}, state, { width: payload })
+}, defaultState)
+
+export {
+  window
 }

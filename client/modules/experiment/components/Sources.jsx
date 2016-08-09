@@ -1,12 +1,14 @@
 import React, { PropTypes, Component } from 'react'
 import autobind from 'autobind-decorator'
 import SimpleLoading from '/imports/ui/SimpleLoading'
-import { ListItem } from 'material-ui/List'
 import SelectableList from '/imports/ui/SelectableList'
+import { ListItem } from 'material-ui/List'
 import FontIcon from 'material-ui/FontIcon'
 import NotFound from '/imports/ui/NotFound'
 import RaisedButton from 'material-ui/RaisedButton'
 import { fColumnNoWrap } from '/imports/styles'
+import Subheader from 'material-ui/Subheader'
+import Caption from './Caption'
 
 const style = {
   height: '100%',
@@ -18,8 +20,19 @@ const style = {
 @autobind
 class Sources extends Component {
 
-  constructor (props) {
-    super(props)
+  static displayName = 'Sources'
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired
+  }
+
+  static propTypes = {
+    experiment: PropTypes.object.isRequired,
+    selectSource: PropTypes.func.isRequired,
+    refreshSources: PropTypes.func.isRequired,
+    places: PropTypes.array,
+    source: PropTypes.string,
+    placesError: PropTypes.string
   }
 
   selectSource (source) {
@@ -44,24 +57,30 @@ class Sources extends Component {
     )
   }
 
+  static renderPlaceRow (caption) {
+    {/*return <ListItem value={caption.place} key={caption.place}>{caption.place}</ListItem>*/}
+    return <Caption value={caption.place} key={caption.place} caption={caption} />
+  }
+
   renderError () {
     const { placesError } = this.props
+    console.info('PLACES ERROR', placesError)
     return <NotFound message={placesError} style={style}>{this.renderRefreshButton()}</NotFound>
   }
 
   renderSources () {
     const { places, source } = this.props
-    const lines = places.map(({ place }) => {
-      return (<ListItem value={place} key={place} leftIcon={<FontIcon className='mdi mdi-video'/>} primaryText={place} />)
-    })
+    const { t } = this.context
+    const lines = places.map(Sources.renderPlaceRow)
     return (
       <SelectableList value={source} style={style} onChange={this.selectSource}>
+        <Subheader>{t('experiment.caption-points')}</Subheader>
         {lines}
       </SelectableList>
     )
   }
 
-  renderLoading() {
+  static renderLoading () {
     return <SimpleLoading style={style} />
   }
 
@@ -69,7 +88,7 @@ class Sources extends Component {
     const { places, placesError } = this.props
     const loading = places == null && placesError == null
     let body = null
-    if (loading) body = this.renderLoading()
+    if (loading) body = Sources.renderLoading()
     else if (placesError) body = this.renderError()
     else body = this.renderSources()
     return (
@@ -79,18 +98,6 @@ class Sources extends Component {
       </div>
     )
   }
-}
-
-Sources.propTypes = {
-  experiment: PropTypes.object.isRequired,
-  selectSource: PropTypes.func.isRequired,
-  refreshSources: PropTypes.func.isRequired,
-  places: PropTypes.array,
-  source: PropTypes.string
-}
-
-Sources.contextTypes = {
-  t: PropTypes.func.isRequired
 }
 
 export default Sources

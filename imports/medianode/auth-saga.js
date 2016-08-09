@@ -3,14 +3,15 @@ import { delay } from 'redux-saga'
 import { asyncPost } from './async'
 import MediaNodeConfig from './MediaNodeConfig'
 import errors from './server-errors'
-import { AUTH_FAIL, AUTH_OK, AUTH, RESET, REQUEST_AUTO_AUTH } from './actions'
+import { AUTH_FAIL, AUTH_OK, AUTH, RESET, REQUEST_AUTO_AUTH } from './actionsTypes'
+import { requestAuth, reportAuthOk, reportAuthFail, requestAutoAuth } from './actionCreators'
 /**
  * Automatically re-authenticate user to media-node server before token expires.
  * @param {Number} seconds, seconds after which an auth request will be triggered
  */
 function * autoReAuth (seconds) {
   yield delay((seconds) * 1000)
-  yield put({ type: REQUEST_AUTO_AUTH })
+  yield put(requestAutoAuth())
 }
 
 /**
@@ -29,7 +30,7 @@ export function * authenticateWithCredentials (conf) {
     conf.token = { value: data.token, epoch_s: data.epoch_s }
     // TODO use a composer instead
     yield delay(1000)
-    yield put({ type: AUTH_OK, payload: data.token })
+    yield put(reportAuthOk(data.token))
   } catch (error) {
     console.error(error)
     // TODO use a composer instead
@@ -39,7 +40,7 @@ export function * authenticateWithCredentials (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put({ type: AUTH_FAIL, payload: standardError })
+    yield put(reportAuthFail(standardError))
   }
 }
 
@@ -56,7 +57,7 @@ export function * authenticateWithToken (conf) {
       }
     })
     yield result
-    yield put({ type: AUTH_OK })
+    yield put(reportAuthOk())
   } catch (error) {
     console.error(error)
     let standardError = errors.SERVER_OFFLINE
@@ -64,7 +65,7 @@ export function * authenticateWithToken (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put({ type: AUTH_FAIL, payload: standardError })
+    yield put(reportAuthFail(standardError))
   }
 }
 
@@ -102,7 +103,7 @@ export function * authFlow (conf) {
         yield cancel(authTask)
         break
       case REQUEST_AUTO_AUTH:
-        yield put({ type: AUTH })
+        yield put(requestAuth())
         break
     }
   }

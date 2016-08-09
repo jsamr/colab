@@ -1,6 +1,6 @@
 import merge from 'lodash/merge'
 
-import { RESET, AUTH, AUTH_FAIL, AUTH_OK } from './actions'
+import { RESET, AUTH, AUTH_FAIL, AUTH_OK } from './actionsTypes'
 
 function getDefaultState () {
   return {

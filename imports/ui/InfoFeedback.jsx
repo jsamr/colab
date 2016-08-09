@@ -6,10 +6,6 @@ const InfoFeedback = ({...props}, { theme }) => (
   <BigFeedback Icon={Info} color={theme.palette.infoColor} {...props} />
 )
 
-InfoFeedback.propTypes = {
-  message: PropTypes.node.isRequired
-}
-
 InfoFeedback.contextTypes = {
   theme: PropTypes.object.isRequired
 }

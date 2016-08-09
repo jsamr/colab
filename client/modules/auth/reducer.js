@@ -1,21 +1,14 @@
-import { LOGIN, LOGOUT, UPDATE_PROFILE } from './actions/actionTypes'
+import { LOGIN, LOGOUT, UPDATE_PROFILE } from './actions/actionsTypes'
+import { handleActions } from 'redux-actions'
 
-function getDefaultState () {
-  return {
-    // instance of CurrentUser
-    user: null,
-    id: null
-  }
-}
+const getDefaultState = () => ({ user: null, id: null })
 
-export function auth (state = getDefaultState(), action) {
-  switch (action.type) {
-    case UPDATE_PROFILE: return { ...state, ...action.payload }
-    case LOGIN:
-      return action.payload
-    case LOGOUT:
-      return getDefaultState()
-    default:
-      return state
-  }
+const auth = handleActions({
+  [UPDATE_PROFILE]: (state, { payload }) => ({ ...state, ...payload }),
+  [LOGIN]: (state, { payload }) => payload,
+  [LOGOUT]: getDefaultState
+}, getDefaultState())
+
+export {
+  auth
 }

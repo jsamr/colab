@@ -3,14 +3,17 @@ import { MakeSelectable, List } from 'material-ui/List'
 
 let SelectableList = MakeSelectable(List)
 
-function wrapState(ComposedComponent) {
+function wrapState (ComposedComponent) {
 
-  return class SelectableList extends Component {
+  return class extends Component {
+
+    static displayName = 'SelectableList'
 
     static propTypes = {
       children: PropTypes.node.isRequired,
       onChange: PropTypes.func,
-      value: PropTypes.any
+      value: PropTypes.any,
+      defaultValue: PropTypes.any
     }
 
     componentWillMount () {
@@ -24,7 +27,6 @@ function wrapState(ComposedComponent) {
       this.setState({
         selectedIndex: index
       })
-      console.info('INDEX IS : ', index)
       if (onChange) onChange(index)
     }
 

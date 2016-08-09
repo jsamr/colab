@@ -1,11 +1,11 @@
 import { put, call, take, fork, cancel, select } from 'redux-saga/effects'
 import { REQUIRE_EXPERIMENT_PAGE, TIME_LINE_SET_CURSOR, SET_MEDIA_NODE_PLACES, SELECT_SOURCE, REFRESH_MEDIA_NODE_PLACES } from '../actions/actionsTypes'
-import { AUTO_UPDATE_PLAYER_LOAD_STATUS, VIDEO_LOAD_URL, VIDEO_CLEAR } from '../../video/actions/actionsTypes'
-import { AUTH_OK, AUTH_FAIL, AUTH } from '/imports/medianode/actions'
+import { reportMediaNodePlaces, selectSource, setTimeLineCursor } from '../actions/actionsCreators'
+import { AUTO_UPDATE_PLAYER_LOAD_STATUS, VIDEO_LOAD_URL } from '../../video/actions/actionsTypes'
+import { requestVideoClear, requestVideoLoadUrl } from '../../video/actions/actionsCreators'
+import { AUTH_OK, AUTH_FAIL, AUTH } from '/imports/medianode/actionsTypes'
 import create from 'lodash/create'
 import keyBy from 'lodash/keyBy'
-import includes from 'lodash/includes'
-import map from 'lodash/map'
 
 function wrapPlaces (places, fetchUrl) {
   const placeProto = {
@@ -16,13 +16,11 @@ function wrapPlaces (places, fetchUrl) {
   return (places || []).map((place) => create(placeProto, place))
 }
 
-function * mediaLoop (placesUrlMap) {
-  while (true) {
-    const { payload } = yield take(SELECT_SOURCE)
-    const { source } = payload
-    const { url } = placesUrlMap[source]
-    if (url) yield put({ type: VIDEO_LOAD_URL, payload: url })
-  }
+function * selectSourceLoop (placesUrlMap) {
+  const { payload } = yield take(SELECT_SOURCE)
+  const { url } = placesUrlMap[payload]
+  if (url) yield put(requestVideoLoadUrl(url))
+  yield call(selectSourceLoop, placesUrlMap)
 }
 
 function * mediaFlow (experiment, context, token) {
@@ -36,11 +34,11 @@ function * mediaFlow (experiment, context, token) {
       try {
         const places = yield call([session, session.requirePlaces])
         const placesUrlMap = keyBy(wrapPlaces(places, (place) => session.buildPlaceUrl(place)), 'place')
-        yield put({ type: SET_MEDIA_NODE_PLACES, payload: { places }, meta: { experiment } })
+        yield put(reportMediaNodePlaces(places, experiment))
         let defaultSource = yield select(({ experiments }) => experiments[experiment._id].source)
         if (!defaultSource && places.length > 0) defaultSource = places[0].place
-        mediaLoopTask = yield fork(mediaLoop, placesUrlMap)
-        if (defaultSource) yield put({ type: SELECT_SOURCE, payload: { source: defaultSource, _id: experiment._id } })
+        mediaLoopTask = yield fork(selectSourceLoop, placesUrlMap)
+        if (defaultSource) yield put(selectSource(defaultSource, experiment))
       } catch (e) {
         yield put({ type: SET_MEDIA_NODE_PLACES, payload: e, error: true, meta: { experiment } })
       } finally {
@@ -49,12 +47,12 @@ function * mediaFlow (experiment, context, token) {
           const { meta } = yield take(REFRESH_MEDIA_NODE_PLACES)
           if (meta.experiment._id === experiment._id) shallRun = false
         }
-        yield put({ type: VIDEO_CLEAR })
+        yield put(requestVideoClear())
       }
     }
   } finally {
     // clear video information when leaving the page
-    yield put({ type: VIDEO_CLEAR })
+    yield put(requestVideoClear())
   }
 }
 
@@ -66,13 +64,7 @@ function * cursorFlow (experiment, context) {
     const { cursorSec } = payload
     if (Math.abs(cursorSec - oldCursor) > CONF.SECONDS_BETWEEN_TIME_LINE_UPDATED) {
       oldCursor = cursorSec
-      yield put({
-        type: TIME_LINE_SET_CURSOR,
-        payload: {
-          _id: experiment._id,
-          cursor: cursorSec / 60
-        }
-      })
+      yield put(setTimeLineCursor(cursorSec / 60, experiment))
     }
     yield call(oneRound)
   }
@@ -89,11 +81,8 @@ function * authFlow (context) {
       mediaFlowTask = yield fork(mediaFlow, experiment, context, token)
     }
     let { type, payload } = yield take([AUTH_OK, REQUIRE_EXPERIMENT_PAGE])
-    if (type === AUTH_OK) {
-      token = payload
-    } else {
-      experiment = payload
-    }
+    if (type === AUTH_OK) token = payload
+    else experiment = payload
     yield call(oneExpCycle)
   }
   yield call(oneExpCycle)

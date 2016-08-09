@@ -1,11 +1,14 @@
-import { LOGIN, LOGOUT, UPDATE_PROFILE } from './actionTypes'
+import {
+  reportLogin,
+  reportProfileUpdate
+} from './actionsCreators'
 
 function login ({ Store }, value) {
-  Store.dispatch({ type: LOGIN, payload: value })
+  Store.dispatch(reportLogin(value))
 }
 
 function update ({ Store }, user) {
-  Store.dispatch({ type: UPDATE_PROFILE, payload: { user, _id: user && user._id } })
+  Store.dispatch(reportProfileUpdate(user))
 }
 
 function logout ({ Meteor }) {

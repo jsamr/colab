@@ -1,17 +1,17 @@
-import { WINDOW_HEIGHT_UPDATE, WINDOW_WIDTH_UPDATE, NOTIFY_SUBSCRIPTION_READY } from './actionTypes'
+import { reportUpdateWidth, reportUpdateHeight, reportSubscriptionReady } from './actionsCreators'
 
 const window = {
   setHeight ({ Store }, height) {
-    Store.dispatch({ type: WINDOW_HEIGHT_UPDATE, height })
+    Store.dispatch(reportUpdateHeight(height))
   },
   setWidth ({ Store }, width) {
-    Store.dispatch({ type: WINDOW_WIDTH_UPDATE, width })
+    Store.dispatch(reportUpdateWidth(width))
   }
 }
 
 const sub = {
   notifyReady ({ Store }) {
-    Store.dispatch({ type: NOTIFY_SUBSCRIPTION_READY })
+    Store.dispatch(reportSubscriptionReady())
   }
 }
 

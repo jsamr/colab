@@ -1,7 +1,6 @@
-import * as actions from './actions'
+import * as actions from './actionsTypes'
 import mediaNodeReducer from './reducer'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
-import { authenticateWithCredentials } from './auth-saga'
 import rootSaga from './saga'
 import { expect } from 'meteor/practicalmeteor:chai'
 import each from 'lodash/each'

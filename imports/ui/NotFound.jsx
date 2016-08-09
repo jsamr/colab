@@ -6,10 +6,6 @@ const NotFound = ({...props}, { theme }) => (
   <BigFeedback Icon={Warning} color={theme.palette.warningColor} {...props} />
 )
 
-NotFound.propTypes = {
-  message: PropTypes.node.isRequired
-}
-
 NotFound.contextTypes = {
   theme: PropTypes.object.isRequired
 }

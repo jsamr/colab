@@ -1,5 +1,5 @@
 import { put, call, take } from 'redux-saga/effects'
-import { LOGIN, LOGOUT, UPDATE_PROFILE } from '../actions/actionTypes'
+import { LOGIN, LOGOUT, UPDATE_PROFILE } from '../actions/actionsTypes'
 
 function * authFlow () {
   function * oneRound () {

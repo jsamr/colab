@@ -14,7 +14,7 @@ const BigFeedback = ({message, children, style, Icon, color}) => (
 )
 
 BigFeedback.propTypes = {
-  message: PropTypes.node.isRequired,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   color: PropTypes.string.isRequired,
   Icon: PropTypes.func.isRequired
 }

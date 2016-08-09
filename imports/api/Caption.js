@@ -11,7 +11,12 @@ const Caption = Serrurier.createClass({
     update: true,
     remove: true
   },
-  fields: {},
+  fields: {
+    expId: String,
+    place: String,
+    offset_rm: Number,
+    class: String
+  },
   behaviors: {
     softremove: {
       removedFieldName: '_removed'

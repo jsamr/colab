@@ -1,9 +1,9 @@
-import * as actionTypes from '/imports/medianode/actions'
+import * as actionTypes from '/imports/medianode/actionsTypes'
 import * as reducer from '/imports/medianode/reducer'
 import medianodeSaga from '/imports/medianode/saga'
 import ColabMediaConf from './libs/ColabMediaConf'
-import { LOGOUT } from '../auth/actions/actionTypes'
-import { START_MEDIA_NODE_AUTH } from '../core/actions/actionTypes'
+import { LOGOUT } from '../auth/actions/actionsTypes'
+import { START_MEDIA_NODE_AUTH } from '../core/actions/actionsTypes'
 
 export default {
   actionTypes,
