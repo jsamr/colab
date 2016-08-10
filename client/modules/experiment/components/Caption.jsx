@@ -47,19 +47,37 @@ class Caption extends ListItem {
     return <FontIcon color={theme.palette.infoColor} className='mdi mdi-information'/>
   }
 
-  renderError () {
+  renderWarning () {
     const { theme } = this.context
     return <Warning color={theme.palette.warningColor} />
   }
 
-  renderPlaceFeedback (error, comments, show) {
-    const info = comments ? this.renderInfo(comments) : null
-    const warn = error ? this.renderError(error) : null
-    return <div style={{ display: 'flex', opacity: show ? 1 : 0.5, ...transitionFast }}>{warn}{info}</div>
+  renderSoundQ (soundQ) {
+    const { theme } = this.context
+    return <FontIcon color={ soundQ ? theme.palette.successColor : theme.palette.failureColor }
+                     className={`mdi ${ soundQ ? 'mdi-volume-high' : 'mdi-volume-off' }`} />
+  }
+
+  renderError () {
+    const { theme } = this.context
+    return <Warning color={theme.palette.failureColor} />
+  }
+
+  renderPlaceFeedback ({ error, comments, warning, soundQ = 3 }, show) {
+    const infoComponent = comments ? this.renderInfo(comments) : null
+    const errorComponent = error ? this.renderError(error) : null
+    const warningComponent = warning ? this.renderWarning() : null
+    const soundQComponent = this.renderSoundQ(soundQ)
+    return <div style={{ display: 'flex', flexBasis: 120, justifyContent: 'space-between', opacity: show ? 0.6 : 0.3, ...transitionFast }}>
+      {soundQComponent}
+      {errorComponent}
+      {warningComponent}
+      {infoComponent}
+      </div>
   }
 
   renderFeedback (meta) {
-    const { error, comments } = meta
+    const { error, warning, comments } = meta
     const errorLine = error ? (
       <div style={{  }}>
         {this.renderError()}
@@ -72,9 +90,16 @@ class Caption extends ListItem {
         {comments}
       </div>
     ) : null
+    const warningLine = warning ? (
+      <div style={{  }}>
+        {this.renderWarning()}
+        {warning}
+      </div>
+    ) : null
     return (
       <div>
         {errorLine}
+        {warningLine}
         {commentsLine}
       </div>
     )
@@ -97,7 +122,7 @@ class Caption extends ListItem {
         >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>{place}</span>
-            {this.renderPlaceFeedback(error, comments, !showFeedback)}
+            {this.renderPlaceFeedback(meta, !showFeedback)}
           </div>
         </ListItem>
         <FastHover style={{ opacity: showFeedback ? 1 : 0, ...transitionFast, zIndex: 1000 }}>

@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import ExperimentState from './ExperimentState'
-import SimpleLoading from '/imports/ui/SimpleLoading'
 import LoadableComponent from './LoadableComponent'
 import Toolbar, { ToolbarGroup, ToolbarSeparator } from 'material-ui/'
 import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
@@ -30,10 +29,9 @@ const ExperimentHeader = ({ params, experiment, loading }, { t, theme }) => {
     container={Toolbar}
     style={{
       display: 'flex',
-      marginLeft: 30,
       alignItems: 'center',
-      justifyContent: 'flex-start',
-      height: '100%',
+      justifyContent: 'center',
+      height: 48,
       borderRadius: 3,
       background: 'transparent'
      }}

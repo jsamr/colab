@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
 import Sources from '../containers/Sources'
 import TabTemplate from '/imports/ui/TabTemplate'
 
-const ExperimentMenu = ({ experiment, selectedMenuTab, selectMenuTab }, { t }) => {
+const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t }) => {
   const tabsDefinition = [
     { value: 'infos', icon: 'fa fa-info', content: <span>INFO TAB</span> },
     { value: 'sources', icon: 'mdi mdi-video', content: <Sources experiment={experiment} /> },
@@ -22,7 +21,7 @@ const ExperimentMenu = ({ experiment, selectedMenuTab, selectMenuTab }, { t }) =
             if (typeof newValue === 'string') {
               selectMenuTab(newValue)
             }
-        }}>
+          }}>
       {tabsDefinition.map(({ value, icon, content }) => (
         <Tab key={value} icon={<FontIcon className={icon}/>} label={t(`experiment.${value}`)} value={value} >
           {content}
@@ -33,9 +32,9 @@ const ExperimentMenu = ({ experiment, selectedMenuTab, selectMenuTab }, { t }) =
 }
 
 ExperimentMenu.propTypes = {
-  experiment: PropTypes.object.isRequired,
   selectedMenuTab: PropTypes.oneOf(['infos', 'sources', 'tasks', 'collaboration']).isRequired,
-  selectMenuTab: PropTypes.func.isRequired
+  selectMenuTab: PropTypes.func.isRequired,
+  experiment: PropTypes.object.isRequired
 }
 
 ExperimentMenu.contextTypes = {

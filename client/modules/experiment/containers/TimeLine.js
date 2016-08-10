@@ -1,7 +1,6 @@
 import TimeLine from '../components/TimeLine'
 import { composeWithTracker, composeAll } from 'react-komposer'
 import { useDeps } from 'mantra-core'
-import { connect } from 'react-redux'
 import Annotation from '/imports/api/Annotation'
 import Task from '/imports/api/Task'
 

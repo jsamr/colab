@@ -3,7 +3,8 @@ import MainWrapper from './MainWrapper'
 import React, { Component, PropTypes } from 'react'
 import includes from 'lodash/includes'
 import LoginForm from '../../auth/components/LoginForm'
-import Paper  from 'material-ui/Paper'
+
+const TOPBAR_BASE_HEIGHT = 64
 
 class App extends Component {
 
@@ -25,7 +26,7 @@ class App extends Component {
     const inner = !isLoggedIn && !isLoggingIn ? this.createLoginFallback() : this.props.content
     return (
       <div className='application' >
-        <TopBar height={this.props.topBarHeight} pageTitle={this.props.pageTitle} />
+        <TopBar pageTitle={this.props.pageTitle} />
         <MainWrapper
           className='page'
           style={{ minHeight: this.props.mainHeight,

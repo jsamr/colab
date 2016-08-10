@@ -19,7 +19,8 @@ ToggleTimeLine.contextTypes = {
 ToggleTimeLine.propTypes = {
   timeLineVisible: PropTypes.bool.isRequired,
   setTimeLineVisibility: PropTypes.func.isRequired,
-  experiment: PropTypes.object.isRequired
+  experiment: PropTypes.object.isRequired,
+  height: PropTypes.number.isRequired
 }
 
 export default ToggleTimeLine

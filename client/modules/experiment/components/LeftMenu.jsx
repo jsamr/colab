@@ -41,7 +41,8 @@ const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme }) 
 LeftMenu.propTypes = {
   expLoading: PropTypes.bool.isRequired,
   minWidth: PropTypes.number,
-  experiment: PropTypes.object
+  experiment: PropTypes.object,
+  style: PropTypes.object
 }
 
 LeftMenu.contextTypes = {

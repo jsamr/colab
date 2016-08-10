@@ -23,6 +23,7 @@ const Arrow = ({ arrowSize, arrowColor, style }) => (
     ...style
   }} />
 )
+
 Arrow.propTypes = {
   arrowSize: PropTypes.number.isRequired,
   arrowColor: PropTypes.string.isRequired,
@@ -42,7 +43,7 @@ const FastHover = ({ children, background = 'white', arrowSize = 10,  style }) =
 )
 
 FastHover.propTypes = {
-  children: PropTypes.nodes,
+  children: PropTypes.node,
   background: PropTypes.string,
   style: PropTypes.object,
   arrowSize: PropTypes.number

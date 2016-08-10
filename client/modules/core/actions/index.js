@@ -1,4 +1,4 @@
-import { reportUpdateWidth, reportUpdateHeight, reportSubscriptionReady } from './actionsCreators'
+import { reportUpdateWidth, reportUpdateHeight, reportSubscriptionReady, reportTopBarHeightUpdate } from './actionsCreators'
 
 const window = {
   setHeight ({ Store }, height) {
@@ -6,6 +6,9 @@ const window = {
   },
   setWidth ({ Store }, width) {
     Store.dispatch(reportUpdateWidth(width))
+  },
+  setTopBarHeight ({ Store }, height) {
+    Store.dispatch(reportTopBarHeightUpdate(height))
   }
 }
 

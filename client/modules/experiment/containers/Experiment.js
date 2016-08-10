@@ -4,6 +4,8 @@ import { useDeps } from 'mantra-core'
 import { connect } from 'react-redux'
 import Exp from '/imports/api/Exp'
 import Project from '/imports/api/Project'
+import provideCaptions from './provideCaptions'
+
 
 function trackExperiment ({ context, params, actions, shouldRequire }, onData) {
   let { Meteor } = context()
@@ -34,7 +36,7 @@ export default composeAll(
   composeWithTracker(trackExperiment),
   useDeps(),
   compose((props, onData) => onData(null, { shouldRequire: true }))
-)(Experiment)
+)(provideCaptions(Experiment))
 
 export {
   trackExperiment

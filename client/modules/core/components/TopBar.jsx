@@ -1,10 +1,10 @@
 import AppBar from 'material-ui/AppBar'
-import React, { PropTypes } from 'react'
-import { ToolbarGroup } from 'material-ui/Toolbar'
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+import React, { PropTypes, Component } from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import Badge from 'material-ui/Badge'
 import IconButton from 'material-ui/IconButton'
+import { HeightSizer } from '/imports/ui/Sizer'
+
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Status from '../../medianode/containers/Status'
 
@@ -25,28 +25,45 @@ const makeToolbar = (props, { t, nav, ROUTES }) => (
   </div>
 )
 
-const TopBar = (props, context) => {
-  const title = (
-    <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-      <span style={{ fontSize: 12, fontFamily: 'monospace', marginTop: 'auto', height: 'auto', fontWeight: 'bold' }}>
-        {`v ${context.VERSION}`}
-      </span>
-      <div style={{ flexGrow: 1, flexShrink: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '70%' }}>
-        {props.pageTitle}
+class TopBar extends Component {
+
+  componentWillReceiveProps ({ size }) {
+    const { onHeightUpdate } = this.props
+    if (size.height !== this.props.size.height && onHeightUpdate) {
+      onHeightUpdate(size.height)
+    }
+  }
+
+  render () {
+    const { preferredHeight, pageTitle, user } = this.props
+    const context = this.context
+    const title = (
+      <div style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
+        <div style={{ flexGrow: 1, flexShrink: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', maxHeight: preferredHeight, height: preferredHeight }}>
+          {pageTitle}
+        </div>
       </div>
-    </div>
-  )
-  return (
-    <AppBar
-      style={{ position: 'fixed', top: 0, height: props.height }}
-      title={title}
-      titleStyle={{ lineHeight: 'auto', flexGrow: 10, flexShrink: 1 }}
-      iconStyleLeft={{ marginTop: 0 }}
-      iconStyleRight={{ margin: 0,  justifyContent: 'center', flexGrow: 1 }}
-      iconElementLeft={<img src='/colab-full.svg' style={{ height: props.height }}/>}
-      iconElementRight={props.user ? makeToolbar(props, context) : null}
-    />
-  )
+    )
+    const iconLeft = (
+      <div style={{ maxHeight: preferredHeight }}>
+        <img src='/colab-full.svg' style={{ height: preferredHeight }}/>
+        <span style={{ fontSize: 12, fontFamily: 'monospace', marginTop: 'auto', height: 'auto', fontWeight: 'bold' }}>
+        {`v ${context.VERSION}`}
+    </span>
+      </div>
+    )
+    return (
+      <AppBar
+        style={{ position: 'fixed', top: 0, minHeight: preferredHeight, paddingLeft: 0, paddingRight: 0, justifyContent: 'center', flexWrap: 'wrap' }}
+        title={title}
+        titleStyle={{ lineHeight: 'auto', flexGrow: 10, flexShrink: 1, minWidth: '-webkit-min-content', display: 'flex', justifyContent: 'center' }}
+        iconStyleLeft={{ marginTop: 0, marginLeft: 0, marginRight: 0 }}
+        iconStyleRight={{ margin: 0, justifyContent: 'center', flexGrow: 1 }}
+        iconElementLeft={iconLeft}
+        iconElementRight={user ? makeToolbar(this.props, context) : null}
+      />
+    )
+  }
 }
 
 TopBar.contextTypes = {
@@ -57,9 +74,14 @@ TopBar.contextTypes = {
 }
 
 TopBar.propTypes = {
+  onHeightUpdate: PropTypes.func,
+  size: PropTypes.shape({
+    height: PropTypes.number.isRequired
+  }),
+  preferredHeight: PropTypes.number.isRequired,
   user: PropTypes.object,
   pageTitle: PropTypes.node,
   logout: PropTypes.func.isRequired
 }
 
-export default TopBar
+export default HeightSizer(TopBar)

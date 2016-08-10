@@ -7,7 +7,7 @@ function mapProps (state, { actions, experiment }) {
   const { selectMenuTab } = actions().experiments
   return {
     selectMenuTab: partialRight(selectMenuTab, experiment),
-    selectedMenuTab: state.experiments[experiment._id ].menuTab
+    selectedMenuTab: state.experiments[experiment._id].menuTab
   }
 }
 

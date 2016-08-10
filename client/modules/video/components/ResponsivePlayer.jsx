@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import ReactPlayer from 'react-player'
+import ReactPlayer  from 'react-player'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import autobind from 'autobind-decorator'
 import { transitionSlow } from '/imports/styles'
@@ -8,6 +8,29 @@ import NotFound from '/imports/ui/NotFound'
 
 @autobind
 class VideoContainer extends Component {
+
+  static propTypes = {
+    autoUpdateCursor: PropTypes.func.isRequired,
+    autoUpdateDuration: PropTypes.func.isRequired,
+    setPlayingState: PropTypes.func.isRequired,
+    isPlaying: PropTypes.bool.isRequired,
+    userCursor: PropTypes.number.isRequired,
+    volumeLevel: PropTypes.number.isRequired,
+    maxWidth: PropTypes.number.isRequired,
+    dataLoading: PropTypes.bool.isRequired,
+    mainHeight: PropTypes.number,
+    fullHeight: PropTypes.bool,
+    progressUpdateFrequency: PropTypes.number,
+    url: PropTypes.string,
+    offsetRM: PropTypes.number,
+    onLoad: PropTypes.func,
+    onWidthUpdate: PropTypes.func,
+    style: PropTypes.object
+  }
+
+  static contextTypes = {
+    t: PropTypes.func.isRequired
+  }
 
   constructor (props) {
     super(props)
@@ -34,9 +57,7 @@ class VideoContainer extends Component {
 
     if (url !== this.props.url) {
       shouldUpdate = true
-      this.setState({
-        error: null
-      })
+      newState.error = null
     }
 
     if (mainHeight !== this.props.mainHeight) {
@@ -76,10 +97,12 @@ class VideoContainer extends Component {
 
   handleOnDuration (duration) {
     const { autoUpdateDuration } = this.props
+    const { offset } = this.state
+    const realDuration = duration - offset
     this.setState({
-      duration
+      duration: realDuration
     })
-    autoUpdateDuration(duration)
+    autoUpdateDuration(realDuration)
   }
 
   handleReachEnd () {
@@ -148,8 +171,8 @@ class VideoContainer extends Component {
   }
 
   render () {
-    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, url, progressUpdateFrequency = 50 } = this.props
-    const { containerLoading, playerLoading, error } = this.state
+    const { isPlaying, volumeLevel, dataLoading, style, maxWidth, url, offsetRM, progressUpdateFrequency = 50 } = this.props
+    const { containerLoading, playerLoading, error, duration } = this.state
     const { t } = this.context
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
@@ -172,8 +195,9 @@ class VideoContainer extends Component {
             onDuration={this.handleOnDuration}
             onEnded={this.handleReachEnd}
             onError={this.handleError}
+            startOffset={offsetRM * 60}
             progressFrequency={progressUpdateFrequency}
-            className='fastTransition'
+            style={transitionSlow}
           />
         </div>
         {this.renderLoading(loading ? 'flex' : 'none')}
@@ -184,26 +208,5 @@ class VideoContainer extends Component {
 }
 
 const ResponsivePlayer = VideoContainer
-
-ResponsivePlayer.propTypes = {
-  autoUpdateCursor: PropTypes.func.isRequired,
-  autoUpdateDuration: PropTypes.func.isRequired,
-  setPlayingState: PropTypes.func.isRequired,
-  isPlaying: PropTypes.bool.isRequired,
-  userCursor: PropTypes.number.isRequired,
-  volumeLevel: PropTypes.number.isRequired,
-  maxWidth: PropTypes.number.isRequired,
-  dataLoading: PropTypes.bool.isRequired,
-  mainHeight: PropTypes.number,
-  fullHeight: PropTypes.bool,
-  progressUpdateFrequency: PropTypes.number,
-  url: PropTypes.string,
-  onLoad: PropTypes.func,
-  onWidthUpdate: PropTypes.func
-}
-
-ResponsivePlayer.contextTypes = {
-  t: PropTypes.func.isRequired
-}
 
 export default ResponsivePlayer

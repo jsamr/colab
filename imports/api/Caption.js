@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo'
 import { Serrurier } from 'meteor/svein:serrurier'
-
+import { server } from 'meteor/svein:serrurier'
 const captions = new Mongo.Collection('plugins.captions')
 
 const Caption = Serrurier.createClass({
@@ -14,7 +14,10 @@ const Caption = Serrurier.createClass({
   fields: {
     expId: String,
     place: String,
-    offset_rm: Number,
+    offset_rm: {
+      type: Number,
+      optional: true
+    },
     class: String
   },
   behaviors: {

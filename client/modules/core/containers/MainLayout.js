@@ -2,7 +2,6 @@ import MainLayout from '../components/MainLayout.jsx'
 import { useDeps } from 'mantra-core'
 import {  composeAll, composeWithTracker, compose } from 'react-komposer'
 import { getConfig } from '/imports/api/Config'
-import { connect } from 'react-redux'
 
 const mapDepsToProps = (context, { window, sub }) => ({
   setWinHeight: window.setHeight,

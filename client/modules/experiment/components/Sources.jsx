@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react'
 import autobind from 'autobind-decorator'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import SelectableList from '/imports/ui/SelectableList'
-import { ListItem } from 'material-ui/List'
 import FontIcon from 'material-ui/FontIcon'
 import NotFound from '/imports/ui/NotFound'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -27,7 +26,6 @@ class Sources extends Component {
   }
 
   static propTypes = {
-    experiment: PropTypes.object.isRequired,
     selectSource: PropTypes.func.isRequired,
     refreshSources: PropTypes.func.isRequired,
     places: PropTypes.array,
@@ -58,13 +56,11 @@ class Sources extends Component {
   }
 
   static renderPlaceRow (caption) {
-    {/*return <ListItem value={caption.place} key={caption.place}>{caption.place}</ListItem>*/}
     return <Caption value={caption.place} key={caption.place} caption={caption} />
   }
 
   renderError () {
     const { placesError } = this.props
-    console.info('PLACES ERROR', placesError)
     return <NotFound message={placesError} style={style}>{this.renderRefreshButton()}</NotFound>
   }
 

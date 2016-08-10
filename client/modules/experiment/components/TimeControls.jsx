@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
 import { fInlineAround, fInlineNoWrap, fColumnNoWrapCenter } from '/imports/styles'
-import Paper from 'material-ui/Paper'
 import ToggleAnnotations from '/imports/ui/controls/ToggleAnnotations'
 import ToggleTasks from '/imports/ui/controls/ToggleTasks'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -11,12 +9,25 @@ import autobind from 'autobind-decorator'
 
 const ControlLine = ({ children }) => <div style={{ ...fInlineAround, margin: '0 10px', flexGrow: 1 }}>{children}</div>
 
+ControlLine.propTypes = {
+  children: PropTypes.node
+}
+
 const Button = ({ children, ...props }) => <FloatingActionButton secondary={true} mini={true} {...props} >{children}</FloatingActionButton>
+
+Button.propTypes = {
+  children: PropTypes.node
+}
 
 @autobind
 class ZoomButton extends Component {
 
   static intervals = [ 0, 150, 130, 110, 100, 80, 50, 20, 10 ]
+
+  static propTypes = {
+    fontIconClass: PropTypes.string.isRequired,
+    operation: PropTypes.func.isRequired
+  }
 
   constructor (props) {
     super(props)
@@ -46,7 +57,7 @@ class ZoomButton extends Component {
   }
 
   render () {
-    const { fontIconClass, operation, ...props } = this.props
+    const { fontIconClass, operation, experiment, ...props } = this.props
     return (
       <Button
         onMouseDown={this.handleStart}
@@ -63,7 +74,7 @@ class ZoomButton extends Component {
   }
 }
 
-const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTimeLineZoom, setTimeLineTasksVisibility }) => {
+const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTimeLineZoom, setTimeLineTasksVisibility, experiment }) => {
   let { zoom, displayTasks, displayAnnotations, timeLineVisible } = controls
   return (
     <div style={{ ...fInlineNoWrap, flexBasis: 350, ...style, display: timeLineVisible ? 'flex' : 'none' }}>
@@ -77,6 +88,7 @@ const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTi
       </ControlLine>
       <ControlLine>
         <ZoomButton
+          experiment={experiment}
           disabled={zoom <= 1}
           operation={() => setTimeLineZoom(zoom - 0.1)}
           fontIconClass='fa fa-search-minus'
@@ -88,6 +100,7 @@ const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTi
           </div>
         </FlatButton>
         <ZoomButton
+          experiment={experiment}
           operation={() => setTimeLineZoom(zoom + 0.1)}
           fontIconClass='fa fa-search-plus'
         />
@@ -98,6 +111,7 @@ const TimeControls = ({ controls, style, setTimeLineAnnotationsVisibility, setTi
 }
 
 TimeControls.propTypes = {
+  style: PropTypes.object,
   controls: PropTypes.object.isRequired,
   setTimeLineAnnotationsVisibility: PropTypes.func.isRequired,
   setTimeLineZoom: PropTypes.func.isRequired,

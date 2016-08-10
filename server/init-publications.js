@@ -98,13 +98,30 @@ Meteor.publish('plugins.tasks', function (expName, projectId) {
   } else return []
 })
 
-Meteor.publish('plugins.captions', function (expName, projectId) {
+Meteor.publish('plugins.captions', function (expName, projectId, captionNames) {
   ensuresArg('Publishing `plugins.captions`, argument `expName`', expName, String)
   ensuresArg('Publishing `plugins.captions`, argument `projectId`', projectId, String)
+  ensures('Publishing `plugins.captions`, argument `captionNames` must be an array of string', captionNames, [String])
   const isUserAllowed = invoke(Project.findOne(projectId, { fields: basicPrjFields }), 'isUserMember', this.userId)
   if (isUserAllowed) {
     const exp = (Exp.findOne({ name: expName }, onlyId))
-    return Caption.find({ expId: getp(exp, '_id') })
+    const expId = getp(exp, '_id')
+    if (expId) {
+      // populate missing captions
+      captionNames.forEach((place) => Caption.upsert(
+        {
+          expId,
+          place
+        },
+        { $setOnInsert: {
+          expId,
+          offset_rm: null,
+          place,
+          class: 'tasks'
+        }
+        }))
+    }
+    return Caption.find({ expId, place: { $in: captionNames }, class: 'tasks' })
   } else return []
 })
 

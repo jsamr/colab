@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react'
-import LoadableComponent from './LoadableComponent'
 import ResponsivePlayer from '../../video/containers/ResponsivePlayer'
 import VideoControls from './VideoControls'
 import TimeIndicator from '../containers/TimeIndicator'
@@ -45,7 +44,9 @@ class VideoBox extends Component {
     places: PropTypes.array,
     mainHeight: PropTypes.number,
     fullHeight: PropTypes.bool,
-    experiment: PropTypes.object
+    experiment: PropTypes.object,
+    captions: PropTypes.object,
+    caption: PropTypes.object
   }
 
   static contextTypes = {
@@ -84,14 +85,17 @@ class VideoBox extends Component {
 
   renderPlayer () {
     const { CONF } = this.context
-    const { expLoading, mainHeight, fullHeight, maxWidth } = this.props
+    const { expLoading, mainHeight, fullHeight, maxWidth, caption } = this.props
+    const offset = caption && caption.offset_rm
+    const loading = expLoading || !caption
     return (
       <ResponsivePlayer
         progressUpdateFrequency={CONF.VIDEO_PROGRESS_UPDATE_FREQUENCY}
-        dataLoading={expLoading}
+        dataLoading={loading}
         maxWidth={maxWidth}
         mainHeight={mainHeight}
         fullHeight={fullHeight}
+        offset={offset}
         onWidthUpdate={this.handleWidthUpdate}
       />
     )

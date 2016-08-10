@@ -1,19 +1,30 @@
 import React, { PropTypes, Component } from 'react'
-import SimpleLoading from '/imports/ui/SimpleLoading'
-import DefaultPageRoot from '/imports/ui/DefaultPageRoot'
 import LeftMenu from './LeftMenu'
 import VideoBox from '../containers/VideoBox'
-import VideoControls from './VideoControls'
 import TimeLine from '../containers/TimeLine'
 import NotFound from '/imports/ui/NotFound'
-
 import { fColumnNoWrap, transitionFast } from '/imports/styles'
+
 const LEFT_MENU_MIN_WIDTH = 300
 
 class Experiment extends Component {
+  static contextTypes = {
+    t: PropTypes.func.isRequired,
+    theme: PropTypes.object.isRequired
+  }
+
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    experiment: PropTypes.object,
+    project: PropTypes.object,
+    height: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    timeLineVisible: PropTypes.bool.isRequired,
+    captions: PropTypes.array
+  }
 
   render () {
-    const { height, width, loading, project, experiment, timeLineVisible } = this.props
+    const { height, width, loading, project, experiment, timeLineVisible, captions } = this.props
     const { t, theme } = this.context
     let elems
     if (!loading && !experiment) elems = <NotFound message={t('experiment.notfound')}/>
@@ -35,6 +46,7 @@ class Experiment extends Component {
                         expLoading={loading}
                         mainHeight={height}
                         fullHeight={!showTimeLine}
+                        captions={captions}
               />
             </div>
           </div>
@@ -44,8 +56,8 @@ class Experiment extends Component {
           </div>
         </div>
       )
-      return elems
     }
+    return elems
   }
 }
 

@@ -13,10 +13,12 @@ const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment
       {referential}
     </div>
   )
-  return (<LoadableComponent
+  return (
+    <LoadableComponent
     loading={expLoading || loading}
     getInner={getInner}
-    style={{ background: 'transparent', height: '100%', width: '100%', display: 'flex', ...style }} />)
+    style={{ background: 'transparent', height: '100%', width: '100%', display: 'flex', ...style }} />
+  )
 }
 
 TimeLine.propTypes = {
@@ -26,7 +28,8 @@ TimeLine.propTypes = {
   project: PropTypes.object,
   annotations: PropTypes.array,
   tasks: PropTypes.array,
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
+  style: PropTypes.object
 }
 
 TimeLine.contextTypes = {

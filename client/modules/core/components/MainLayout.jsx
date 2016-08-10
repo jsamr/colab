@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
-// import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { setWinHeight, setWinWidth } from '../actions/index'
 import throttle from 'lodash/throttle'
