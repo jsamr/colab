@@ -56,7 +56,7 @@ class TopBar extends Component {
       <AppBar
         style={{ position: 'fixed', top: 0, minHeight: preferredHeight, paddingLeft: 0, paddingRight: 0, justifyContent: 'center', flexWrap: 'wrap' }}
         title={title}
-        titleStyle={{ lineHeight: 'auto', flexGrow: 10, flexShrink: 1, minWidth: '-webkit-min-content', display: 'flex', justifyContent: 'center' }}
+        titleStyle={{ lineHeight: 'auto', flexGrow: 10, flexShrink: 1, minWidth: '-webkit-min-content', display: 'flex', justifyContent: 'flex-start', marginLeft: 10 }}
         iconStyleLeft={{ marginTop: 0, marginLeft: 0, marginRight: 0 }}
         iconStyleRight={{ margin: 0, justifyContent: 'center', flexGrow: 1 }}
         iconElementLeft={iconLeft}

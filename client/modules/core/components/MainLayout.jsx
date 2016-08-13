@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import getExtendedMuiTheme from '/imports/ui/getExtendedMuiTheme'
 import { setWinHeight, setWinWidth } from '../actions/index'
 import throttle from 'lodash/throttle'
 import AppLoading from '/imports/ui/AppLoading'
@@ -30,7 +30,7 @@ class MainLayout extends Component {
 
   getChildContext () {
     return {
-      muiTheme: getMuiTheme(this.props.theme),
+      muiTheme: getExtendedMuiTheme(this.props.theme),
       t: this.props.t,
       VERSION: this.props.VERSION,
       theme: this.props.theme,

@@ -24,6 +24,11 @@ class Session {
     return url.resolve(config.videoServer.url, `/m/${this.project.acronym}/${this.experiment.name}/${place}?a=${a}&t=${t}`)
   }
 
+  buildError (errorCode) {
+    const error = new Error(errors[errorCode])
+    error.errorCode = errorCode
+    return error
+  }
   /**
    * @return {Promise} Accepted value is a list of spots, rejected value is a string describing the error.
    */
@@ -36,19 +41,18 @@ class Session {
         .then((result) => {
           const data = result.data
           if (isString(data)) {
-            this.placesError = errors[data] || errors.UNKNOWN_ERR
-            reject(this.placesError)
+            const errorCode = errors[data] ? data : 'UNKNOWN_ERR'
+            reject(this.buildError(errorCode))
           } else {
             resolve(data.places)
           }
         })
         .catch((error) => {
-          if (error.response && error.response.data) {
-            this.placesError = errors[error.response.data] || errors.UNKNOWN_ERR
-          } else {
-            this.placesError = errors.SERVER_OFFLINE
-          }
-          reject(this.placesError)
+          const hasStandardError = error.response && error.response.data
+          let errorCode = ''
+          if (hasStandardError) errorCode = errors[error.response.data] ? error.response.data : 'UNKNOWN_ERR'
+          else errorCode = 'SERVER_OFFLINE'
+          reject(this.buildError(errorCode))
         })
     })
     promise[CANCEL] = () => {

@@ -2,19 +2,23 @@ import React, { PropTypes } from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import FontIcon from 'material-ui/FontIcon'
 import Sources from '../containers/Sources'
+import Tasks from './Tasks'
+import Infos from './Infos'
+import Collaboration from './Collaboration'
 import TabTemplate from '/imports/ui/TabTemplate'
 
-const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t }) => {
+const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, muiTheme }) => {
   const tabsDefinition = [
-    { value: 'infos', icon: 'fa fa-info', content: <span>INFO TAB</span> },
-    { value: 'sources', icon: 'mdi mdi-video', content: <Sources experiment={experiment} /> },
-    { value: 'tasks', icon: 'fa fa-tasks', content: <span>INFO TASKS</span> },
-    { value: 'collaboration', icon: 'fa fa-users', content: <span>INFO COLLAB</span> }
+    { value: 'infos', icon: 'fa fa-info', Content: Infos },
+    { value: 'sources', icon: 'mdi mdi-video', Content: Sources },
+    { value: 'tasks', icon: 'fa fa-tasks', Content: Tasks },
+    { value: 'collaboration', icon: 'fa fa-users', Content: Collaboration }
   ]
   return (
     <Tabs key='body'
-          style={{ flexGrow: 1, width: '100%', display: 'flex', flexFlow: 'column nowrap', background: 'transparent' }}
+          style={{ flexGrow: 1, width: '100%', display: 'flex', flexFlow: 'column nowrap' }}
           contentContainerStyle={{ flexGrow: 1, display: 'flex', flexFlow: 'column nowrap' }}
+          tabItemContainerStyle={{ background: muiTheme.experiment.background }}
           value={selectedMenuTab}
           tabTemplate={TabTemplate}
           onChange={(newValue) => {
@@ -22,9 +26,9 @@ const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t }) =
               selectMenuTab(newValue)
             }
           }}>
-      {tabsDefinition.map(({ value, icon, content }) => (
+      {tabsDefinition.map(({ value, icon, Content }) => (
         <Tab key={value} icon={<FontIcon className={icon}/>} label={t(`experiment.${value}`)} value={value} >
-          {content}
+          <Content experiment={experiment} style={{ padding: muiTheme.experiment.padding * 2 }}/>
         </Tab>
       ))}
     </Tabs>
@@ -38,7 +42,8 @@ ExperimentMenu.propTypes = {
 }
 
 ExperimentMenu.contextTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  muiTheme: PropTypes.object.isRequired
 }
 
 export default ExperimentMenu

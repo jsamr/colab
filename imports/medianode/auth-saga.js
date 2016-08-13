@@ -3,15 +3,28 @@ import { delay } from 'redux-saga'
 import { asyncPost } from './async'
 import MediaNodeConfig from './MediaNodeConfig'
 import errors from './server-errors'
-import { AUTH_FAIL, AUTH_OK, AUTH, RESET, REQUEST_AUTO_AUTH } from './actionsTypes'
-import { requestAuth, reportAuthOk, reportAuthFail, requestAutoAuth } from './actionCreators'
+import { AUTH_FAIL, AUTH_OK, AUTH, RESET, INVALIDATE_AUTH } from './actionsTypes'
+import { requestAuth, reportAuthOk, reportAuthFail } from './actionCreators'
 /**
  * Automatically re-authenticate user to media-node server before token expires.
  * @param {Number} seconds, seconds after which an auth request will be triggered
  */
 function * autoReAuth (seconds) {
   yield delay((seconds) * 1000)
-  yield put(requestAutoAuth())
+  yield put(requestAuth())
+}
+
+function * autoReauthFlow (conf) {
+  function * authLoop () {
+    const { type } = yield take([AUTH_FAIL, AUTH_OK])
+    if (type === AUTH_FAIL) {
+      console.warn(`Auth failed. Reconnecting in ${conf.RETRY_AFTER_SECONDS} seconds.`)
+      yield call(autoReAuth, conf.RETRY_AFTER_SECONDS)
+      yield call(authLoop)
+    }
+  }
+  yield call(authLoop)
+  yield call(autoReauthFlow, conf)
 }
 
 /**
@@ -40,7 +53,7 @@ export function * authenticateWithCredentials (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put(reportAuthFail(standardError))
+    yield put(reportAuthFail(new Error(standardError)))
   }
 }
 
@@ -65,7 +78,7 @@ export function * authenticateWithToken (conf) {
       const possibleError = errors[error.response.data]
       if (possibleError) standardError = possibleError
     }
-    yield put(reportAuthFail(standardError))
+    yield put(reportAuthFail(new Error(standardError)))
   }
 }
 
@@ -73,39 +86,53 @@ export function * authenticateWithToken (conf) {
  * @param {MediaNodeConfig} conf
  */
 function * authenticate (conf) {
+  let reauthTokenExpiresTask = null
   if (!conf instanceof MediaNodeConfig) throw new TypeError('must provide an instance of MediaNodeConfig ')
   if (conf.canAuthWithToken()) yield fork(authenticateWithToken, conf)
   else yield fork(authenticateWithCredentials, conf)
-  let action = yield take([ AUTH_OK, AUTH_FAIL ])
+  let action = yield take([AUTH_OK, AUTH_FAIL])
   if (action.type === AUTH_OK) {
-    // upon success, launch a fork that will send autoreauth actions when token is about to expire
     console.info(`Reconnecting in ${conf.remainingSecondsBeforeTokenExpires()} seconds.`)
-    yield fork(autoReAuth, conf.remainingSecondsBeforeTokenExpires())
-  } else {
-    console.warn(`Auth failed. Reconnecting in ${conf.RETRY_AFTER_SECONDS} seconds.`)
-    // upon failure, launch a fork that will attempt a reauth after RETRY_AFTER_SECONDS seconds
-    yield fork(autoReAuth, conf.RETRY_AFTER_SECONDS)
+    reauthTokenExpiresTask = yield fork(autoReAuth, conf.remainingSecondsBeforeTokenExpires())
+    yield take(AUTH)
+    cancel(reauthTokenExpiresTask)
   }
 }
 
-export function * authFlow (conf) {
+function * authFlow (conf) {
   // the recursive flow logic
   let run = function * () {
     // wait for auth event
     yield take(AUTH)
+    console.info('AUTH EVENT RECEIVED')
     // fork async authentication mediaserver call
-    let authTask = yield fork(authenticate, conf)
-    let action = yield take([ RESET, REQUEST_AUTO_AUTH ])
-    yield fork(run)
-    switch (action.type) {
-      case RESET:
-        conf.clear()
-        yield cancel(authTask)
-        break
-      case REQUEST_AUTO_AUTH:
-        yield put(requestAuth())
-        break
-    }
+    yield fork(authenticate, conf)
+    yield call(run)
   }
   yield call(run)
+}
+
+function * resetAuthFlow (conf) {
+  yield take(RESET)
+  conf.clear()
+  yield call(resetAuthFlow, conf)
+}
+
+function * invalidateAuthFlow (conf) {
+  yield take(AUTH_OK)
+  const { type, payload } = yield take([INVALIDATE_AUTH, AUTH_FAIL])
+  if (type === INVALIDATE_AUTH) {
+    conf.token = null
+    yield put(reportAuthFail(new Error(payload)))
+  }
+  yield call(invalidateAuthFlow, conf)
+}
+
+export default function * authSaga (conf) {
+  yield [
+    autoReauthFlow(conf),
+    resetAuthFlow(conf),
+    invalidateAuthFlow(conf),
+    authFlow(conf)
+  ]
 }

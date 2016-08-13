@@ -2,22 +2,36 @@ import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
 import TimeReferential from '../containers/TimeReferential'
 
-const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment, style, visible }, { theme }) => {
-  const referential = visible ? <TimeReferential style={{ background: theme.palette.headerColor }}
+const Container = ({children, style}) => <div style={style}>{children}</div>
+
+const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment, style, visible }, { muiTheme }) => {
+  const referential = visible ? <TimeReferential
                                                  project={project}
                                                  annotations={annotations}
                                                  tasks={tasks}
                                                  experiment={experiment} /> : null
-  const getInner = () => (
-    <div style={{ display: 'flex', alignItems: 'stretch', width: '100%', background: 'white', margin: visible ? 6 : 0 }}>
-      {referential}
-    </div>
-  )
+  const getInner = () => {
+    const spacing = visible ? muiTheme.experiment.padding : 0
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'stretch',
+        width: '100%',
+        paddingLeft: spacing,
+        paddingRight: spacing,
+        marginBottom: spacing,
+        background: muiTheme.experiment.timeLineBackground
+      }}>
+        {referential}
+      </div>
+    )
+  }
   return (
     <LoadableComponent
     loading={expLoading || loading}
     getInner={getInner}
-    style={{ background: 'transparent', height: '100%', width: '100%', display: 'flex', ...style }} />
+    Container={Container}
+    style={{ height: '100%', width: '100%', display: 'flex', ...style }} />
   )
 }
 
@@ -33,7 +47,7 @@ TimeLine.propTypes = {
 }
 
 TimeLine.contextTypes = {
-  theme: PropTypes.object.isRequired
+  muiTheme: PropTypes.object.isRequired
 }
 
 export default TimeLine

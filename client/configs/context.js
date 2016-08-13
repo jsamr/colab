@@ -14,7 +14,8 @@ import { browserHistory } from 'react-router'
 import { routerMiddleware, push } from 'react-router-redux'
 import i18n from 'meteor/universe:i18n'
 import ROUTES from './routes'
-import colabDefaultTheme from './colabDefaultTheme'
+import orangeTheme from './orangeTheme'
+import solemnTheme from './solemnTheme'
 
 const logger = new Logger('redux')
 
@@ -48,6 +49,6 @@ export default function ({ reducer }) {
     t: i18n.__,
     nav: (route) => store.dispatch(push(route)),
     time,
-    theme: colabDefaultTheme
+    theme: solemnTheme
   }
 }

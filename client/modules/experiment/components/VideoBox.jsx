@@ -51,6 +51,7 @@ class VideoBox extends Component {
 
   static contextTypes = {
     theme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired,
     t: PropTypes.func.isRequired,
     CONF: PropTypes.object.isRequired
   }
@@ -113,9 +114,9 @@ class VideoBox extends Component {
     const showControls = !isPlaying || hovered
     return (
       <VideoControls
-      style={{ ...CONTROLS_DIMENSIONS, background, opacity: showControls ? 1 : 0 }}
-      experiment={experiment}
-      expLoading={expLoading} />
+        style={{ ...CONTROLS_DIMENSIONS, background, opacity: showControls ? 1 : 0 }}
+        experiment={experiment}
+        expLoading={expLoading} />
     )
   }
 
@@ -125,7 +126,7 @@ class VideoBox extends Component {
   }
 
   render () {
-    const { theme } = this.context
+    const { theme, muiTheme } = this.context
     const { preferredWidth } = this.state
     const { places } = this.props
     const background = theme.palette.controlsColor
@@ -138,13 +139,15 @@ class VideoBox extends Component {
     const noPlaces = places && places.length === 0
     let player = noPlaces ? this.renderNoPlaces() : this.renderPlayer()
     return (
-      <div
-        onMouseEnter={this.handleHoverIn}
-        onMouseLeave={this.handleHoverOut}
-        style={style}>
+      <div style={{ flexGrow: 1, order: 1, display: 'flex', background: muiTheme.experiment.mediaBackground }}>
+        <div
+          onMouseEnter={this.handleHoverIn}
+          onMouseLeave={this.handleHoverOut}
+          style={style}>
           {player}
           {this.renderTimeIndicator(background)}
-        {this.renderControls(background)}
+          {this.renderControls(background)}
+        </div>
       </div>
     )
   }

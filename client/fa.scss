@@ -23,14 +23,10 @@
     background: black;
   }
   &.fa-dark::before {
-
-    color:white;
     border-radius: 1em;
     @extend .fa-padded, .fa-bg-black;
   }
   &.fa-light::before {
-    background: white;
-    color:black;
     border-radius: 1em;
     @extend .fa-padded;
   }

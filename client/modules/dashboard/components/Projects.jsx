@@ -1,7 +1,5 @@
 import Paper from 'material-ui/Paper'
 import React, { PropTypes } from 'react'
-import RaisedButton from 'material-ui/RaisedButton'
-import HeadBar from './HeadBar.jsx'
 import ProjectsList from '../containers/ProjectsList'
 import { fColumnNoWrap } from '/imports/styles'
 import Scrollbar from '/imports/ui/Scrollbar'
@@ -13,7 +11,7 @@ const Projects = ({ iconSize, user, mainHeight }, { t, theme }) => {
       <Paper rounded={false} zDepth={3} style={{ minHeight: '100%', background: 'transparent' }}>
         <ProjectsList cardStyle={{ background: 'transparent', flexGrow: 1, borderRadius: 0, ...fColumnNoWrap }}
                       headerBackground={ theme.palette.primary1Color }
-                      cardBackground={ theme.palette.accent3Color }
+                      cardBackground={ theme.palette.canvasColor }
                       style={{ ...fColumnNoWrap, minHeight: '100%' }}
                       iconSize={iconSize}
                       user={user}

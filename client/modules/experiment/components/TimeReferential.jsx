@@ -5,8 +5,7 @@ import TaskDisplayComputer from '../libs/TaskDisplayComputer'
 import Sizer from '/imports/ui/Sizer'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
-import Paper from 'material-ui/Paper'
-
+import Popover from 'material-ui/Popover'
 const MAGIC_MULTIPLE = 55.3
 
 const MINUTES_DISPLAY_HEIGHT_PRCT = 12
@@ -26,7 +25,7 @@ const defaultControls = {
   cursor: 0
 }
 
-const Container = ({ style, children }) => <Paper rounded={false} zDepth={2} style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>{children}</Paper>
+const Container = ({ style, children }) => <div style={{ flexGrow: 1, flexBasis: '100%', maxWidth: '100%', ...style }}>{children}</div>
 
 class TimeReferential extends Component {
 
@@ -55,7 +54,7 @@ class TimeReferential extends Component {
       cannotSlideLeft,
       range,
       rows
-      } = internals
+    } = internals
     let updatedBounds
     const halfRange = range / 2
     if (cannotSlideRight && cannotSlideLeft) {
@@ -127,15 +126,23 @@ class TimeReferential extends Component {
     const tasksDisplay = displayTasks ? segments.map((segment) => {
       /* {{#hovercard template="_exp_panel_controller_taskHover" trigger="click" direction="vertical" }} */
       const segmentDisplay = ({ tskTypeId, width, index, start, taskType }) => (
-        <rect
-          key={`segment_${tskTypeId}_${start}`}
-          width={width}
-          height='1'
-          rx='0.1'
-          ry='0.1'
-          y={`${index()}`}
-          x={start}
-          style={{ fill: taskType.color, strokeWidth: 0.015, stroke: 'rgb(0,0,0)' }}/>
+        <g>
+          <rect
+            key={`segment_${tskTypeId}_${start}`}
+            width={width}
+            height='1'
+            rx='0.1'
+            ry='0.1'
+            y={`${index()}`}
+            x={start}
+            style={{ fill: taskType.color, strokeWidth: 0.015, stroke: 'rgb(0,0,0)' }}>
+          </rect>
+          <foreignObject requiredExtensions='http://www.w3.org/1999/xhtml'>
+            <div xmlns='http://www.w3.org/1999/xhtml'>
+              This is a test
+            </div>
+          </foreignObject>
+        </g>
       )
       return segmentDisplay(segment)
     }) : null
@@ -181,64 +188,64 @@ class TimeReferential extends Component {
     }) : null
 
     return (
-        <Container style={style}>
-          <svg
-            id='time-referential-svg-root'
-            height={viewHeight}
-            width={viewWidth}>
-            <rect
-              id='svg-ruler'
-              fill={theme.palette.primary1Color}
-              width='100%'
-              height={intToPercent(MINUTES_DISPLAY_HEIGHT_PRCT)}
-              y={intToPercent(META_DISPLAY_HEIGHT_PRCT)} />
-            {/* Minutes and cursor display */}
-            <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none'>
-              <g fontSize={computedTextFontSize}>
-                {minuteDisplay}
-                {/* Cursor */}
-                <g style={{ stroke: theme.palette.textColor }} transform={`translate(${cursor})`}>
-                  <g strokeWidth={computedCursorStrokeWidth}>
-                    <line
-                      fill='black'
-                      y1='0'
-                      y2={intToPercent(CURSOR_HEIGHT)}
-                      x1='0'
-                      x2='0' />
-                  </g>
-                  <g transform={`translate(${-5 * computedCursorStrokeWidth})`}>
-                    <svg
-                      y={intToPercent(CURSOR_HEIGHT)}
-                      preserveAspectRatio='none'
-                      viewBox='-1 0 2 1'
-                      width={10 * computedCursorStrokeWidth}
-                      height='5%'>
-                      <polygon fill={theme.palette.textColor} strokeWidth='0' points='-1,1 1,1 0,0' />
-                    </svg>
-                  </g>
+      <Container style={style}>
+        <svg
+          id='time-referential-svg-root'
+          height={viewHeight}
+          width={viewWidth}>
+          <rect
+            id='svg-ruler'
+            fill={theme.palette.primary1Color}
+            width='100%'
+            height={intToPercent(MINUTES_DISPLAY_HEIGHT_PRCT)}
+            y={intToPercent(META_DISPLAY_HEIGHT_PRCT)} />
+          {/* Minutes and cursor display */}
+          <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none'>
+            <g fontSize={computedTextFontSize}>
+              {minuteDisplay}
+              {/* Cursor */}
+              <g style={{ stroke: theme.palette.textColor }} transform={`translate(${cursor})`}>
+                <g strokeWidth={computedCursorStrokeWidth}>
+                  <line
+                    fill='black'
+                    y1='0'
+                    y2={intToPercent(CURSOR_HEIGHT)}
+                    x1='0'
+                    x2='0' />
+                </g>
+                <g transform={`translate(${-5 * computedCursorStrokeWidth})`}>
+                  <svg
+                    y={intToPercent(CURSOR_HEIGHT)}
+                    preserveAspectRatio='none'
+                    viewBox='-1 0 2 1'
+                    width={10 * computedCursorStrokeWidth}
+                    height='5%'>
+                    <polygon fill={theme.palette.textColor} strokeWidth='0' points='-1,1 1,1 0,0' />
+                  </svg>
                 </g>
               </g>
-            </svg>
-            {/* Meta display */}
-            <svg
-              preserveAspectRatio='none'
-              className='scalable-svg-meta-viewport'
-              height={intToPercent(META_DISPLAY_INNER_HEIGHT_PRCT)}
-              y={intToPercent(META_DISPLAY_HEIGHT_OFFSET)}>
-              {/* Tasks display */}
-              <g fillOpacity='0.5'>
-                {tasksDisplay}
-              </g>
-              {/* Annotations display
-               Translate used to center annotation in their width middle */}
-              <g transform='translate(-0.05)'>
-                <g>
-                  {annotationsDisplay}
-                </g>
-              </g>
-            </svg>
+            </g>
           </svg>
-        </Container>
+          {/* Meta display */}
+          <svg
+            preserveAspectRatio='none'
+            className='scalable-svg-meta-viewport'
+            height={intToPercent(META_DISPLAY_INNER_HEIGHT_PRCT)}
+            y={intToPercent(META_DISPLAY_HEIGHT_OFFSET)}>
+            {/* Tasks display */}
+            <g fillOpacity='0.5'>
+              {tasksDisplay}
+            </g>
+            {/* Annotations display
+             Translate used to center annotation in their width middle */}
+            <g transform='translate(-0.05)'>
+              <g>
+                {annotationsDisplay}
+              </g>
+            </g>
+          </svg>
+        </svg>
+      </Container>
     )
   }
 }

@@ -4,8 +4,6 @@ import React, { Component, PropTypes } from 'react'
 import includes from 'lodash/includes'
 import LoginForm from '../../auth/components/LoginForm'
 
-const TOPBAR_BASE_HEIGHT = 64
-
 class App extends Component {
 
   getChildContext () {
@@ -19,19 +17,20 @@ class App extends Component {
   }
 
   render () {
-    let { ROUTES } = this.context
+    let { ROUTES, theme } = this.context
     let { user } = this.props
     const isLoggingIn = includes([ ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.ROOT ], this.props.location.pathname)
     const isLoggedIn = user != null
     const inner = !isLoggedIn && !isLoggingIn ? this.createLoginFallback() : this.props.content
     return (
-      <div className='application' >
+      <div className='application' style={{ background: theme.palette.pageBackground }}>
         <TopBar pageTitle={this.props.pageTitle} />
         <MainWrapper
           className='page'
           style={{ minHeight: this.props.mainHeight,
             position: 'relative',
-            top: this.props.topBarHeight, display: 'flex',
+            marginTop: this.props.topBarHeight,
+            display: 'flex',
             justifyContent: 'center',
             alignItems: 'stretch'
             }}>
@@ -48,7 +47,8 @@ App.childContextTypes = {
 
 App.contextTypes = {
   t: PropTypes.func.isRequired,
-  ROUTES: PropTypes.object
+  ROUTES: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 App.propTypes = {

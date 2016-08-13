@@ -3,7 +3,8 @@ import { REQUIRE_EXPERIMENT_PAGE, TIME_LINE_SET_CURSOR, SET_MEDIA_NODE_PLACES, S
 import { reportMediaNodePlaces, selectSource, setTimeLineCursor } from '../actions/actionsCreators'
 import { AUTO_UPDATE_PLAYER_LOAD_STATUS, VIDEO_LOAD_URL } from '../../video/actions/actionsTypes'
 import { requestVideoClear, requestVideoLoadUrl } from '../../video/actions/actionsCreators'
-import { AUTH_OK, AUTH_FAIL, AUTH } from '/imports/medianode/actionsTypes'
+import { AUTH_OK, AUTH_FAIL, AUTH, RESET } from '/imports/medianode/actionsTypes'
+import { invalidateAuth, requestAuth } from '/imports/medianode/actionCreators'
 import create from 'lodash/create'
 import keyBy from 'lodash/keyBy'
 
@@ -40,7 +41,15 @@ function * mediaFlow (experiment, context, token) {
         mediaLoopTask = yield fork(selectSourceLoop, placesUrlMap)
         if (defaultSource) yield put(selectSource(defaultSource, experiment))
       } catch (e) {
-        yield put({ type: SET_MEDIA_NODE_PLACES, payload: e, error: true, meta: { experiment } })
+        console.info('ERROR CODE IS ', e.errorCode)
+        switch (e.errorCode) {
+          case 'SERVER_OFFLINE':
+          case 'SESSION.FORBIDDEN':
+            yield put(invalidateAuth())
+            break
+        }
+        yield put(reportMediaNodePlaces(e, experiment))
+        // yield put({ type: SET_MEDIA_NODE_PLACES, payload: e, error: true, meta: { experiment } })
       } finally {
         let shallRun = true
         while (shallRun) {
@@ -80,9 +89,19 @@ function * authFlow (context) {
       if (mediaFlowTask) yield cancel(mediaFlowTask)
       mediaFlowTask = yield fork(mediaFlow, experiment, context, token)
     }
-    let { type, payload } = yield take([AUTH_OK, REQUIRE_EXPERIMENT_PAGE])
-    if (type === AUTH_OK) token = payload
-    else experiment = payload
+    let { type, payload } = yield take([AUTH_FAIL, AUTH_OK, REQUIRE_EXPERIMENT_PAGE])
+    switch (type) {
+      case AUTH_OK:
+        token = payload
+        break
+      case AUTH_FAIL:
+        console.info('EXP SAGA AUTH FAIL', payload)
+        yield put(reportMediaNodePlaces(payload, experiment))
+        break
+      case REQUIRE_EXPERIMENT_PAGE:
+        experiment = payload
+        break
+    }
     yield call(oneExpCycle)
   }
   yield call(oneExpCycle)

@@ -4,16 +4,18 @@ import { fColumnNoWrap, fInlineNoWrapCentered, transitionVerySlow } from '/impor
 import TimeControls from '../containers/TimeControls'
 import ToggleTimeLine from '../containers/ToggleTimeLine'
 import ExperimentMenu from '../containers/ExperimentMenu'
-
+import FormContainer from './FormContainer'
 const CONTROLS_HEIGHT = 50
 
-const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme }) => {
+const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme, muiTheme }) => {
   const toggle = experiment ? <ToggleTimeLine experiment={experiment} height={CONTROLS_HEIGHT} /> : null
+  const form = true
+  const inner = form ? <FormContainer /> : <ExperimentMenu key='menu' experiment={experiment} />
   const getInner = () => (
     [
-      <ExperimentMenu key='menu' experiment={experiment} />,
+      inner,
       <div key='controls'
-           style={{ ...fInlineNoWrapCentered, flexWrap: 'wrap', justifyContent: 'space-around', background: theme.palette.controlsColor }}>
+        style={{ ...fInlineNoWrapCentered, flexWrap: 'wrap', justifyContent: 'space-around', background: muiTheme.experiment.timeLineBackground }}>
         {toggle}
         <TimeControls experiment={experiment} style={{ height: CONTROLS_HEIGHT }} />
       </div>
@@ -27,12 +29,13 @@ const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme }) 
         order: 1,
         margin: 0,
         flexBasis: minWidth,
-        background: 'transparent',
+        background: muiTheme.application.background,
         minWidth,
-        flexGrow: 1,
+        flexGrow: 10,
         ...fColumnNoWrap,
         justifyContent: 'space-around',
         maxWidth: 700,
+        marginTop: muiTheme.experiment.padding,
         ...style,
         ...transitionVerySlow
       }} />)
@@ -46,7 +49,8 @@ LeftMenu.propTypes = {
 }
 
 LeftMenu.contextTypes = {
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired
 }
 
 export default LeftMenu

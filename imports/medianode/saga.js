@@ -1,7 +1,7 @@
 import { RESET, AUTH } from './actionsTypes'
 import { takeEvery } from 'redux-saga'
 import { put } from 'redux-saga/effects'
-import { authFlow } from './auth-saga'
+import authFlow  from './auth-saga'
 
 function * symlinkAuth () {
   yield put({ type: AUTH })

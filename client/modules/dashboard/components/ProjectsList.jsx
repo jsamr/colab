@@ -26,12 +26,13 @@ const ProjectsList = ({ projects, selectedProjectId, selectProject, headerBackgr
     ))
     const tabs = (
       <Tabs
-        tabItemContainerStyle={{ background: 'transparent' }}
+        tabItemContainerStyle={{ background: theme.palette.primary1Color }}
         contentContainerStyle={{ display: 'flex', flexFlow: 'column nowrap', flexGrow: 1 }}
         tabTemplate={TabTemplate}
         // typecheck because of this issue : https://github.com/callemall/material-ui/issues/2189
         onChange={(prj) => { if (typeof prj === 'string') selectProject(prj) }}
-        style={style} value={selectedProjectId}>
+        style={style}
+        value={selectedProjectId}>
         { projeez }
       </Tabs>
     )
