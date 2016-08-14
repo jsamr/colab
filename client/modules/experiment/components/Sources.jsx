@@ -5,7 +5,7 @@ import SelectableList from '/imports/ui/SelectableList'
 import FontIcon from 'material-ui/FontIcon'
 import NotFound from '/imports/ui/NotFound'
 import RaisedButton from 'material-ui/RaisedButton'
-import { fColumnNoWrap } from '/imports/styles'
+import { fColumnNoWrap, transitionFast } from '/imports/styles'
 import Subheader from 'material-ui/Subheader'
 import Caption from './Caption'
 
@@ -39,20 +39,25 @@ class Sources extends Component {
     selectSource(source)
   }
 
-  handleRefreshSources () {
-    const { refreshSources } = this.props
-    refreshSources()
+  handleRefreshSources (loading) {
+    if (!loading) {
+      const { refreshSources } = this.props
+      refreshSources()
+    }
   }
 
-  renderRefreshButton () {
-    const { t } = this.context
+  renderRefreshButton (loading) {
+    const { t, muiTheme } = this.context
     return (
-      <RaisedButton icon={<FontIcon className='mdi mdi-refresh' />}
-                    primary={true}
-                    label={t('actions.refresh')}
-                    onClick={this.handleRefreshSources}
-                    style={{ marginTop: 7 }}
-      />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <RaisedButton icon={<FontIcon className='mdi mdi-refresh' />}
+                      primary={true}
+                      label={t('actions.refresh')}
+                      onClick={() => this.handleRefreshSources(loading)}
+                      style={{ marginBottom: muiTheme.experiment.padding }}
+                      disabled={loading}
+        />
+      </div>
     )
   }
 
@@ -70,15 +75,16 @@ class Sources extends Component {
     const{ muiTheme, t } = this.context
     const lines = places.map(Sources.renderPlaceRow)
     return (
-      <SelectableList value={source} style={{ background: muiTheme.experiment.sourcesListBackground, ...BASE_STYLE }} onChange={this.selectSource}>
-        <Subheader>{t('experiment.caption-points')}</Subheader>
+      <SelectableList value={source} style={{ background: muiTheme.experiment.sourcesListBackground, width: '100%', ...BASE_STYLE }}
+                      onChange={this.selectSource} >
+        <Subheader>{t('experiment.sources')} / {t('experiment.caption-points')}</Subheader>
         {lines}
       </SelectableList>
     )
   }
 
   static renderLoading () {
-    return <SimpleLoading style={BASE_STYLE} />
+    return <SimpleLoading style={{ alignSelf: 'center', ...BASE_STYLE }} />
   }
 
   render () {
@@ -90,9 +96,11 @@ class Sources extends Component {
     else if (placesError) body = this.renderError()
     else body = this.renderSources()
     return (
-      <div style={{ ...fColumnNoWrap, justifyContent: 'space-between', flexGrow: 1, background: muiTheme.experiment.mediaBackground, ...BASE_STYLE, ...style }}>
-        {this.renderRefreshButton()}
-        {body}
+      <div style={{ ...fColumnNoWrap, justifyContent: 'flex-start', flexGrow: 1, background: muiTheme.experiment.mediaBackground, ...BASE_STYLE, ...style }}>
+        {this.renderRefreshButton(loading)}
+        <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+          {body}
+        </div>
       </div>
     )
   }

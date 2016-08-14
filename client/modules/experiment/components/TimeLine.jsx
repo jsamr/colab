@@ -1,37 +1,40 @@
 import React, { PropTypes } from 'react'
 import LoadableComponent from './LoadableComponent'
 import TimeReferential from '../containers/TimeReferential'
+import Paper from 'material-ui/Paper'
 
 const Container = ({children, style}) => <div style={style}>{children}</div>
 
 const TimeLine = ({ expLoading, loading, project, annotations, tasks, experiment, style, visible }, { muiTheme }) => {
   const referential = visible ? <TimeReferential
-                                                 project={project}
-                                                 annotations={annotations}
-                                                 tasks={tasks}
-                                                 experiment={experiment} /> : null
+    project={project}
+    annotations={annotations}
+    tasks={tasks}
+    experiment={experiment} /> : null
   const getInner = () => {
     const spacing = visible ? muiTheme.experiment.padding : 0
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'stretch',
-        width: '100%',
-        paddingLeft: spacing,
-        paddingRight: spacing,
-        marginBottom: spacing,
-        background: muiTheme.experiment.timeLineBackground
-      }}>
+      <Paper zDepth={3}
+             style={{
+               marginTop: spacing,
+               display: 'flex',
+               alignItems: 'stretch',
+               width: '100%',
+               paddingLeft: spacing,
+               paddingRight: spacing,
+               marginBottom: spacing,
+               background: muiTheme.experiment.timeLineBackground
+             }}>
         {referential}
-      </div>
+      </Paper>
     )
   }
   return (
     <LoadableComponent
-    loading={expLoading || loading}
-    getInner={getInner}
-    Container={Container}
-    style={{ height: '100%', width: '100%', display: 'flex', ...style }} />
+      loading={expLoading || loading}
+      getInner={getInner}
+      Container={Container}
+      style={{ height: '100%', width: '100%', display: 'flex', ...style }} />
   )
 }
 

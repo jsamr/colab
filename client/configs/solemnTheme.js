@@ -14,8 +14,10 @@ const darkSeaGreen = '#89B6A5'
 const aeroBlue = '#C9EDDC'
 const dolphinGray = '#82968C'
 const dimGray = '#6A706E'
+
 const primary1 = jet
 const secondary1 = darkSeaGreen
+
 const theme = {
   spacing: spacing,
   fontFamily: 'Roboto, sans-serif',
@@ -31,7 +33,7 @@ const theme = {
     highContrastTextColor: primary1,
     canvasColor: grey900,
     borderColor: grey900,
-    disabledColor: fade(grey900, 0.3),
+    disabledColor: 'rgb(120, 120, 120)',
     pickerHeaderColor: darkSeaGreen,
     clockCircleColor: fade(grey900, 0.07),
     shadowColor: secondary1,

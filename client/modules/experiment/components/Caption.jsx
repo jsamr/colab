@@ -68,7 +68,7 @@ class Caption extends ListItem {
     const errorComponent = error ? this.renderError(error) : null
     const warningComponent = warning ? this.renderWarning() : null
     const soundQComponent = this.renderSoundQ(soundQ)
-    return <div style={{ display: 'flex', flexBasis: 120, justifyContent: 'space-between', opacity: show ? 0.6 : 0.3, ...transitionFast }}>
+    return <div className='PlaceFeedbackContainer' style={{ display: 'flex', flexBasis: 130, justifyContent: 'flex-start', opacity: show ? 0.6 : 0.3, ...transitionFast }}>
       {soundQComponent}
       {errorComponent}
       {warningComponent}
@@ -109,7 +109,6 @@ class Caption extends ListItem {
     const { caption, value, style, ...props } = this.props
     const { hovered } = this.state
     const { place, meta = {}, fileFound = true } = caption
-    const { error = false, comments = false } = meta
     const hasFeedback = meta.error
     const showFeedback = hovered && hasFeedback
     return (
@@ -121,7 +120,7 @@ class Caption extends ListItem {
                   onMouseLeave={this.handleHoverOut}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>{place}</span>
+            <span style={{ textTransform: 'uppercase', letterSpacing: 2 }}>{place}</span>
             {this.renderPlaceFeedback(meta, !showFeedback)}
           </div>
         </ListItem>

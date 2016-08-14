@@ -5,7 +5,8 @@ import TaskDisplayComputer from '../libs/TaskDisplayComputer'
 import Sizer from '/imports/ui/Sizer'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
-import Popover from 'material-ui/Popover'
+import TaskSegment from './TaskSegment'
+
 const MAGIC_MULTIPLE = 55.3
 
 const MINUTES_DISPLAY_HEIGHT_PRCT = 12
@@ -126,23 +127,14 @@ class TimeReferential extends Component {
     const tasksDisplay = displayTasks ? segments.map((segment) => {
       /* {{#hovercard template="_exp_panel_controller_taskHover" trigger="click" direction="vertical" }} */
       const segmentDisplay = ({ tskTypeId, width, index, start, taskType }) => (
-        <g>
-          <rect
-            key={`segment_${tskTypeId}_${start}`}
-            width={width}
-            height='1'
-            rx='0.1'
-            ry='0.1'
-            y={`${index()}`}
-            x={start}
-            style={{ fill: taskType.color, strokeWidth: 0.015, stroke: 'rgb(0,0,0)' }}>
-          </rect>
-          <foreignObject requiredExtensions='http://www.w3.org/1999/xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-              This is a test
-            </div>
-          </foreignObject>
-        </g>
+        <TaskSegment key={`segment_${tskTypeId}_${start}`}
+                     taskType={taskType}
+                     style={{ fill: taskType.color, strokeWidth: 0, stroke: 'rgb(0,0,0)' }}
+                     width={width}
+                     height='0.8'
+                     y={`${index() + 0.1}`}
+                     x={start}
+        />
       )
       return segmentDisplay(segment)
     }) : null
@@ -233,7 +225,7 @@ class TimeReferential extends Component {
             height={intToPercent(META_DISPLAY_INNER_HEIGHT_PRCT)}
             y={intToPercent(META_DISPLAY_HEIGHT_OFFSET)}>
             {/* Tasks display */}
-            <g fillOpacity='0.5'>
+            <g fillOpacity='0.8'>
               {tasksDisplay}
             </g>
             {/* Annotations display

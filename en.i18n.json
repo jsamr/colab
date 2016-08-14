@@ -67,7 +67,7 @@
     "tasks": "tasks",
     "collaboration": "collab",
     "no-place": "There is no source associated to this experiment.",
-    "caption-points": "Caption points"
+    "caption-points": "caption points"
   },
   "auth" : {
     "must" : "Authentication",

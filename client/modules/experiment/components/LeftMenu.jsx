@@ -7,10 +7,11 @@ import ExperimentMenu from '../containers/ExperimentMenu'
 import FormContainer from './FormContainer'
 const CONTROLS_HEIGHT = 50
 
-const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme, muiTheme }) => {
+const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { muiTheme }) => {
   const toggle = experiment ? <ToggleTimeLine experiment={experiment} height={CONTROLS_HEIGHT} /> : null
-  const form = true
+  const form = false
   const inner = form ? <FormContainer /> : <ExperimentMenu key='menu' experiment={experiment} />
+  const spacing = muiTheme.experiment.padding
   const getInner = () => (
     [
       inner,
@@ -26,18 +27,19 @@ const LeftMenu = ({ expLoading, experiment, style, minWidth = 300 }, { theme, mu
       loading={expLoading}
       getInner={getInner}
       style={{
+        ...fColumnNoWrap,
+        ...transitionVerySlow,
         order: 1,
         margin: 0,
+        marginRight: spacing,
+        marginTop: spacing,
         flexBasis: minWidth,
         background: muiTheme.application.background,
         minWidth,
         flexGrow: 10,
-        ...fColumnNoWrap,
         justifyContent: 'space-around',
         maxWidth: 700,
-        marginTop: muiTheme.experiment.padding,
-        ...style,
-        ...transitionVerySlow
+        ...style
       }} />)
 }
 

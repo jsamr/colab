@@ -9,7 +9,7 @@ export default function getExtendedMuiTheme (theme, ...more) {
       background: palette.pageBackground,
       mediaBackground: palette.primary2Color,
       timeLineBackground: palette.primary3Color,
-      sourcesListBackground: 'rgba(10, 10, 10, 0.15)',
+      sourcesListBackground: palette.primary1Color,
       padding: 5
     },
     application: {

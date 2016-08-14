@@ -19,6 +19,7 @@ const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, mui
           style={{ flexGrow: 1, width: '100%', display: 'flex', flexFlow: 'column nowrap' }}
           contentContainerStyle={{ flexGrow: 1, display: 'flex', flexFlow: 'column nowrap' }}
           tabItemContainerStyle={{ background: muiTheme.experiment.background }}
+          inkBarStyle={{ bottom: 2, height: 4 }}
           value={selectedMenuTab}
           tabTemplate={TabTemplate}
           onChange={(newValue) => {
@@ -27,7 +28,7 @@ const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, mui
             }
           }}>
       {tabsDefinition.map(({ value, icon, Content }) => (
-        <Tab key={value} icon={<FontIcon className={icon}/>} label={t(`experiment.${value}`)} value={value} >
+        <Tab key={value} icon={<FontIcon className={icon}/>} value={value} >
           <Content experiment={experiment} style={{ padding: muiTheme.experiment.padding * 2 }}/>
         </Tab>
       ))}

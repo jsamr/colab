@@ -62,7 +62,7 @@
     "display-time-explorer": "Afficher l'explorateur temporel",
     "tasks": "tâches",
     "no-place": "Aucune source n'est associée à cette expérimentation.",
-    "caption-points": "Points de captation"
+    "caption-points": "points de captation"
   },
   "auth" : {
     "must" : "S'authentifier",
