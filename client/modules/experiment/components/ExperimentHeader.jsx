@@ -19,7 +19,7 @@ const ExperimentHeader = ({ params, experiment, loading }, { t, muiTheme }) => {
       if (experiment != null) {
         children.push(
           <Separator key='sep2'/>,
-          <ToolbarGroup key='experimentState' style={{ fontSize: 15, flexGrow: 0, flexBasis: 270 }}>
+          <ToolbarGroup key='experimentState' style={{ fontSize: 15, flexGrow: 0, flexBasis: 270, alignSelf: 'flex-end', marginBottom: 5 }}>
             <ExperimentState experiment={experiment} style={{ width: 270 }} />
           </ToolbarGroup>
         )
@@ -32,6 +32,7 @@ const ExperimentHeader = ({ params, experiment, loading }, { t, muiTheme }) => {
       alignItems: 'center',
       justifyContent: 'flex-start',
       borderRadius: 3,
+      height: 64,
       background: muiTheme.experiment.background
      }}
   />

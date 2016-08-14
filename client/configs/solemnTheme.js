@@ -14,6 +14,7 @@ const darkSeaGreen = '#89B6A5'
 const aeroBlue = '#C9EDDC'
 const dolphinGray = '#82968C'
 const dimGray = '#6A706E'
+const auroreGreen = '#81977f'
 
 const primary1 = jet
 const secondary1 = darkSeaGreen
@@ -32,7 +33,7 @@ const theme = {
     alternateTextColor: lighten(aeroBlue, 0.12),
     highContrastTextColor: primary1,
     canvasColor: grey900,
-    borderColor: grey900,
+    borderColor: auroreGreen,
     disabledColor: 'rgb(120, 120, 120)',
     pickerHeaderColor: darkSeaGreen,
     clockCircleColor: fade(grey900, 0.07),

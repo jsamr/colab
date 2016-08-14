@@ -3,14 +3,14 @@ import { fInlineAround } from '/imports/styles'
 
 const identifierStyle = {
   display: 'flex',
-  justifyContent: 'space-around',
+  justifyContent: 'space-between',
   flexFlow: 'column nowrap',
   height: '100%'
 }
 
 const StylizedLabeledIdentifier = ({ preferredWidth = 90, labelSize = 12, label, identifier, idFontSize, stripColor = 'black', style }) => (
   <div style={{ ...identifierStyle, flexBasis: preferredWidth, textTransform: 'none', ...style }}>
-    <div style={{ fontSize: labelSize, ...fInlineAround }}>
+    <div style={{ fontSize: labelSize, ...fInlineAround, color: 'gray', marginTop: 5 }}>
       <span>{label}</span>
     </div>
     <div style={{ fontSize: idFontSize, ...fInlineAround }}>

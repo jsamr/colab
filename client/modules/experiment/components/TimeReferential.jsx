@@ -94,6 +94,7 @@ class TimeReferential extends Component {
     const computedMinutesStrokeWidth = 0.01 * MAGIC_MULTIPLE / pxpm
     const computedCursorStrokeWidth = 0.03 * MAGIC_MULTIPLE / pxpm
     const computedTextFontSize = 0.25 * MAGIC_MULTIPLE / pxpm
+    console.info('COMPUTED TEXT FONT SIZE', computedTextFontSize)
     // Task positioning computing
     const computer = new TaskDisplayComputer(tasks, experiment, project)
     const segments = computer.segs
