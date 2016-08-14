@@ -87,14 +87,13 @@ class TimeReferential extends Component {
     if (viewWidth === 0) return <Container style={style}>LOADING</Container>
     // General computations
     const range = experiment.duration / zoom
-
-    const pxpm = viewWidth / experiment.duration
+    // pxpm = pixels per minute
+    const pxpm = viewWidth / experiment.duration * zoom
     const step = Math.ceil(25 / pxpm)
     const minutes = makeRange(1, Math.ceil(experiment.duration - 0.5), step)
     const computedMinutesStrokeWidth = 0.01 * MAGIC_MULTIPLE / pxpm
     const computedCursorStrokeWidth = 0.03 * MAGIC_MULTIPLE / pxpm
     const computedTextFontSize = 0.25 * MAGIC_MULTIPLE / pxpm
-    console.info('COMPUTED TEXT FONT SIZE', computedTextFontSize)
     // Task positioning computing
     const computer = new TaskDisplayComputer(tasks, experiment, project)
     const segments = computer.segs
