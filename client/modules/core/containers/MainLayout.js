@@ -1,17 +1,12 @@
-import MainLayout from '../components/MainLayout.jsx'
+import { composeAll, composeWithTracker, compose } from 'react-komposer'
 import { useDeps } from 'mantra-core'
-import {  composeAll, composeWithTracker, compose } from 'react-komposer'
-import { getConfig } from '/imports/api/Config'
 
-const mapDepsToProps = (context, { window, sub }) => ({
-  setWinHeight: window.setHeight,
-  setWinWidth: window.setWidth,
-  notifySubReady: sub.notifyReady,
-  store: context.Store,
-  context: () => context
-})
+import MainLayout from '../components/MainLayout.jsx'
+import { getConfig } from '/imports/api/Config'
+import loadLanguage from '/imports/loadLanguage'
 
 function confComposer ({ context, notifySubReady }, onData) {
+  console.info('LOADING CONF')
   const { Meteor } = context()
   const confSub = Meteor.subscribe('globalconfig')
   if (confSub.ready()) {
@@ -22,17 +17,22 @@ function confComposer ({ context, notifySubReady }, onData) {
   }
 }
 
-function loadComposer (params, onData) {
-  setTimeout(() => onData(null, { delayLoading: false }), 600)
+function loadLang (params, onData) {
+  console.info('LOADING LANG')
+  loadLanguage('fr').then(() => onData(null, { delayLoading: false }))
   onData(null, { delayLoading: true })
 }
 
+const mapDepsToProps = (context, { window, sub }) => ({
+  setWinHeight: window.setHeight,
+  setWinWidth: window.setWidth,
+  store: context.Store,
+  notifySubReady: sub.notifyReady,
+  context: () => context
+})
+
 export default composeAll(
+  compose(loadLang),
   composeWithTracker(confComposer),
-  compose(loadComposer),
   useDeps(mapDepsToProps)
 )(MainLayout)
-
-export {
-  confComposer
-}

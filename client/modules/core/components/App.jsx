@@ -3,6 +3,7 @@ import MainWrapper from './MainWrapper'
 import React, { Component, PropTypes } from 'react'
 import includes from 'lodash/includes'
 import LoginForm from '../../auth/components/LoginForm'
+import AppLoading from './AppLoading'
 
 class App extends Component {
 
@@ -17,11 +18,19 @@ class App extends Component {
   }
 
   render () {
-    let { ROUTES, theme } = this.context
-    let { user } = this.props
+    const { ROUTES, theme, appLoading } = this.context
+    const { user } = this.props
     const isLoggingIn = includes([ ROUTES.LOGIN, ROUTES.REGISTER, ROUTES.ROOT ], this.props.location.pathname)
     const isLoggedIn = user != null
-    const inner = !isLoggedIn && !isLoggingIn ? this.createLoginFallback() : this.props.content
+    const shouldLogin = !isLoggedIn && !isLoggingIn
+    let inner = null
+    if (appLoading) {
+      inner = <AppLoading />
+    } else if (shouldLogin) {
+      inner = this.createLoginFallback()
+    } else {
+      inner = this.props.content
+    }
     return (
       <div className='application' style={{ background: theme.palette.pageBackground }}>
         <TopBar pageTitle={this.props.pageTitle} />
@@ -48,7 +57,8 @@ App.childContextTypes = {
 App.contextTypes = {
   t: PropTypes.func.isRequired,
   ROUTES: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  appLoading: PropTypes.bool.isRequired
 }
 
 App.propTypes = {

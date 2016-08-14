@@ -11,7 +11,6 @@ import RegisterForm from '../auth/components/RegisterForm'
 import Experiment from '../experiment/containers/Experiment'
 import ExperimentHeader from '../experiment/containers/ExperimentHeader'
 import Root from './components/Root'
-import Warning from 'material-ui/svg-icons/alert/warning'
 
 export default function (inject, { Store, ACCOUNT_STATES, ROUTES, t, nav, VERSION, theme, CONF }) {
   const MainLayoutCtx = inject(MainLayout)

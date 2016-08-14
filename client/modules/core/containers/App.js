@@ -4,10 +4,14 @@ import { useDeps } from 'mantra-core'
 
 import { connect } from 'react-redux'
 
-const mapDeps = ({ ROUTES, t }) => ({
-  ROUTES,
-  t
-})
+const mapDeps = (context) => {
+  const { ROUTES, t } = context
+  return ({
+    ROUTES,
+    t,
+    context: () => context
+  })
+}
 
 const mapStateToProps = (state) => {
   return {

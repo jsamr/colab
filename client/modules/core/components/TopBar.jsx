@@ -5,7 +5,7 @@ import Badge from 'material-ui/Badge'
 import IconButton from 'material-ui/IconButton'
 import { HeightSizer } from '/imports/ui/Sizer'
 
-import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
+import NotificationsIcon from 'material-ui/svg-icons/social/notifications'
 import Status from '../../medianode/containers/Status'
 
 const makeToolbar = (props, { t, nav, ROUTES }) => (

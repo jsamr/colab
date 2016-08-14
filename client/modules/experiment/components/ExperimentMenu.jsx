@@ -7,7 +7,7 @@ import Infos from './Infos'
 import Collaboration from './Collaboration'
 import TabTemplate from '/imports/ui/TabTemplate'
 
-const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, muiTheme }) => {
+const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, muiTheme, theme }) => {
   const tabsDefinition = [
     { value: 'infos', icon: 'fa fa-info', Content: Infos },
     { value: 'sources', icon: 'mdi mdi-video', Content: Sources },
@@ -18,7 +18,7 @@ const ExperimentMenu = ({ selectedMenuTab, selectMenuTab, experiment }, { t, mui
     <Tabs key='body'
           style={{ flexGrow: 1, width: '100%', display: 'flex', flexFlow: 'column nowrap' }}
           contentContainerStyle={{ flexGrow: 1, display: 'flex', flexFlow: 'column nowrap' }}
-          tabItemContainerStyle={{ background: muiTheme.experiment.background }}
+          tabItemContainerStyle={{ background: muiTheme.experiment.background, borderTop: `solid ${theme.palette.textColor} ${muiTheme.experiment.padding}px` }}
           inkBarStyle={{ bottom: 2, height: 4 }}
           value={selectedMenuTab}
           tabTemplate={TabTemplate}
@@ -44,7 +44,8 @@ ExperimentMenu.propTypes = {
 
 ExperimentMenu.contextTypes = {
   t: PropTypes.func.isRequired,
-  muiTheme: PropTypes.object.isRequired
+  muiTheme: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
 }
 
 export default ExperimentMenu
