@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ExperimentState from './ExperimentState'
-import LoadableComponent from './LoadableComponent'
+import LoadableComponent from '/imports/ui/LoadableComponent'
 import Toolbar, { ToolbarGroup, ToolbarSeparator } from 'material-ui/'
 import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
 

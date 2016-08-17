@@ -6,18 +6,11 @@ import Sizer from '/imports/ui/Sizer'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
 import TaskSegment from './TaskSegment'
+import AnnotationDisplay from './AnnotationDisplay'
+import Cursor from './Cursor'
+import reverse from 'lodash/reverse'
 
 const MAGIC_MULTIPLE = 55.3
-
-const MINUTES_DISPLAY_HEIGHT_PRCT = 12
-const META_DISPLAY_HEIGHT_PRCT = 100 - MINUTES_DISPLAY_HEIGHT_PRCT
-const META_DISPLAY_HEIGHT_OFFSET = 5
-const META_DISPLAY_INNER_HEIGHT_PRCT = META_DISPLAY_HEIGHT_PRCT - META_DISPLAY_HEIGHT_OFFSET
-const CURSOR_HEIGHT = META_DISPLAY_INNER_HEIGHT_PRCT
-
-function intToPercent (int) {
-  return `${int}%`
-}
 
 const defaultControls = {
   displayTasks: true,
@@ -97,6 +90,11 @@ class TimeReferential extends Component {
     // Task positioning computing
     const computer = new TaskDisplayComputer(tasks, experiment, project)
     const segments = computer.segs
+    const minutesDisplayHeightPx = 24
+    const annotationsDisplayHeightPx = 30
+    const metaDisplayHeightPx = viewHeight - minutesDisplayHeightPx
+    const tasksDisplayInnerHeightPx = metaDisplayHeightPx - annotationsDisplayHeightPx
+
     // uppper & lower
     this.updateInternals({
       rows: computer.nRows(),
@@ -104,6 +102,8 @@ class TimeReferential extends Component {
       cannotSlideRight: cursor + range / 2 > experiment.duration,
       range
     })
+    // window view port to embed xhtml elements
+    const htmlViewBox = `0 0 ${viewWidth} ${viewHeight}`
     const minuteDisplay = minutes.map((minute) => (
       <g key={`minute_${minute}`}
          strokeWidth={computedMinutesStrokeWidth}>
@@ -117,7 +117,7 @@ class TimeReferential extends Component {
         </text>
         <line
           className='minute'
-          y2={intToPercent(META_DISPLAY_HEIGHT_PRCT)}
+          y2={metaDisplayHeightPx}
           y1='0'
           x2={minute}
           x1={minute}
@@ -139,45 +139,8 @@ class TimeReferential extends Component {
       return segmentDisplay(segment)
     }) : null
 
-    const annotationsDisplay = displayAnnotations ? annotations.map((annotation) => {
-      /* {{#hovercard template="_exp_panel_controller_annotationHover" trigger="click" direction="horizontal"}} */
-      const displayAnnotation = (annotation) => {
-        const { categories, rawMinutes } = annotation
-        let categoriesDisplay
-        if (categories.length) {
-          categoriesDisplay = categories.map(({ color, _id }, index) => (
-            <rect
-              key={`annotation_${annotation._id}_${index}`}
-              width='1'
-              height='1'
-              y={`${index}`}
-              x='0'
-              style={{ fill: color, strokeWidth: '0.015', stroke: 'rgb(0, 0, 0)' }}/>
-          ))
-        } else {
-          categoriesDisplay = (<rect
-            key={`annotation_${annotation._id}_${'none'}`}
-            x={rawMinutes}
-            y='0'
-            height='100%'
-            width='0.1'
-            fill='#CCCCCC'/>)
-        }
-        return (
-          <svg
-            key={`annotation_${annotation._id}`}
-            x={rawMinutes}
-            y='0'
-            height='100%'
-            width='0.1'
-            viewBox={`0 0 1 ${categories.length || 1}`}
-            preserveAspectRatio='none'>
-            {categoriesDisplay}
-          </svg>
-        )
-      }
-      return displayAnnotation(annotation)
-    }) : null
+    // reverse in order to avoid floating elements on hover boxes
+    const annotationsDisplay = displayAnnotations ? reverse(annotations).map((annotation) => <AnnotationDisplay viewBox={htmlViewBox} key={`annotation_${annotation._id}`} annotation={annotation} />) : null
 
     return (
       <Container style={style}>
@@ -185,56 +148,54 @@ class TimeReferential extends Component {
           id='time-referential-svg-root'
           height={viewHeight}
           width={viewWidth}>
+          {/* minutes background rectangle */}
           <rect
             id='svg-ruler'
             fill={theme.palette.primary1Color}
             width='100%'
-            height={intToPercent(MINUTES_DISPLAY_HEIGHT_PRCT)}
-            y={intToPercent(META_DISPLAY_HEIGHT_PRCT)} />
-          {/* Minutes and cursor display */}
-          <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none'>
+            height={minutesDisplayHeightPx}
+            y={metaDisplayHeightPx} />
+          {/* Minutes display */}
+          <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none' >
             <g fontSize={computedTextFontSize}>
               {minuteDisplay}
-              {/* Cursor */}
-              <g style={{ stroke: theme.palette.textColor }} transform={`translate(${cursor})`}>
-                <g strokeWidth={computedCursorStrokeWidth}>
-                  <line
-                    fill='black'
-                    y1='0'
-                    y2={intToPercent(CURSOR_HEIGHT)}
-                    x1='0'
-                    x2='0' />
-                </g>
-                <g transform={`translate(${-5 * computedCursorStrokeWidth})`}>
-                  <svg
-                    y={intToPercent(CURSOR_HEIGHT)}
-                    preserveAspectRatio='none'
-                    viewBox='-1 0 2 1'
-                    width={10 * computedCursorStrokeWidth}
-                    height='5%'>
-                    <polygon fill={theme.palette.textColor} strokeWidth='0' points='-1,1 1,1 0,0' />
-                  </svg>
-                </g>
-              </g>
             </g>
           </svg>
-          {/* Meta display */}
+          {/* Tasks display */}
+          <g>
+            <svg
+              preserveAspectRatio='none'
+              className='scalable-svg-meta-viewport'
+              height={tasksDisplayInnerHeightPx}
+              y={annotationsDisplayHeightPx}
+            >
+              <g fillOpacity='0.8'>
+                {tasksDisplay}
+              </g>
+            </svg>
+          </g>
+          <rect height={annotationsDisplayHeightPx}
+                y={0}
+                width='100%'
+                fill='rgba(40, 40, 40, 0.6)'
+          />
           <svg
             preserveAspectRatio='none'
-            className='scalable-svg-meta-viewport'
-            height={intToPercent(META_DISPLAY_INNER_HEIGHT_PRCT)}
-            y={intToPercent(META_DISPLAY_HEIGHT_OFFSET)}>
-            {/* Tasks display */}
-            <g fillOpacity='0.8'>
-              {tasksDisplay}
-            </g>
+            className='scalable-svg-minutes-viewport'
+            height={metaDisplayHeightPx}
+            y='0'>
+            >
             {/* Annotations display
              Translate used to center annotation in their width middle */}
-            <g transform='translate(-0.05)'>
+            <g>
               <g>
                 {annotationsDisplay}
               </g>
             </g>
+          </svg>
+          {/* Cursor display */}
+          <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none' >
+            <Cursor cursor={cursor} strokeWidth={computedCursorStrokeWidth} height={metaDisplayHeightPx / viewHeight} y={annotationsDisplayHeightPx / viewHeight}/>
           </svg>
         </svg>
       </Container>

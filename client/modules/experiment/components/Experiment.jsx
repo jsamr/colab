@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import LeftMenu from './LeftMenu'
 import VideoBox from '../containers/VideoBox'
-import TimeLine from '../containers/TimeLine'
+import TimeLine from '../../timeline/containers/TimeLine'
 import NotFound from '/imports/ui/NotFound'
 import { fColumnNoWrap, transitionFast } from '/imports/styles'
 

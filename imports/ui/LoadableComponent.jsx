@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import DefaultPageRoot from '/imports/ui/DefaultPageRoot'
 import SimpleLoading from '/imports/ui/SimpleLoading'
 import Paper from 'material-ui/Paper'
 

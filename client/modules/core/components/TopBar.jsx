@@ -54,7 +54,17 @@ class TopBar extends Component {
     )
     return (
       <AppBar
-        style={{ position: 'fixed', top: 0, minHeight: preferredHeight, paddingLeft: 0, paddingRight: 0, justifyContent: 'center', flexWrap: 'wrap' }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          minHeight: preferredHeight,
+          paddingLeft: 0,
+          paddingRight: 0,
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          borderBottom: `solid ${context.theme.palette.borderColor} ${context.muiTheme.experiment.padding}px`,
+          boxSizing: 'border-box'
+        }}
         title={title}
         titleStyle={{ lineHeight: 'auto', flexGrow: 10, flexShrink: 1, minWidth: '-webkit-min-content', display: 'flex', justifyContent: 'flex-start', marginLeft: 10 }}
         iconStyleLeft={{ marginTop: 0, marginLeft: 0, marginRight: 0 }}
@@ -67,6 +77,8 @@ class TopBar extends Component {
 }
 
 TopBar.contextTypes = {
+  theme: PropTypes.object.isRequired,
+  muiTheme: PropTypes.object.isRequired,
   t: PropTypes.func.isRequired,
   VERSION: PropTypes.string.isRequired,
   ROUTES: PropTypes.object.isRequired,

@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react'
 
+const COMMON_STYLE = {
+  minWidth: 200,
+  padding: 10
+}
+
 const CONTAINER_STYLE = {
-  background: 'white',
-  color: 'black',
+  ...COMMON_STYLE,
   position: 'absolute',
   left: '100%',
   top: 0,
   width: '65%',
-  minWidth: 200,
-  zIndex: 1000,
-  padding: 10
+  zIndex: 1000
 }
 
 const Arrow = ({ arrowSize, arrowColor, style }) => (
@@ -35,10 +37,24 @@ const ARROW_STYLE = {
   height: 0
 }
 
-const FastHover = ({ children, background = 'white', arrowSize = 10,  style }) => (
-  <div style={{ ...CONTAINER_STYLE, marginLeft: arrowSize, ...style, background }}>
+function getThemeStyling (theme) {
+  return {
+    background: theme.palette.textColor,
+    color: theme.palette.primary1Color
+  }
+}
+
+const SvgHover = ({ children, arrowSize = 10,  style }, { theme }) => (
+  <div style={{ ...COMMON_STYLE, marginLeft: 3, ...style, ...getThemeStyling(theme) }}>
     {children}
-    <Arrow arrowColor={background} arrowSize={arrowSize} />
+    <Arrow arrowColor={theme.palette.textColor} arrowSize={arrowSize} />
+  </div>
+)
+
+const FastHover = ({ children, arrowSize = 10,  style }, { theme }) => (
+  <div style={{ ...CONTAINER_STYLE, marginLeft: arrowSize, ...style, ...getThemeStyling(theme) }}>
+    {children}
+    <Arrow arrowColor={theme.palette.textColor} arrowSize={arrowSize} />
   </div>
 )
 
@@ -49,4 +65,17 @@ FastHover.propTypes = {
   arrowSize: PropTypes.number
 }
 
+FastHover.contextTypes = {
+  theme: PropTypes.object.isRequired
+}
+
+SvgHover.contextTypes = {
+  theme: PropTypes.object.isRequired
+}
+
 export default FastHover
+
+export {
+  FastHover,
+  SvgHover
+}

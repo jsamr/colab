@@ -1,10 +1,11 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react'
 import ResponsivePlayer from '../../video/containers/ResponsivePlayer'
 import VideoControls from './VideoControls'
 import TimeIndicator from '../containers/TimeIndicator'
 import { transitionSlow } from '/imports/styles'
 import autobind from 'autobind-decorator'
 import InfoFeedback from '/imports/ui/InfoFeedback'
+import Hoverable from '/imports/ui/Hoverable'
 
 const CONTROLS_DIMENSIONS = {
   height: 50,
@@ -35,7 +36,7 @@ const BOX_STYLE_BASE = {
 }
 
 @autobind
-class VideoBox extends Component {
+class VideoBox extends Hoverable {
 
   static propTypes = {
     expLoading: PropTypes.bool.isRequired,
@@ -59,21 +60,9 @@ class VideoBox extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      hovered: false,
-      preferredWidth: null
+      preferredWidth: null,
+      ...this.state
     }
-  }
-
-  handleHoverIn () {
-    this.setState({
-      hovered: true
-    })
-  }
-
-  handleHoverOut () {
-    this.setState({
-      hovered: false
-    })
   }
 
   handleWidthUpdate (width) {
@@ -114,7 +103,7 @@ class VideoBox extends Component {
     const showControls = !isPlaying || hovered
     return (
       <VideoControls
-        style={{ ...CONTROLS_DIMENSIONS, background, opacity: showControls ? 1 : 0 }}
+        style={{ ...CONTROLS_DIMENSIONS, background, opacity: showControls ? 1 : 0, width: '100%', left: 'auto', flexGrow: 0 }}
         experiment={experiment}
         expLoading={expLoading} />
     )
@@ -139,14 +128,17 @@ class VideoBox extends Component {
     const noPlaces = places && places.length === 0
     let player = noPlaces ? this.renderNoPlaces() : this.renderPlayer()
     return (
-      <div style={{ flexGrow: 1, order: 1, display: 'flex', background: muiTheme.experiment.mediaBackground }}>
+      <div
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        style={{ flexGrow: 1, order: 1, display: 'flex', background: muiTheme.experiment.mediaBackground, position: 'relative' }}>
         <div
-          onMouseEnter={this.handleHoverIn}
-          onMouseLeave={this.handleHoverOut}
           style={style}>
           {player}
           {this.renderTimeIndicator(background)}
-          {this.renderControls(background)}
+        </div>
+        <div style={{ width: '100%', position: 'absolute', bottom: 0, zIndex: 10 }} >
+          {this.renderControls(muiTheme.experiment.mediaControlsBackground)}
         </div>
       </div>
     )

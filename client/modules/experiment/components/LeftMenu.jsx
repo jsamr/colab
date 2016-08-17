@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import LoadableComponent from './LoadableComponent'
+import LoadableComponent from '/imports/ui/LoadableComponent'
 import { fColumnNoWrap, fInlineNoWrapCentered, transitionVerySlow } from '/imports/styles'
 import TimeControls from '../containers/TimeControls'
 import ToggleTimeLine from '../containers/ToggleTimeLine'

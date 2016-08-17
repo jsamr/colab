@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import LoadableComponent from './LoadableComponent'
+import LoadableComponent from '/imports/ui/LoadableComponent'
 import TimeReferential from '../containers/TimeReferential'
 import Paper from 'material-ui/Paper'
 

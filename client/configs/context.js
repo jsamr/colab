@@ -32,7 +32,7 @@ export default function ({ reducer }) {
   const store = createStore(
     reducer,
     defaultState,
-    applyMiddleware(sagaMiddleWare, rMiddleware, loggerMiddleware)
+    applyMiddleware(sagaMiddleWare, rMiddleware) // loggerMiddleware
   )
   return {
     Accounts,

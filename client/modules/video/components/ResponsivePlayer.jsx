@@ -97,12 +97,10 @@ class VideoContainer extends Component {
 
   handleOnDuration (duration) {
     const { autoUpdateDuration } = this.props
-    const { offset } = this.state
-    const realDuration = duration - offset
     this.setState({
-      duration: realDuration
+      duration
     })
-    autoUpdateDuration(realDuration)
+    autoUpdateDuration(duration)
   }
 
   handleReachEnd () {
