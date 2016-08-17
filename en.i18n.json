@@ -1,4 +1,5 @@
 {
+  "not-found": "this page does not exist",
   "actions" : {
     "joinproject" : "join a project",
     "editprofile" : "edit profile",

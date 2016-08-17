@@ -1,113 +1,98 @@
-import React, { PropTypes, Component } from 'react'
-import Hoverable from '/imports/ui/Hoverable'
-import { SvgHover } from '/imports/ui/FastHover'
+import React, { PropTypes } from 'react'
 import Chip from 'material-ui/Chip'
-import contrast from 'font-color-contrast'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
-import autobind from 'autobind-decorator'
-import { transitionSlow } from '/imports/styles'
 import map from 'lodash/map'
-import reduce from 'lodash/reduce'
 
-function createMultipleColorsBg (colors) {
-  let percent = 0
-  let slice = 100 / colors.length
-  return colors.length ? 'linear-gradient(' + reduce(colors, (stack, next) => `${stack ? stack + ',' : ''} ${next} ${Math.floor(percent++ * slice)}%, ${next} ${Math.floor(percent * slice)}%`, null ) + ')' : 'transparent'
-}
+import { createMultipleColorsBg, findBestContrastedColor } from '../libs/colors-utils'
 
 const CategorySticker = ({ category }) => {
   const { name, color } = category
   return (
-    <Chip style={{ background: color, color: contrast(color) }}
-          labelStyle={{ textTransform: 'lowercase', fontSize: 14, lineHeight: '18px' }}
+    <Chip style={{ background: color, margin: 2 }}
+          labelStyle={{ textTransform: 'lowercase', fontSize: 14, lineHeight: '18px', color: findBestContrastedColor(color) }}
     >
       {name}
     </Chip>
   )
 }
 
-const AnnotationButton = ({ annotation, ...props } ) => {
+const AnnotationButton = ({ annotation, tooltip, ...props }) => {
   const background = createMultipleColorsBg(map(annotation.categories, 'color'))
   return (
-    <IconButton style={{ left: '0', width: 28, height: 28, padding: 0, zIndex: 1, background, textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }} {...props} >
-      <FontIcon className='fa fa-tag' style={{ fontSize: 18 }}/>
+    <IconButton
+      tooltip={tooltip}
+      style={{ left: '0', width: 28, height: 28, padding: 0, zIndex: 1, background }}
+      {...props} >
+      <FontIcon className='fa fa-tag text-stroke' style={{ fontSize: 18 }}/>
     </IconButton>
   )
 }
 
-@autobind
-class AnnotationDisplay extends Hoverable {
+AnnotationButton.propTypes = {
+  annotation: PropTypes.object.isRequired,
+  tooltip: PropTypes.node
+}
 
-  static contextTypes = {
-    theme: PropTypes.object.isRequired
-  }
+const HoverBox = ({ annotation }, { theme }) => {
+  return (annotation.categories.length || annotation.observations) ? (
+    <div style={{ textShadow: 'none', minWidth: 300, maxWidth: '50vw' }}>
+      <div className='StickerContainer' style={{ display: 'flex', margin: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+        {annotation.categories.map((category) => <CategorySticker key={category._id} category={category} />)}
+      </div>
+      <div style={{ fontSize: 14, fontStyle: 'italic', color: theme.palette.textColor, background: theme.palette.primary1Color, padding: 5, paddingLeft: 20, position: 'relative' }}>
+        <FontIcon className='mdi mdi-note-text' style={{ position: 'absolute', top: 0, left: 0, fontSize: 20 }}/>
+        {annotation.observations}
+      </div>
+    </div>
+  ) : null
+}
 
-  renderHoverbox () {
-    const { annotation } = this.props
-    const { hovered } = this.state
-    return (
-      <SvgHover style={{ opacity: hovered ? 1 : 0, zIndex: 10000, display: hovered ? 'block' : 'none', position: 'absolute', left: 36, marginLeft: 3, ...transitionSlow}}>
-        <div>
-          <div style={{ display: 'flex' }}>
-            {annotation.categories.map((category) => <CategorySticker key={category._id} category={category} />)}
-          </div>
-          <div>
-            {annotation.observations}
-          </div>
-        </div>
-      </SvgHover>
-    )
-  }
+HoverBox.contextTypes = {
+  theme: PropTypes.object.isRequired
+}
 
-  renderAnnotation () {
-    const { annotation } = this.props
-    const { categories } = annotation
-    const { theme } = this.context
-    let categoriesDisplay
-    categoriesDisplay = (
-      <rect
-        x='0'
-        y='10%'
-        height='90%'
-        width='1'
-        fill={theme.palette.textColor}/>
-    )
-    return categoriesDisplay
-  }
+HoverBox.propTypes = {
+  annotation: PropTypes.object.isRequired
+}
 
-  render () {
-    const { annotation, viewBox } = this.props
-    const { rawMinutes } = annotation
-    let categoriesDisplay = this.renderAnnotation()
-    return (
-      <g transform={`translate(${rawMinutes})`}>
-        <svg viewBox={viewBox} >
+const AnnotationDisplay = ({ annotation, viewBox }, { theme }) => {
+  const { rawMinutes } = annotation
+  return (
+    <g transform={`translate(${rawMinutes})`}>
+      <svg viewBox={viewBox} >
+        <g>
+          <foreignObject y='0' width="100%" height="100%">
+            <div xmlns='http://www.w3.org/1999/xhtml'
+                 style={{ position: 'fixed', top: 0, zIndex: 1 }}
+            >
+              <AnnotationButton tooltip={<HoverBox annotation={annotation}/>}
+                                annotation={annotation}
+                                onMouseLeave={this.onMouseLeave}
+                                onMouseEnter={this.onMouseEnter}/>
+            </div>
+          </foreignObject>
           <g>
-            <switch>
-              <foreignObject y='0' width="100%" height="100%" requiredFeatures='http://www.w3.org/TR/SVG11/feature#Extensibility'>
-                <div xmlns='http://www.w3.org/1999/xhtml'
-                     style={{ position: 'fixed', top: 0, zIndex: 1 }}
-                >
-                  {this.renderHoverbox()}
-                  <AnnotationButton annotation={annotation}
-                                    onMouseLeave={this.onMouseLeave}
-                                    onMouseEnter={this.onMouseEnter}/>
-                </div>
-              </foreignObject>
-              <text y={20} fill='white' >
-                <tspan>Ce navigateur ne supporte pas</tspan>
-                <tspan>les extensions SVG nécessaires!</tspan>
-              </text>
-            </switch>
-            <g>
-              {categoriesDisplay}
-            </g>
+            <rect
+              x='0'
+              y='10%'
+              height='90%'
+              width='1'
+              fill={theme.palette.textColor}/>
           </g>
-        </svg>
-      </g>
-    )
-  }
+        </g>
+      </svg>
+    </g>
+  )
+}
+
+AnnotationDisplay.contextTypes = {
+  theme: PropTypes.object.isRequired
+}
+
+AnnotationDisplay.propTypes = {
+  annotation: PropTypes.object.isRequired,
+  viewBox: PropTypes.string.isRequired
 }
 
 export default AnnotationDisplay
