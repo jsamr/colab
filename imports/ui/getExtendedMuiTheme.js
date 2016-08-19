@@ -1,5 +1,6 @@
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import merge from 'lodash/merge'
+import { TOPBAR_BOTTOM_BORDER_WIDTH } from '/client/configs/configuration'
 import { fade } from 'material-ui/utils/colorManipulator'
 
 export default function getExtendedMuiTheme (theme, ...more) {
@@ -7,6 +8,9 @@ export default function getExtendedMuiTheme (theme, ...more) {
   const {spacing, fontFamily, palette} = theme
   const mediaBackground = palette.primary2Color
   return merge(baseTheme, {
+    topBar: {
+      bottomBorder: TOPBAR_BOTTOM_BORDER_WIDTH
+    },
     experiment: {
       background: palette.pageBackground,
       mediaBackground,

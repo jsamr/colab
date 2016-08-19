@@ -71,7 +71,7 @@ const reduceRefreshMediaNodePlaces = reduceExperiment(() => ({ places: null, pla
 const reduceSelectSource = reduceExperiment((payload) => ({ source: payload }))
 const reduceSetMenuTab = reduceExperiment((payload) => ({ menuTab: payload }))
 const reduceZoom = reduceExperiment((payload) => ({ controls: { zoom: enforceInInterval(payload, 1, 20) } }))
-const reduceEditAnnotation = reduceExperiment((payload) => { editAnnotation: { _id: payload }})
+const reduceEditAnnotation = reduceExperiment((payload) => ({ editAnnotation: { _id: payload }}))
 
 const experiments = handleActions({
   [REQUIRE_EXPERIMENT_PAGE]: reduceRequireExperimentPage,
@@ -86,8 +86,8 @@ const experiments = handleActions({
   [TIME_LINE_SET_ZOOM]: reduceZoom,
   [TIME_LINE_SET_VISIBILITY]: reduceExperimentControls('timeLineVisible'),
   [TIME_LINE_SET_CURSOR]: reduceExperimentControls('cursor'),
-  [TIME_LINE_EDIT_ANNOTATION]: reduceExperiment('annotation')
-  [TIME_LINE_ADD_ANNOTATION]: identity
+  [TIME_LINE_EDIT_ANNOTATION]: reduceExperiment('annotation'),
+  [TIME_LINE_ADD_ANNOTATION]: reduceEditAnnotation
 }, {})
 
 export {

@@ -62,7 +62,7 @@ class TopBar extends Component {
           paddingRight: 0,
           justifyContent: 'center',
           flexWrap: 'wrap',
-          borderBottom: `solid ${context.theme.palette.borderColor} ${context.muiTheme.experiment.padding}px`,
+          borderBottom: `solid ${context.theme.palette.borderColor} ${context.muiTheme.topBar.bottomBorder}px`,
           boxSizing: 'border-box'
         }}
         title={title}
