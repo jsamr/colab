@@ -1,5 +1,6 @@
 import { Mongo } from 'meteor/mongo'
 import Serrurier from 'meteor/svein:serrurier'
+import { raw } from '/imports/time'
 
 const annotations = new Mongo.Collection('plugins.annotations')
 
@@ -17,6 +18,11 @@ const Annotation = Serrurier.createClass({
     observations: String,
     rawMinutes: Number,
     categories: [Object]
+  },
+  methods: {
+    readableMinutes () {
+      return raw.readable(this.rawMinutes)
+    }
   },
   behaviors: {
     softremove: {

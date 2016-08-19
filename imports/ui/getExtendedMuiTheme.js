@@ -15,6 +15,41 @@ export default function getExtendedMuiTheme (theme, ...more) {
       sourcesListBackground: palette.primary1Color,
       padding: 5
     },
+    categoryStickerLabel: {
+      textTransform: 'lowercase',
+      fontSize: 14,
+      lineHeight: '18px'
+    },
+    smallIconButton: {
+      width: 28,
+      height: 28,
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    },
+    timeLine: {
+      icon: {
+        fontSize: 18,
+        marginRight: 5,
+        color: palette.primary1Color,
+        background: palette.textColor,
+        alignSelf: 'flex-start'
+      },
+      button: {
+        width: 28,
+        height: 28,
+        padding: 0
+      },
+      hoverBoxContainer: {
+        position: 'absolute',
+        top: 0,
+        background: palette.textColor,
+        zIndex: 0,
+        padding: '0 1px'
+      }
+    },
     application: {
       background: palette.pageBackground
     }

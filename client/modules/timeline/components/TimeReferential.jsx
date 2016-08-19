@@ -91,7 +91,7 @@ class TimeReferential extends Component {
     const computer = new TaskDisplayComputer(tasks, experiment, project)
     const segments = computer.segs
     const minutesDisplayHeightPx = 24
-    const annotationsDisplayHeightPx = 30
+    const annotationsDisplayHeightPx = 32
     const metaDisplayHeightPx = viewHeight - minutesDisplayHeightPx
     const tasksDisplayInnerHeightPx = metaDisplayHeightPx - annotationsDisplayHeightPx
 
@@ -110,10 +110,10 @@ class TimeReferential extends Component {
         <text
           color={theme.palette.textColor}
           fill={theme.palette.textColor}
-          fontFamily='Verdana'
+          fontFamily='monospace'
           y='98%'
           x={minute}>
-          {minute}'
+          {minute}′
         </text>
         <line
           className='minute'
@@ -140,7 +140,7 @@ class TimeReferential extends Component {
     }) : null
 
     // reverse in order to avoid floating elements on hover boxes
-    const annotationsDisplay = displayAnnotations ? reverse(annotations).map((annotation) => <AnnotationDisplay viewBox={htmlViewBox} key={`annotation_${annotation._id}`} annotation={annotation} />) : null
+    const annotationsDisplay = displayAnnotations ? reverse(annotations).map((annotation) => <AnnotationDisplay pxpm={pxpm} height={metaDisplayHeightPx} viewBox={htmlViewBox} key={`annotation_${annotation._id}`} annotation={annotation} />) : null
 
     return (
       <Container style={style}>
@@ -188,11 +188,13 @@ class TimeReferential extends Component {
             {/* Annotations display
              Translate used to center annotation in their width middle */}
             <g>
-              <g>
-                {annotationsDisplay}
-              </g>
             </g>
           </svg>
+          <foreignObject y='0' width="100%" height="100%">
+            <div xmlns='http://www.w3.org/1999/xhtml' style={{ zIndex: 0, position: 'relative' }}>
+            {annotationsDisplay}
+            </div>
+          </foreignObject>
           {/* Cursor display */}
           <svg className='scalable-svg-minutes-viewport' preserveAspectRatio='none' >
             <Cursor cursor={cursor} strokeWidth={computedCursorStrokeWidth} height={metaDisplayHeightPx / viewHeight} y={annotationsDisplayHeightPx / viewHeight}/>

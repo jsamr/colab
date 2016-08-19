@@ -12,7 +12,7 @@ function fromMinSec (mins, secs) {
 }
 
 const raw = {
-  readable (value, sep1 = 'm', sep2 = 's') {
+  readable (value, sep1 = '′', sep2 = '″') {
     let min = Math.floor(value)
     let sec = Math.floor((value - min) * 60)
     return twoDigit(min) + sep1 + twoDigit(sec) + sep2
