@@ -41,9 +41,11 @@ class VideoContainer extends Component {
       videoRatio: 0,
       containerLoading: true,
       playerLoading: true,
+      srcLoading: false,
       height: null,
       cachedHeight: 0,
-      error: null
+      error: null,
+      seeking: false
     }
   }
 
@@ -58,6 +60,7 @@ class VideoContainer extends Component {
     if (url !== this.props.url) {
       shouldUpdate = true
       newState.error = null
+      newState.srcLoading = true
     }
 
     if (mainHeight !== this.props.mainHeight) {
@@ -82,10 +85,12 @@ class VideoContainer extends Component {
     if (shouldUpdate) this.setState(newState)
   }
 
-  componentWillUpdate (nextProp, { userCursor, videoRatio }) {
+  componentWillUpdate (nextProp, { userCursor }) {
     // TODO check if this operation is costy
     if (userCursor !== this.state.userCursor) {
-      if (userCursor !== this._player.prevPlayed) this._player.seekTo(userCursor)
+      if (userCursor !== this._player.prevPlayed) {
+        this._player.seekTo(userCursor)
+      }
     }
   }
 
@@ -115,10 +120,22 @@ class VideoContainer extends Component {
     if (videoWidth && videoHeight) {
       this.setState({
         videoRatio: videoWidth / videoHeight,
-        playerLoading: false
+        srcLoading: false
       })
       if (onLoad) onLoad(true)
     }
+  }
+
+  handleSeeking () {
+    this.setState({
+      seeking: true
+    })
+  }
+
+  handleSeeked () {
+    this.setState({
+      seeking: false
+    })
   }
 
   handlePlayerMount (player) {
@@ -128,6 +145,11 @@ class VideoContainer extends Component {
       const rPlayer = player.refs.player
       this._playerEl = rPlayer.refs.player
       this._playerEl.addEventListener('loadedmetadata', this.handleLoadedMetaData)
+      this._playerEl.addEventListener('seeking', this.handleSeeking)
+      this._playerEl.addEventListener('seeked', this.handleSeeked)
+      this.setState({
+        playerLoading: false
+      })
     } else {
       if (onLoad) onLoad(false)
     }
@@ -165,12 +187,21 @@ class VideoContainer extends Component {
   }
 
   renderLoading (display) {
-    return <SimpleLoading style={{ alignItems: 'center', justifyContent: 'center', height: '100%', display }} />
+    return <SimpleLoading style={{
+      display: display ? 'flex' : 'none',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      position: 'absolute',
+      zIndex: 10,
+      top: 0,
+      left: '50%'
+    }} />
   }
 
   render () {
     const { isPlaying, volumeLevel, dataLoading, style, maxWidth, url, offsetRM, progressUpdateFrequency = 50 } = this.props
-    const { containerLoading, playerLoading, error, duration } = this.state
+    const { containerLoading, playerLoading, error, seeking, srcLoading } = this.state
     const { t } = this.context
     const loading = containerLoading || playerLoading || dataLoading
     const { width, height } = loading ? { width: maxWidth, height: 'auto' } : this.computeWidthBasis()
@@ -198,7 +229,7 @@ class VideoContainer extends Component {
             style={transitionSlow}
           />
         </div>
-        {this.renderLoading(loading ? 'flex' : 'none')}
+        {this.renderLoading(loading || seeking || srcLoading)}
       </div>
     )
   }

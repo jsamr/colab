@@ -73,7 +73,7 @@ SmallIconButton.contextTypes = {
   muiTheme: PropTypes.object.isRequired
 }
 
-const HoverBox = ({ annotation, style }, { theme, muiTheme }) => {
+const HoverBox = ({ handleClickPlayButton, annotation, style }, { theme, muiTheme }) => {
   const borderStyle = `2px solid ${theme.palette.primary1Color}`
   const containerStyle = {
     fontSize: 14,
@@ -82,7 +82,6 @@ const HoverBox = ({ annotation, style }, { theme, muiTheme }) => {
     margin: 2,
     position: 'relative',
     textAlign: 'center',
-    borderTop: borderStyle,
     display: 'flex',
     alignItems: 'center',
     padding: 5,
@@ -90,24 +89,21 @@ const HoverBox = ({ annotation, style }, { theme, muiTheme }) => {
   }
   return (annotation.categories.length || annotation.observations) ? (
     <div style={{ minWidth: 300, maxWidth: '50vw', ...style }}>
-      <div style={{ background: theme.palette.primary1Color, display: 'flex', alignItems: 'center', paddingLeft: muiTheme.smallIconButton.width }}>
+      <div style={{ background: theme.palette.primary1Color, display: 'flex', alignItems: 'center', height: 32, paddingLeft: muiTheme.smallIconButton.width }}>
         <span style={{ fontFamily: 'monospace', fontSize: 20 }}>{annotation.readableMinutes()}</span>
         <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <SmallIconButton iconClass='mdi mdi-play-circle' />
+          <SmallIconButton onClick={handleClickPlayButton} iconClass='mdi mdi-play-circle' />
           <SmallIconButton iconClass='mdi mdi-pencil-box' />
         </div>
       </div>
-      <div style={{ display: 'flex', ...containerStyle }}>
+      <div style={{ display: 'flex', borderBottom: borderStyle, ...containerStyle }}>
         <FontIcon className='fa fa-tag'
                   style={muiTheme.timeLine.icon}/>
         <div className='StickerContainer'>
           {annotation.categories.map((category) => <CategorySticker key={category._id} category={category} />)}
         </div>
       </div>
-      <div style={{
-        ...containerStyle,
-        borderBottom: borderStyle
-      }}>
+      <div style={containerStyle}>
         <FontIcon className='mdi mdi-eye'
                   style={muiTheme.timeLine.icon}/>
         {annotation.observations}
@@ -125,14 +121,18 @@ HoverBox.propTypes = {
   annotation: PropTypes.object.isRequired
 }
 
-const AnnotationDisplay = ({ annotation, pxpm, height }, { theme }) => {
+const AnnotationDisplay = ({ userSelectPlayerCursor, annotation, pxpm, height }, { theme }) => {
   const { rawMinutes } = annotation
+  const handleClickPlayButton = () => {
+    userSelectPlayerCursor(annotation.rawMinutes * 60)
+  }
   return (
     <div style={{ position: 'relative', top: 0, left: rawMinutes * pxpm }}
     >
       <div style={{ background: theme.palette.primary1Color, height, width: 1, position: 'absolute' }}>
-        <AnnotationButton tooltip={<HoverBox style={{ maxHeight: height }} annotation={annotation} />}
+        <AnnotationButton tooltip={<HoverBox handleClickPlayButton={handleClickPlayButton} style={{ maxHeight: height }} annotation={annotation} />}
                           annotation={annotation}
+                          onClick={handleClickPlayButton}
                           onMouseLeave={this.onMouseLeave}
                           onMouseEnter={this.onMouseEnter}/>
 
@@ -148,7 +148,8 @@ AnnotationDisplay.contextTypes = {
 AnnotationDisplay.propTypes = {
   annotation: PropTypes.object.isRequired,
   pxpm: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired
+  height: PropTypes.number.isRequired,
+  userSelectPlayerCursor: PropTypes.func.isRequired
 }
 
 export default AnnotationDisplay

@@ -9,7 +9,7 @@ function mapProps (state) {
 
 function mapDeps (context, actions) {
   return {
-    userSelectPlayerCursor: actions.video.userSelectPlayerCursor
+    userSelectPlayerCursor: actions.video.userSelectPlayerCursorRatio
   }
 }
 

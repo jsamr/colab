@@ -14,8 +14,11 @@ const video = {
   autoUpdatePlayerDuration ({ Store }, duration) {
     Store.dispatch(reportUpdatePlayerDuration(duration))
   },
-  userSelectPlayerCursor ({ Store }, cursor) {
-    Store.dispatch(setPlayerCursor(cursor))
+  userSelectPlayerCursorRatio ({ Store }, cursor) {
+    Store.dispatch(setPlayerCursor(cursor, false))
+  },
+  userSelectPlayerCursorAbsolute ({ Store }, cursor) {
+    Store.dispatch(setPlayerCursor(cursor, true))
   },
   setPlayingState ({ Store }, playingState) {
     Store.dispatch(setPlayingState(playingState))

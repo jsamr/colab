@@ -6,7 +6,7 @@ import Sizer from '/imports/ui/Sizer'
 import animateVB from '../libs/annimate-viewbox'
 import { $ } from 'meteor/jquery'
 import TaskSegment from './TaskSegment'
-import AnnotationDisplay from './AnnotationDisplay'
+import AnnotationDisplay from '../containers/AnnotationDisplay'
 import Cursor from './Cursor'
 import reverse from 'lodash/reverse'
 
@@ -177,7 +177,7 @@ class TimeReferential extends Component {
           <rect height={annotationsDisplayHeightPx}
                 y={0}
                 width='100%'
-                fill='rgba(40, 40, 40, 0.6)'
+                fill={theme.palette.primary1Color}
           />
           <svg
             preserveAspectRatio='none'

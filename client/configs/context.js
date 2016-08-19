@@ -1,7 +1,7 @@
 import '/imports/init-accounts'
 import { Meteor } from 'meteor/meteor'
 import { Tracker } from 'meteor/tracker'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Accounts, STATES as ACCOUNT_STATES } from 'meteor/std:accounts-ui'
 import * as time from '/imports/time'
 import Logger from '/imports/Logger'
@@ -32,7 +32,16 @@ export default function ({ reducer }) {
   const store = createStore(
     reducer,
     defaultState,
-    applyMiddleware(sagaMiddleWare, rMiddleware) // loggerMiddleware
+    compose(
+      applyMiddleware(sagaMiddleWare, rMiddleware),
+      // loggerMiddleware,
+      window.devToolsExtension && window.devToolsExtension({
+        serializeAction: (key, value) => {
+          if (typeof(value) === 'symbol') return value.toString()
+          return value
+        }
+      })
+    )
   )
   return {
     Accounts,

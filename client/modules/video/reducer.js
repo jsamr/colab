@@ -32,7 +32,11 @@ const video = handleActions({
   [AUTO_UPDATE_PLAYER_LOAD_STATUS]: (state, { payload }) => ({ ...state, ...payload }),
   [AUTO_UPDATE_PLAYER_DURATION]: reduceField('duration'),
   [SET_PLAYER_PLAYING_STATE]: reduceField('isPlaying'),
-  [USER_SET_PLAYER_CURSOR]: reduceField('userCursor'),
+  [USER_SET_PLAYER_CURSOR]: (state, { payload, meta }) => {
+    const value = meta.isAbsolute ? payload / state.duration : payload
+    console.info('FOUND VALUE', meta, value)
+    return ({ ...state, userCursor: value })
+  },
   [VIDEO_LOAD_URL]: reduceField('url'),
   [SET_VOLUME_LEVEL]: reduceField('volumeLevel'),
   [VIDEO_CLEAR]: (state, { payload }) => ({ ...defaultState, ...pick(state, ['volumeLevel', 'userCursor']) })
