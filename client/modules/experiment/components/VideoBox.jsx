@@ -6,8 +6,6 @@ import { transitionSlow } from '/imports/styles'
 import autobind from 'autobind-decorator'
 import InfoFeedback from '/imports/ui/InfoFeedback'
 import Hoverable from '/imports/ui/Hoverable'
-import { fade } from 'material-ui/utils/colorManipulator'
-
 
 const CONTROLS_DIMENSIONS = {
   height: 50,
@@ -22,7 +20,9 @@ const TIME_INDICATOR_STYLE = {
   flexGrow: 1,
   textAlign: 'center',
   position: 'absolute',
-  top: 0, right: 0
+  top: 0,
+  right: 0,
+  zIndex: 10
 }
 
 const BOX_STYLE_BASE = {

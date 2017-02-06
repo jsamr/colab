@@ -29,19 +29,21 @@ const defaultState = { }
 export default function ({ reducer }) {
   injectTapEventPlugin()
   const rMiddleware = routerMiddleware(browserHistory)
+  let middleware
+  if (window.devToolsExtension && window.devToolsExtension()) {
+    middleware = compose(
+      applyMiddleware(sagaMiddleWare, rMiddleware),
+      window.devToolsExtension && window.devToolsExtension()
+    )
+  } else {
+    middleware = compose(
+      applyMiddleware(sagaMiddleWare, rMiddleware)
+    )
+  }
   const store = createStore(
     reducer,
     defaultState,
-    compose(
-      applyMiddleware(sagaMiddleWare, rMiddleware),
-      // loggerMiddleware,
-      window.devToolsExtension && window.devToolsExtension({
-        serializeAction: (key, value) => {
-          if (typeof (value) === 'symbol') return value.toString()
-          return value
-        }
-      })
-    )
+    middleware
   )
   return {
     Accounts,
