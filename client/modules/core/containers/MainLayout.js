@@ -6,7 +6,6 @@ import { getConfig } from '/imports/api/Config'
 import loadLanguage from '/imports/loadLanguage'
 
 function confComposer ({ context, notifySubReady }, onData) {
-  console.info('LOADING CONF')
   const { Meteor } = context()
   const confSub = Meteor.subscribe('globalconfig')
   if (confSub.ready()) {
@@ -18,7 +17,6 @@ function confComposer ({ context, notifySubReady }, onData) {
 }
 
 function loadLang (params, onData) {
-  console.info('LOADING LANG')
   loadLanguage('fr').then(() => onData(null, { delayLoading: false }))
   onData(null, { delayLoading: true })
 }

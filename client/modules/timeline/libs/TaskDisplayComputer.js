@@ -40,7 +40,6 @@ class TaskDisplayComputer {
     )
     this.selection.forEach(task => {
       let taskType = this.project.getTaskType(task.taskTypeId) || fallbackToTaskType(task.taskTypeId)
-      // console.info('FOUND', task, taskType, task.taskTypeId)
       let i = 0
       let selectedRanges = []
       this.segs.push.apply(this.segs, lodash(task.segments).sortBy('start').map(seg => {

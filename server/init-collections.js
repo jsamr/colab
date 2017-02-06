@@ -1,4 +1,4 @@
-import Config from '/imports/api/Config'
+import Config, { SINGLETON_CONFIG_ID } from '/imports/api/Config'
 import Project from '/imports/api/Project'
 import { roles } from '/imports/security'
 import '/imports/api/Annotation'
@@ -27,7 +27,7 @@ Project.extend({
 // TODO implement
 
 Meteor.startup(() => {
-  if (!Config.findOne()) {
+  if (!Config.findOne(SINGLETON_CONFIG_ID)) {
     const conf = new Config()
     conf.save()
     logger.info('Default config file inserted!')

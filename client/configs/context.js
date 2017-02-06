@@ -37,7 +37,7 @@ export default function ({ reducer }) {
       // loggerMiddleware,
       window.devToolsExtension && window.devToolsExtension({
         serializeAction: (key, value) => {
-          if (typeof(value) === 'symbol') return value.toString()
+          if (typeof (value) === 'symbol') return value.toString()
           return value
         }
       })

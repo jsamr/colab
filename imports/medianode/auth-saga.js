@@ -34,6 +34,7 @@ function * autoReauthFlow (conf) {
 export function * authenticateWithCredentials (conf) {
   try {
     const state = yield select()
+    console.info(state)
     let args = {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       params: conf.getCredentials(state)

@@ -13,6 +13,7 @@
     "mantra-core": "^1.7.0",
     "material-ui": "0.15.4",
     "meteor-node-stubs": "~0.2.0",
+    "path": "^0.12.7",
     "rc-tooltip": "^3.4.2",
     "react": "~15.3.0",
     "react-custom-scrollbars": "^4.0.0",
@@ -27,7 +28,6 @@
     "redux-actions": "^0.10.1",
     "redux-saga": "^0.11.0",
     "stringify-object": "^2.4.0",
-    "url": "^0.11.0",
     "validator": "^5.4.0"
   },
   "standard": {

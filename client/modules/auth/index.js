@@ -1,7 +1,8 @@
 import actions from './actions'
-import * as reducer from './reducer.js'
+import * as reducer from './reducer'
 import { CurrentUser } from '/imports/api/User'
 import authSaga from './libs/auth-saga'
+
 export default {
   actions,
   reducer,

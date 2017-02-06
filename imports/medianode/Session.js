@@ -3,7 +3,7 @@ import { getConfig } from '/imports/api/Config'
 import { asyncGet } from './async'
 import isString from 'lodash/isString'
 import errors from './server-errors'
-import url from 'url'
+import path from 'path'
 import autobind from 'autobind-decorator'
 import { ensuresArg } from '/imports/ensure'
 import Exp from '/imports/api/Exp'
@@ -14,14 +14,14 @@ class Session {
 
   buildRequesPlacesUrl () {
     const config = getConfig()
-    return url.resolve(config.videoServer.url, `/i/${this.project.acronym}/${this.experiment.name}`)
+    return path.join(config.videoServer.url, `/i/${this.project.acronym}/${this.experiment.name}`)
   }
 
   buildPlaceUrl (place) {
     const config = getConfig()
     const a = this.application
     const t = this.token
-    return url.resolve(config.videoServer.url, `/m/${this.project.acronym}/${this.experiment.name}/${place}?a=${a}&t=${t}`)
+    return path.join(config.videoServer.url, `/m/${this.project.acronym}/${this.experiment.name}/${place}?a=${a}&t=${t}`)
   }
 
   buildError (errorCode) {

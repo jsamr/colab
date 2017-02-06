@@ -34,7 +34,6 @@ const video = handleActions({
   [SET_PLAYER_PLAYING_STATE]: reduceField('isPlaying'),
   [USER_SET_PLAYER_CURSOR]: (state, { payload, meta }) => {
     const value = meta.isAbsolute ? payload / state.duration : payload
-    console.info('FOUND VALUE', meta, value)
     return ({ ...state, userCursor: value })
   },
   [VIDEO_LOAD_URL]: reduceField('url'),

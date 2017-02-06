@@ -27,7 +27,6 @@ const reducers = {
 }
 
 const reducer = combineReducers(reducers)
-
 const context = initContext({ reducer })
 
 const app = createApp(context)
