@@ -39,7 +39,7 @@ const theme = {
     failureColor: redA700,
     warningColor: amber500,
     infoColor: lightBlue900,
-    controlsColor: fade(primary1, 0.38),
+    controlsColor: fade('#000', 0.850),
     pageBackground: primary1
   }
 }

@@ -8,6 +8,7 @@ import SimpleLoading from '/imports/ui/SimpleLoading'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import { fInlineAround, fInlineCenter } from '/imports/styles'
+import SettingsIcon from 'material-ui/svg-icons/action/settings'
 import ProjectIcon from '/imports/ui/icons/ProjectIcon'
 
 class ProjectCard extends Component {
@@ -22,28 +23,21 @@ class ProjectCard extends Component {
                 expanded={true}
                 initiallyExpanded={true}
                 containerStyle={{ flexGrow: 1 }}>
-            <CardTitle style={{ background: headerBackground, ...fInlineCenter }}
-                       titleStyle={{ flexBasis: 400 }}
-                       title={
-                       <div>
-                        {project.fullName}
-                       </div>
-                       }>
+            <CardTitle style={{ background: 'transparent', justifyContent: 'center', ...fInlineCenter }}>
               <Toolbar
-                style={{ flexGrow: 1, marginLeft: 20, height: 'auto', background: theme.palette.canvasColor, ...fInlineAround }}>
+                style={{ flexGrow: 1, height: 'auto', background: 'transparent', maxWidth: 800, ...fInlineAround }}>
                 <ToolbarGroup style={{ alignItems: 'center', display: 'flex', flexGrow: 1, justifyContent: 'center' }}>
-                  <SearchIcon style={{ width: 65, height: 65 }}/>
+                  <SearchIcon style={{ width: 65, height: 65, color: theme.palette.canvasColor }}/>
                   <TextField onChange={(e) => selectFilter(e.target.value)}
-                             style={{ fontSize: 30, flexBasis: 500 }}
+                             style={{ fontSize: 30, flexBasis: 500, color: theme.palette.canvasColor }}
                              autoFocus={true}
                              id={project._id}
                              defaultValue={filter}
                   />
                 </ToolbarGroup>
-                <ToolbarSeparator />
                 <ToolbarGroup>
                   <IconButton>
-                    <FontIcon>?</FontIcon>
+                    <SettingsIcon color={theme.palette.canvasColor} />
                   </IconButton>
                 </ToolbarGroup>
               </Toolbar>

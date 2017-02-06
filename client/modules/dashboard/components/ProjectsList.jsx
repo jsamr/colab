@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ProjectCard from '../containers/ProjectCard'
 import SimpleLoading from '/imports/ui/SimpleLoading.jsx'
-import Project from '/imports/api/Project'
 import { fInlineNoWrapCentered } from '/imports/styles'
 import StylizedLabeledIdentifier from '/imports/ui/StylizedLabeledIdentifier'
 import TabTemplate from '/imports/ui/TabTemplate'
@@ -13,11 +12,11 @@ const ProjectsList = ({ projects, selectedProjectId, selectProject, headerBackgr
       <Tab key={prj._id}
            label={
            <div style={{ width: '100%', ...fInlineNoWrapCentered, justifyContent: 'center' }} >
-            <StylizedLabeledIdentifier style={{ flexGrow: 1 }} label={t('experiment.project')} identifier={prj.acronym} idFontSize={40} stripColor={theme.palette.accent2Color} />
+            <StylizedLabeledIdentifier style={{ flexGrow: 1, color: theme.palette.canvasColor }} identifier={prj.fullName} idFontSize={25} stripColor={theme.palette.accent2Color} />
            </div>
            }
            value={prj._id}
-           style={{ flexGrow: 1, alignItems: 'stretch', flexFlow: 'column nowrap' }}>
+           style={{ flexGrow: 1, alignItems: 'stretch', flexFlow: 'column nowrap', background: theme.palette.alternateTextColor }}>
         <ProjectCard style={cardStyle} project={prj}
                      headerBackground={headerBackground}
                      cardBackground={cardBackground}

@@ -109,7 +109,7 @@ class Caption extends ListItem {
     const { caption, value, style, ...props } = this.props
     const { hovered } = this.state
     const { place, meta = {}, fileFound = true } = caption
-    const hasFeedback = meta.error
+    const hasFeedback = meta.error || meta.warning || meta.comments
     const showFeedback = hovered && hasFeedback
     return (
       <div value={value} style={{ position: 'relative' }}>

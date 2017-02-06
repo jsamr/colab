@@ -11,7 +11,7 @@ import Status from '../../medianode/containers/Status'
 const makeToolbar = (props, { t, nav, ROUTES }) => (
   <div style={{ display: 'flex', flexFlow: 'row', alignItems: 'stretch', height: '100%' }}>
     <Status style={{ margin: 'auto' }}/>
-    <Badge style={{ padding: 0, margin: 'auto', marginRight: 50 }} badgeStyle={{ position: 'absolute', right: -5, top: -5 }} badgeContent={4} primary={true}>
+    <Badge style={{ padding: 0, margin: 'auto', marginRight: 50 }} badgeStyle={{ position: 'absolute', right: -5, top: -5, display: 'none' }} badgeContent={4} primary={true}>
       <IconButton tooltip={t('topbar.notifications')}>
         <NotificationsIcon />
       </IconButton>

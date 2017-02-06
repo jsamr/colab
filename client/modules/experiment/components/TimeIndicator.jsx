@@ -59,7 +59,7 @@ class CursorTimeView extends Component {
       inner = readableAbsoluteTime(cursor, begin)
     } else inner = readableRelativeTime(cursor)
     return (
-      <div style={{ ...fInlineAround, justifyContent: 'space-between', ...style }}>
+      <div style={{ ...fInlineAround, justifyContent: 'space-between', padding: 5, ...style }}>
         <span style={{ textAlign: 'center', flexGrow: 1 }}>{inner}</span>
         {button}
       </div>

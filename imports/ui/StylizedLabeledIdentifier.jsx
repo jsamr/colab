@@ -8,7 +8,7 @@ const identifierStyle = {
   height: '100%'
 }
 
-const StylizedLabeledIdentifier = ({ preferredWidth = 90, labelSize = 12, label, identifier, idFontSize, stripColor = 'black', style }) => (
+const StylizedLabeledIdentifier = ({ preferredWidth = 90, labelSize = 12, label = null, identifier, idFontSize, stripColor = 'black', style }) => (
   <div style={{ ...identifierStyle, flexBasis: preferredWidth, textTransform: 'none', ...style }}>
     <div style={{ fontSize: labelSize, ...fInlineAround, color: 'gray', marginTop: 5 }}>
       <span>{label}</span>
@@ -22,7 +22,7 @@ const StylizedLabeledIdentifier = ({ preferredWidth = 90, labelSize = 12, label,
 )
 
 StylizedLabeledIdentifier.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   identifier: PropTypes.string.isRequired,
   preferredWidth: PropTypes.number,
   labelSize: PropTypes.number

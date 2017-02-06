@@ -14,7 +14,6 @@ export default function getExtendedMuiTheme (theme, ...more) {
     experiment: {
       background: palette.pageBackground,
       mediaBackground,
-      mediaControlsBackground: fade(mediaBackground, 0.7),
       timeLineBackground: palette.primary3Color,
       sourcesListBackground: palette.primary1Color,
       padding: 5
